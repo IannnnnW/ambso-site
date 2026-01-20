@@ -24,7 +24,7 @@ export default function Mission() {
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3">Our Vision</h3>
             <p className="text-gray-600 leading-relaxed">
-              A world where communities thrive through accessible, evidence-based health solutions
+              Complete Physical, Social and Mental well-being in Africa
             </p>
           </div>
 

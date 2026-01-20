@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 const navigation = [
   {
     name: 'Who We Are',
-    href: '/who-we-are',
+    href: '/who-we-are/about',
     submenu: [
       { name: 'About Us', href: '/who-we-are/about' },
       { name: 'Our Team', href: '/who-we-are/team' },
@@ -68,7 +69,14 @@ export default function Header() {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
-            <div className="text-2xl font-bold text-primary">AMBSO</div>
+            <Image
+              src="/images/logo.png"
+              alt="AMBSO Logo"
+              width={120}
+              height={60}
+              className="h-12 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}

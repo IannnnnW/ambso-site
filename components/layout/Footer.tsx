@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Facebook, Twitter, Linkedin, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
@@ -8,7 +9,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About */}
           <div>
-            <h3 className="text-xl font-bold mb-4">AMBSO</h3>
+            <Image
+              src="/images/logo.png"
+              alt="AMBSO Logo"
+              width={120}
+              height={60}
+              className="h-12 w-auto"
+            />
             <p className="text-gray-300 text-sm leading-relaxed">
               Transforming Africa through innovative research, training and service provision.
             </p>
