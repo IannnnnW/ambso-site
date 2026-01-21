@@ -1,7 +1,7 @@
 import Container from '../ui/Container';
 import { getFeaturedPartners } from '@/lib/sanity.queries';
-// import { urlFor } from '@/lib/sanity.client';
 import { Partner } from '@/lib/sanity.types';
+import PartnersCarousel from '@/components/layout/partnersCoursel';
 
 export default async function Partners() {
   const partners: Partner[] = await getFeaturedPartners();
@@ -22,29 +22,7 @@ export default async function Partners() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center">
-          {partners.map((partner) => (
-            <a
-              key={partner._id}
-              href={partner.website || '#'}
-              target={partner.website ? '_blank' : '_self'}
-              rel={partner.website ? 'noopener noreferrer' : ''}
-              className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105"
-            >
-              {partner.logo ? (
-                <img
-                  // src={urlFor(partner.logo).width(200).height(100).fit('max').url()}
-                  alt={partner.logo.alt || partner.name}
-                  className="max-w-full max-h-20 object-contain"
-                />
-              ) : (
-                <div className="text-center text-gray-700 font-medium text-sm">
-                  {partner.name}
-                </div>
-              )}
-            </a>
-          ))}
-        </div>
+          <PartnersCarousel partners={partners}/>
       </Container>
     </section>
   );
