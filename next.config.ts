@@ -2,6 +2,8 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'export',
+  basePath: '/ambso-site',
+  assetPrefix: '/ambso-site',
   images: {
     unoptimized: true,
     remotePatterns: [
