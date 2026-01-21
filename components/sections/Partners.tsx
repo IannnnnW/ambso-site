@@ -1,15 +1,15 @@
 import Container from '../ui/Container';
+import { getFeaturedPartners } from '@/lib/sanity.queries';
+// import { urlFor } from '@/lib/sanity.client';
+import { Partner } from '@/lib/sanity.types';
 
-const partners = [
-  { name: 'Partner 1', logo: '/images/partners/partner-1.png' },
-  { name: 'Partner 2', logo: '/images/partners/partner-2.png' },
-  { name: 'Partner 3', logo: '/images/partners/partner-3.png' },
-  { name: 'Partner 4', logo: '/images/partners/partner-4.png' },
-  { name: 'Partner 5', logo: '/images/partners/partner-5.png' },
-  { name: 'Partner 6', logo: '/images/partners/partner-6.png' },
-];
+export default async function Partners() {
+  const partners: Partner[] = await getFeaturedPartners();
 
-export default function Partners() {
+  if (!partners || partners.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-16 bg-white">
       <Container>
@@ -22,16 +22,27 @@ export default function Partners() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center">
           {partners.map((partner) => (
-            <div
-              key={partner.name}
-              className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300"
+            <a
+              key={partner._id}
+              href={partner.website || '#'}
+              target={partner.website ? '_blank' : '_self'}
+              rel={partner.website ? 'noopener noreferrer' : ''}
+              className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105"
             >
-              <div className="w-32 h-20 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
-                {partner.name}
-              </div>
-            </div>
+              {partner.logo ? (
+                <img
+                  // src={urlFor(partner.logo).width(200).height(100).fit('max').url()}
+                  alt={partner.logo.alt || partner.name}
+                  className="max-w-full max-h-20 object-contain"
+                />
+              ) : (
+                <div className="text-center text-gray-700 font-medium text-sm">
+                  {partner.name}
+                </div>
+              )}
+            </a>
           ))}
         </div>
       </Container>

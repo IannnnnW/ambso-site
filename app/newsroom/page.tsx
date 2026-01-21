@@ -1,32 +1,17 @@
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import { Calendar } from 'lucide-react';
+import { getAllNews } from '@/lib/sanity.queries';
+import { News as NewsType } from '@/lib/sanity.types';
+import { urlFor } from '@/lib/sanity.client';
 
-const newsItems = [
-  {
-    title: 'Community Health Camp Reaches 1,000 Beneficiaries',
-    excerpt: 'Our latest health camp provided free medical screenings and treatment to over 1,000 community members in Wakiso District.',
-    date: '2024-01-15',
-    category: 'Community Programs',
-    image: '/images/news-1.jpg',
-  },
-  {
-    title: 'New Clinical Trial Approved for HIV Prevention',
-    excerpt: 'AMBSO receives approval to conduct groundbreaking clinical trial on innovative HIV prevention methods.',
-    date: '2024-01-10',
-    category: 'Research',
-    image: '/images/news-2.jpg',
-  },
-  {
-    title: 'Partnership with International Health Organization',
-    excerpt: 'Strategic collaboration announced to enhance capacity building and research capabilities across East Africa.',
-    date: '2024-01-05',
-    category: 'Collaborations',
-    image: '/images/news-3.jpg',
-  },
-];
 
-export default function NewsroomPage() {
+export default async function NewsroomPage() {
+  const newsItems: NewsType[] = await getAllNews();
+  console.log(newsItems)
+  if (!newsItems || newsItems.length === 0) {
+    return null;
+  }
   return (
     <div className="pt-20">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
@@ -45,7 +30,15 @@ export default function NewsroomPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {newsItems.map((item) => (
               <Card key={item.title} hover>
-                <div className="aspect-video bg-gray-200" />
+                <div className="aspect-video bg-gray-200 relative overflow-hidden">
+                {item.featuredImage && (
+                  <img
+                    src={urlFor(item.featuredImage).width(600).height(400).url()}
+                    alt={item.featuredImage.alt || item.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+              </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
                     <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
@@ -53,11 +46,6 @@ export default function NewsroomPage() {
                     </span>
                     <div className="flex items-center text-gray-500 text-sm">
                       <Calendar size={14} className="mr-1" />
-                      {new Date(item.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
                     </div>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>

@@ -2,35 +2,17 @@ import Container from '../ui/Container';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import { Calendar } from 'lucide-react';
+import { getAllNews } from '@/lib/sanity.queries';
+import { urlFor } from '@/lib/sanity.client';
+import { News as NewsType } from '@/lib/sanity.types';
 
-const newsItems = [
-  {
-    title: 'Community Health Camp Reaches 1,000 Beneficiaries',
-    excerpt: 'Our latest health camp provided free medical screenings and treatment to over 1,000 community members.',
-    date: '2024-01-15',
-    image: '/images/news-1.jpg',
-    category: 'Community',
-    href: '/newsroom/community-health-camp',
-  },
-  {
-    title: 'New Clinical Trial Approved for HIV Prevention',
-    excerpt: 'AMBSO receives approval to conduct groundbreaking clinical trial on innovative HIV prevention methods.',
-    date: '2024-01-10',
-    image: '/images/news-2.jpg',
-    category: 'Research',
-    href: '/newsroom/hiv-prevention-trial',
-  },
-  {
-    title: 'Partnership with International Health Organization',
-    excerpt: 'Strategic collaboration announced to enhance capacity building and research capabilities.',
-    date: '2024-01-05',
-    image: '/images/news-3.jpg',
-    category: 'Collaboration',
-    href: '/newsroom/new-partnership',
-  },
-];
+export default async function News() {
+  const newsItems: NewsType[] = await getAllNews();
 
-export default function News() {
+  if (!newsItems || newsItems.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-20 bg-gray-50">
       <Container>
@@ -50,21 +32,26 @@ export default function News() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsItems.map((item) => (
-            <Card key={item.title} hover href={item.href}>
+            <Card key={item._id} hover href={`/newsroom/${item.slug.current}`}>
               <div className="aspect-video bg-gray-200 relative overflow-hidden">
-                <div
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${item.image})` }}
-                />
+                {item.featuredImage && (
+                  <img
+                    src={urlFor(item.featuredImage).width(600).height(400).url()}
+                    alt={item.featuredImage.alt || item.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
-                    {item.category}
-                  </span>
+                  {item.category && (
+                    <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full capitalize">
+                      {item.category}
+                    </span>
+                  )}
                   <div className="flex items-center text-gray-500 text-sm">
                     <Calendar size={14} className="mr-1" />
-                    {new Date(item.date).toLocaleDateString('en-US', {
+                    {new Date(item.publishedAt).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric',
