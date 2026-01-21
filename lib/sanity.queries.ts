@@ -446,7 +446,7 @@ export const locationsQuery = groq`
   }
 `;
 
-// Hero Section Query
+// Hero Section Query (legacy)
 export const heroSectionQuery = groq`
   *[_type == "heroSection" && name == "homepage-hero"][0] {
     _id,
@@ -454,6 +454,29 @@ export const heroSectionQuery = groq`
     slides,
     autoplay,
     autoplaySpeed
+  }
+`;
+
+// Hero Slides Query - fetches individual slide documents
+export const heroSlidesQuery = groq`
+  *[_type == "heroSlide" && isActive == true] | order(order asc) {
+    _id,
+    title,
+    subtitle,
+    description,
+    category,
+    image {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    ctaText,
+    ctaLink,
+    secondaryCtaText,
+    secondaryCtaLink,
+    order
   }
 `;
 
@@ -587,4 +610,14 @@ export async function getLocations() {
 
 export async function getHeroSection() {
   return await client.fetch(heroSectionQuery);
+}
+
+export async function getHeroSlides() {
+  try {
+    const data = await client.fetch(heroSlidesQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching hero slides:', error);
+    return [];
+  }
 }

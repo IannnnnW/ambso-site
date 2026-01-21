@@ -243,3 +243,22 @@ export interface HeroSection {
   autoplay: boolean;
   autoplaySpeed: number;
 }
+
+// Hero Slide Types (document-based)
+export type HeroSlideCategory = 'clinical-trials' | 'research' | 'community' | 'clinical' | 'training' | 'announcement' | 'partnership';
+
+export interface HeroSlideDocument {
+  _id: string;
+  _type: 'heroSlide';
+  title: string;
+  subtitle?: string;
+  description?: string;
+  image: SanityImage;
+  category?: HeroSlideCategory;
+  ctaText?: string;
+  ctaLink?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
+  order: number;
+  isActive: boolean;
+}
