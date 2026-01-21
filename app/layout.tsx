@@ -15,9 +15,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AMBSO - Transforming Africa through innovative research, training and service provision",
+  title: "AMBSO",
   description: "African Medical and Behavioral Sciences Organization (AMBSO) is dedicated to advancing health through clinical trials, community programs, capacity building, and innovative research.",
   keywords: ["AMBSO", "health research", "clinical trials", "community health", "Uganda", "Africa", "medical research"],
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+    ],
+  apple: '/ambso-site/apple-icon.png',
+  shortcut: '/ambso-site/icon.png',
+  },
 };
 
 export default function RootLayout({
