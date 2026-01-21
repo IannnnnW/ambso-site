@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
       - name: Restore Next.js cache
         uses: actions/cache@v4
         with:
@@ -36,13 +39,16 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build with Next.js
         env:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
           NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
-        run: npx next build
+        run: npm run build
+
+      - name: List output directory
+        run: ls -la out
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -59,4 +65,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        
