@@ -70,7 +70,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
             <Image
-              src="/images/logo.png"
+              src="/ambso-site/images/logo.png"
               alt="AMBSO Logo"
               width={120}
               height={60}

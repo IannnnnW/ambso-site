@@ -10,7 +10,7 @@ export default function Footer() {
           {/* About */}
           <div>
             <Image
-              src="/images/logo.png"
+              src="/ambso-site/images/logo.png"
               alt="AMBSO Logo"
               width={120}
               height={60}
