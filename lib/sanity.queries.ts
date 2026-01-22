@@ -98,6 +98,45 @@ export const singleTeamMemberQuery = groq`
   }
 `;
 
+// Get all team members with counts by department
+export const allTeamMembersQuery = groq`
+  *[_type == "teamMember" && active == true] | order(order asc) {
+    _id,
+    name,
+    slug,
+    role,
+    department,
+    image,
+    order
+  }
+`;
+
+// Get team member with related colleagues (same department)
+export const teamMemberWithColleaguesQuery = groq`
+  *[_type == "teamMember" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    role,
+    department,
+    bio,
+    image,
+    email,
+    phone,
+    qualifications,
+    expertise,
+    socialMedia,
+    "colleagues": *[_type == "teamMember" && active == true && department == ^.department && slug.current != $slug] | order(order asc) [0...4] {
+      _id,
+      name,
+      slug,
+      role,
+      department,
+      image
+    }
+  }
+`;
+
 // Get all program categories
 export const programCategoriesQuery = groq`
   *[_type == "program"] | order(order asc) {
@@ -499,6 +538,36 @@ export async function getTeamMembers() {
 
 export async function getTeamByDepartment(department: string) {
   return await client.fetch(teamByDepartmentQuery, { department });
+}
+
+export async function getAllTeamMembers() {
+  try {
+    const data = await client.fetch(allTeamMembersQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching all team members:', error);
+    return [];
+  }
+}
+
+export async function getTeamMember(slug: string) {
+  try {
+    const data = await client.fetch(singleTeamMemberQuery, { slug });
+    return data;
+  } catch (error) {
+    console.error('Error fetching team member:', error);
+    return null;
+  }
+}
+
+export async function getTeamMemberWithColleagues(slug: string) {
+  try {
+    const data = await client.fetch(teamMemberWithColleaguesQuery, { slug });
+    return data;
+  } catch (error) {
+    console.error('Error fetching team member with colleagues:', error);
+    return null;
+  }
 }
 
 export async function getProgramCategories() {
