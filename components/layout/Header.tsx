@@ -22,6 +22,7 @@ const navigation = [
       { name: 'Community', href: '/programs/community' },
       { name: 'Capacity Building', href: '/programs/capacity-building' },
       { name: 'Clinical', href: '/programs/clinical' },
+      { name: 'Resource Mobilization', href: '/programs/resource-mobilization'}
     ],
   },
   {
