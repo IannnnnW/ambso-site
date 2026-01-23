@@ -244,6 +244,33 @@ export interface HeroSection {
   autoplaySpeed: number;
 }
 
+// Resource Types
+export type ResourceType = 'publication' | 'report' | 'guide' | 'policy-brief' | 'abstract' | 'infographic' | 'video' | 'other';
+export type ResourceCategory = 'hiv-aids' | 'research' | 'clinical' | 'community' | 'policy' | 'training';
+
+export interface Resource {
+  _id: string;
+  _type: 'resource';
+  title: string;
+  slug: { current: string };
+  Conference?: string;
+  resourceType: ResourceType;
+  file?: {
+    asset: {
+      _ref: string;
+      url?: string;
+    };
+  };
+  externalLink?: string;
+  thumbnail?: SanityImage;
+  category?: ResourceCategory[];
+  publishedDate?: string;
+  authors?: string[];
+  relatedPrograms?: ProgramCategory[];
+  relatedResearch?: Research[];
+  featured: boolean;
+}
+
 // Hero Slide Types (document-based)
 export type HeroSlideCategory = 'clinical-trials' | 'research' | 'community' | 'clinical' | 'training' | 'announcement' | 'partnership';
 

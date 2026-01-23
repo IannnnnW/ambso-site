@@ -39,7 +39,6 @@ function getCategoryColor(slug: string) {
 export default async function ProgramsPage() {
   const categories: ProgramCategory[] = await getProgramCategories();
   const partners: Partner[] = await getFeaturedPartners();
-  console.log(partners)
   return (
     <div className="pt-20">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">

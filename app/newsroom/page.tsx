@@ -8,7 +8,6 @@ import { urlFor } from '@/lib/sanity.client';
 
 export default async function NewsroomPage() {
   const newsItems: NewsType[] = await getAllNews();
-  console.log(newsItems)
   if (!newsItems || newsItems.length === 0) {
     return null;
   }

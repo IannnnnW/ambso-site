@@ -485,6 +485,73 @@ export const locationsQuery = groq`
   }
 `;
 
+// Resource Queries
+export const allResourcesQuery = groq`
+  *[_type == "resource"] | order(publishedDate desc) {
+    _id,
+    title,
+    slug,
+    Conference,
+    resourceType,
+    file {
+      asset->{
+        _ref,
+        url
+      }
+    },
+    externalLink,
+    thumbnail,
+    category,
+    publishedDate,
+    authors,
+    featured
+  }
+`;
+
+export const resourcesByTypeQuery = groq`
+  *[_type == "resource" && resourceType == $resourceType] | order(publishedDate desc) {
+    _id,
+    title,
+    slug,
+    Conference,
+    resourceType,
+    file {
+      asset->{
+        _ref,
+        url
+      }
+    },
+    externalLink,
+    thumbnail,
+    category,
+    publishedDate,
+    authors,
+    featured
+  }
+`;
+
+export const featuredResourcesQuery = groq`
+  *[_type == "resource" && featured == true] | order(publishedDate desc) [0...6] {
+    _id,
+    title,
+    slug,
+    Conference,
+    resourceType,
+    file {
+      asset->{
+        _ref,
+        url
+      }
+    },
+    externalLink,
+    thumbnail,
+    category,
+    publishedDate,
+    authors,
+    featured
+  }
+`;
+
 // Hero Section Query (legacy)
 export const heroSectionQuery = groq`
   *[_type == "heroSection" && name == "homepage-hero"][0] {
@@ -570,10 +637,39 @@ export async function getTeamMemberWithColleagues(slug: string) {
   }
 }
 
+export async function getAllResources() {
+  try {
+    const data = await client.fetch(allResourcesQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching resources:', error);
+    return [];
+  }
+}
+
+export async function getResourcesByType(resourceType: string) {
+  try {
+    const data = await client.fetch(resourcesByTypeQuery, { resourceType });
+    return data;
+  } catch (error) {
+    console.error('Error fetching resources by type:', error);
+    return [];
+  }
+}
+
+export async function getFeaturedResources() {
+  try {
+    const data = await client.fetch(featuredResourcesQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching featured resources:', error);
+    return [];
+  }
+}
+
 export async function getProgramCategories() {
   try {
     const data = await client.fetch(programCategoriesQuery);
-    console.log('Program categories:', data);
     return data;
   } catch (error) {
     console.error('Error fetching program categories:', error);
@@ -585,7 +681,6 @@ export async function getProgramCategories() {
 export async function getProgramCategory(slug: string) {
   try {
     const data = await client.fetch(singleProgramCategoryQuery, { slug });
-    console.log('Program category:', data);
     return data;
   } catch (error) {
     console.error('Error fetching program category:', error);
@@ -597,7 +692,6 @@ export async function getProgramCategory(slug: string) {
 export async function getProgramsByCategory(categoryId: string) {
   try {
     const data = await client.fetch(programsByCategoryQuery, { categoryId });
-    console.log('Programs by category:', data);
     return data;
   } catch (error) {
     console.error('Error fetching programs by category:', error);
@@ -609,7 +703,6 @@ export async function getProgramsByCategory(categoryId: string) {
 export async function getProgramsByCategorySlug(categorySlug: string) {
   try {
     const data = await client.fetch(programsByCategorySlugQuery, { categorySlug });
-    console.log('Programs by category slug:', data);
     return data;
   } catch (error) {
     console.error('Error fetching programs by category slug:', error);
@@ -621,7 +714,6 @@ export async function getProgramsByCategorySlug(categorySlug: string) {
 export async function getAllProgramsWithCategories() {
   try {
     const data = await client.fetch(allProgramsWithCategoryQuery);
-    console.log('All programs with categories:', data);
     return data;
   } catch (error) {
     console.error('Error fetching all programs with categories:', error);
