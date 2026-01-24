@@ -6,8 +6,29 @@ import { getAllNews } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
 import { News as NewsType } from '@/lib/sanity.types';
 
-export default async function News() {
+interface NewsProps {
+  content?: {
+    title?: string;
+    subtitle?: string;
+    viewAllText?: string;
+    viewAllLink?: string;
+  };
+}
+
+const defaultContent = {
+  title: 'Latest News',
+  subtitle: 'Stay updated with our recent activities and achievements',
+  viewAllText: 'View All News',
+  viewAllLink: '/newsroom',
+};
+
+export default async function News({ content }: NewsProps) {
   const newsItems: NewsType[] = await getAllNews();
+
+  const title = content?.title ?? defaultContent.title;
+  const subtitle = content?.subtitle ?? defaultContent.subtitle;
+  const viewAllText = content?.viewAllText ?? defaultContent.viewAllText;
+  const viewAllLink = content?.viewAllLink ?? defaultContent.viewAllLink;
 
   if (!newsItems || newsItems.length === 0) {
     return null;
@@ -19,14 +40,14 @@ export default async function News() {
         <div className="flex justify-between items-end mb-12">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Latest News
+              {title}
             </h2>
             <p className="text-lg text-gray-600">
-              Stay updated with our recent activities and achievements
+              {subtitle}
             </p>
           </div>
-          <Button href="/newsroom" variant="outline">
-            View All News
+          <Button href={viewAllLink} variant="outline">
+            {viewAllText}
           </Button>
         </div>
 

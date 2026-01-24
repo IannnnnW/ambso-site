@@ -1,6 +1,7 @@
 import Container from '@/components/ui/Container';
 import ResourcesGrid from '@/components/resources/ResourcesGrid';
-import { getAllResources } from '@/lib/sanity.queries';
+import { getAllResources, getResourcesPageContent } from '@/lib/sanity.queries';
+import { deepMergeWithFallback, fallbackResourcesPageContent } from '@/lib/fallback-data';
 import { BookOpen, FileText, Presentation, TrendingUp } from 'lucide-react';
 
 export const metadata = {
@@ -10,7 +11,12 @@ export const metadata = {
 };
 
 export default async function ResourcesPage() {
-  const resources = await getAllResources();
+  const [resources, sanityContent] = await Promise.all([
+    getAllResources(),
+    getResourcesPageContent(),
+  ]);
+
+  const content = deepMergeWithFallback(sanityContent, fallbackResourcesPageContent);
 
   // Calculate stats
   const publicationsCount = resources.filter(
@@ -30,10 +36,9 @@ export default async function ResourcesPage() {
               <BookOpen className="w-4 h-4" />
               <span>Research Library</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Resources</h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">{content.hero?.title}</h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Explore AMBSO&apos;s scholarly contributions including peer-reviewed publications,
-              conference abstracts, and research presentations.
+              {content.hero?.description}
             </p>
           </div>
         </Container>

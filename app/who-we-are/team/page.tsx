@@ -1,6 +1,7 @@
 import Container from '@/components/ui/Container';
 import TeamGrid from '@/components/team/TeamGrid';
-import { getAllTeamMembers } from '@/lib/sanity.queries';
+import { getAllTeamMembers, getTeamPageContent } from '@/lib/sanity.queries';
+import { deepMergeWithFallback, fallbackTeamPageContent } from '@/lib/fallback-data';
 import { Users } from 'lucide-react';
 
 export const metadata = {
@@ -10,7 +11,12 @@ export const metadata = {
 };
 
 export default async function TeamPage() {
-  const members = await getAllTeamMembers();
+  const [members, sanityContent] = await Promise.all([
+    getAllTeamMembers(),
+    getTeamPageContent(),
+  ]);
+
+  const content = deepMergeWithFallback(sanityContent, fallbackTeamPageContent);
 
   return (
     <div className="pt-20">
@@ -22,10 +28,9 @@ export default async function TeamPage() {
               <Users className="w-4 h-4" />
               <span>Meet Our Team</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Our Team</h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">{content.hero?.title}</h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Meet the dedicated professionals driving AMBSO&apos;s mission to transform Africa
-              through innovative research, training, and service provision.
+              {content.hero?.description}
             </p>
           </div>
         </Container>
@@ -36,10 +41,7 @@ export default async function TeamPage() {
         <Container>
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-lg text-gray-700 leading-relaxed">
-              AMBSO is led by a <strong>Board of Directors</strong> composed of Ugandan research
-              scientists and founders. The Executive Director serves as both leader and BOD
-              Chairperson, working with the <strong>Senior Management Team (SMT)</strong> to provide
-              day-to-day technical oversight of our various research and program activities.
+              {content.leadershipIntro}
             </p>
           </div>
         </Container>

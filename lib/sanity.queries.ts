@@ -48,6 +48,41 @@ export const singleNewsQuery = groq`
   }
 `;
 
+export const newsWithRelatedQuery = groq`
+  *[_type == "news" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    featuredImage,
+    content,
+    category,
+    tags,
+    author->{
+      name,
+      role,
+      image,
+      slug
+    },
+    publishedAt,
+    "relatedNews": *[_type == "news" && slug.current != $slug && (category == ^.category || count((tags[])[@ in ^.tags[]]) > 0)] | order(publishedAt desc) [0...3] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      featuredImage,
+      category,
+      publishedAt
+    }
+  }
+`;
+
+export const allNewsSlugsQuery = groq`
+  *[_type == "news"] {
+    "slug": slug.current
+  }
+`;
+
 // Team Queries
 export const teamMembersQuery = groq`
   *[_type == "teamMember" && active == true] | order(order asc) {
@@ -552,6 +587,70 @@ export const featuredResourcesQuery = groq`
   }
 `;
 
+// Page Content Queries
+
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0] {
+    _id,
+    siteName,
+    siteDescription,
+    logo,
+    contactEmail,
+    contactPhone,
+    address,
+    socialMedia,
+    workingHours
+  }
+`;
+
+export const homepageContentQuery = groq`
+  *[_type == "homepageContent"][0] {
+    _id,
+    missionSection,
+    programsSection,
+    impactSection,
+    newsSection,
+    partnersSection,
+    ctaSection
+  }
+`;
+
+export const aboutPageContentQuery = groq`
+  *[_type == "aboutPageContent"][0] {
+    _id,
+    hero,
+    mission,
+    vision,
+    coreValues,
+    story,
+    researchFocus
+  }
+`;
+
+export const contactPageContentQuery = groq`
+  *[_type == "contactPageContent"][0] {
+    _id,
+    hero,
+    formSection,
+    contactInfo
+  }
+`;
+
+export const teamPageContentQuery = groq`
+  *[_type == "teamPageContent"][0] {
+    _id,
+    hero,
+    leadershipIntro
+  }
+`;
+
+export const resourcesPageContentQuery = groq`
+  *[_type == "resourcesPageContent"][0] {
+    _id,
+    hero
+  }
+`;
+
 // Hero Section Query (legacy)
 export const heroSectionQuery = groq`
   *[_type == "heroSection" && name == "homepage-hero"][0] {
@@ -597,6 +696,26 @@ export async function getAllNews() {
 
 export async function getNewsPost(slug: string) {
   return await client.fetch(singleNewsQuery, { slug });
+}
+
+export async function getNewsWithRelated(slug: string) {
+  try {
+    const data = await client.fetch(newsWithRelatedQuery, { slug });
+    return data;
+  } catch (error) {
+    console.error('Error fetching news with related:', error);
+    return null;
+  }
+}
+
+export async function getAllNewsSlugs() {
+  try {
+    const data = await client.fetch(allNewsSlugsQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching news slugs:', error);
+    return [];
+  }
 }
 
 export async function getTeamMembers() {
@@ -664,6 +783,68 @@ export async function getFeaturedResources() {
   } catch (error) {
     console.error('Error fetching featured resources:', error);
     return [];
+  }
+}
+
+// Page Content Fetch Functions
+
+export async function getSiteSettings() {
+  try {
+    const data = await client.fetch(siteSettingsQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching site settings:', error);
+    return null;
+  }
+}
+
+export async function getHomepageContent() {
+  try {
+    const data = await client.fetch(homepageContentQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching homepage content:', error);
+    return null;
+  }
+}
+
+export async function getAboutPageContent() {
+  try {
+    const data = await client.fetch(aboutPageContentQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching about page content:', error);
+    return null;
+  }
+}
+
+export async function getContactPageContent() {
+  try {
+    const data = await client.fetch(contactPageContentQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching contact page content:', error);
+    return null;
+  }
+}
+
+export async function getTeamPageContent() {
+  try {
+    const data = await client.fetch(teamPageContentQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching team page content:', error);
+    return null;
+  }
+}
+
+export async function getResourcesPageContent() {
+  try {
+    const data = await client.fetch(resourcesPageContentQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching resources page content:', error);
+    return null;
   }
 }
 

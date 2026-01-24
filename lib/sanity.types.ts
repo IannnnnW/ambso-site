@@ -289,3 +289,151 @@ export interface HeroSlideDocument {
   order: number;
   isActive: boolean;
 }
+
+// Page Content Types
+
+export interface SiteSettings {
+  _id: string;
+  _type: 'siteSettings';
+  siteName: string;
+  siteDescription?: string;
+  logo?: SanityImage;
+  contactEmail?: string;
+  contactPhone?: string;
+  address?: string;
+  socialMedia?: {
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+  };
+  workingHours?: {
+    weekdays?: string;
+    weekends?: string;
+  };
+}
+
+export interface HomepageContent {
+  _id: string;
+  _type: 'homepageContent';
+  missionSection?: {
+    mission?: { title: string; description: string };
+    vision?: { title: string; description: string };
+    values?: { title: string; description: string };
+  };
+  programsSection?: {
+    title: string;
+    subtitle?: string;
+    programs?: Array<{
+      title: string;
+      description: string;
+      icon: string;
+      href: string;
+      colorClass: string;
+    }>;
+  };
+  impactSection?: {
+    title: string;
+    subtitle?: string;
+    stats?: Array<{
+      value: number;
+      label: string;
+      suffix?: string;
+    }>;
+  };
+  newsSection?: {
+    title: string;
+    subtitle?: string;
+    viewAllText?: string;
+    viewAllLink?: string;
+  };
+  partnersSection?: {
+    title: string;
+    subtitle?: string;
+  };
+  ctaSection?: {
+    title: string;
+    description?: string;
+    primaryButton?: { text: string; link: string };
+    secondaryButton?: { text: string; link: string };
+  };
+}
+
+export interface AboutPageContent {
+  _id: string;
+  _type: 'aboutPageContent';
+  hero?: {
+    title: string;
+    description?: string;
+  };
+  mission?: {
+    title: string;
+    description?: string;
+  };
+  vision?: {
+    title: string;
+    description?: string;
+  };
+  coreValues?: {
+    sectionTitle: string;
+    values?: Array<{
+      title: string;
+      description: string;
+      icon: string;
+      colorClass: string;
+    }>;
+  };
+  story?: {
+    title: string;
+    content?: PortableTextBlock[];
+  };
+  researchFocus?: {
+    sectionTitle: string;
+    areas?: Array<{
+      title: string;
+      description: string;
+    }>;
+  };
+}
+
+export interface ContactPageContent {
+  _id: string;
+  _type: 'contactPageContent';
+  hero?: {
+    title: string;
+    description?: string;
+  };
+  formSection?: {
+    title: string;
+    subjects?: Array<{ value: string; label: string }>;
+  };
+  contactInfo?: {
+    title: string;
+    headquarters?: string;
+    additionalOffices?: string;
+    phone?: string;
+    email?: string;
+    weekdayHours?: string;
+    weekendHours?: string;
+  };
+}
+
+export interface TeamPageContent {
+  _id: string;
+  _type: 'teamPageContent';
+  hero?: {
+    title: string;
+    description?: string;
+  };
+  leadershipIntro?: string;
+}
+
+export interface ResourcesPageContent {
+  _id: string;
+  _type: 'resourcesPageContent';
+  hero?: {
+    title: string;
+    description?: string;
+  };
+}

@@ -3,12 +3,28 @@
 import { useEffect, useState, useRef } from 'react';
 import Container from '../ui/Container';
 
-const stats = [
-  { value: 50000, label: 'People Reached', suffix: '+' },
-  { value: 120, label: 'Research Studies', suffix: '+' },
-  { value: 25, label: 'Partner Organizations', suffix: '+' },
-  { value: 15, label: 'Years of Impact', suffix: '' },
-];
+interface ImpactProps {
+  content?: {
+    title?: string;
+    subtitle?: string;
+    stats?: Array<{
+      value: number;
+      label: string;
+      suffix?: string;
+    }>;
+  };
+}
+
+const defaultContent = {
+  title: 'Our Impact',
+  subtitle: 'Making a measurable difference in communities across Africa',
+  stats: [
+    { value: 50000, label: 'People Reached', suffix: '+' },
+    { value: 120, label: 'Research Studies', suffix: '+' },
+    { value: 25, label: 'Partner Organizations', suffix: '+' },
+    { value: 15, label: 'Years of Impact', suffix: '' },
+  ],
+};
 
 function Counter({ value, duration = 2000 }: { value: number; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -47,15 +63,17 @@ function Counter({ value, duration = 2000 }: { value: number; duration?: number 
   return <span ref={ref}>{count.toLocaleString()}</span>;
 }
 
-export default function Impact() {
+export default function Impact({ content }: ImpactProps) {
+  const title = content?.title ?? defaultContent.title;
+  const subtitle = content?.subtitle ?? defaultContent.subtitle;
+  const stats = content?.stats ?? defaultContent.stats;
+
   return (
     <section className="py-20 bg-primary text-white">
       <Container>
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Impact</h2>
-          <p className="text-lg text-gray-200 max-w-2xl mx-auto">
-            Making a measurable difference in communities across Africa
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
+          <p className="text-lg text-gray-200 max-w-2xl mx-auto">{subtitle}</p>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
