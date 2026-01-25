@@ -398,6 +398,22 @@ export const featuredPartnersQuery = groq`
   }
 `;
 
+export const partnersWithCollaboratorsQuery = groq`
+  *[_type == "partner" && defined(leadCollaborators) && count(leadCollaborators) > 0] | order(order asc) {
+    _id,
+    name,
+    logo,
+    leadCollaborators[] {
+      name,
+      picture,
+      position,
+      title
+    },
+    website,
+    country
+  }
+`;
+
 export const singlePartnerQuery = groq`
   *[_type == "partner" && slug.current == $slug][0] {
     _id,
@@ -924,6 +940,16 @@ export async function getPartners() {
 
 export async function getFeaturedPartners() {
   return await client.fetch(featuredPartnersQuery);
+}
+
+export async function getPartnersWithCollaborators() {
+  try {
+    const data = await client.fetch(partnersWithCollaboratorsQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching partners with collaborators:', error);
+    return [];
+  }
 }
 
 export async function getPartner(slug: string) {

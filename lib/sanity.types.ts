@@ -360,12 +360,30 @@ export interface HomepageContent {
   };
 }
 
+export interface LeadCollaborator {
+  name: string;
+  picture?: SanityImage;
+  position: string;
+  title?: string;
+}
+
+export interface PartnerWithCollaborators {
+  _id: string;
+  name: string;
+  logo?: SanityImage;
+  leadCollaborators?: LeadCollaborator[];
+  website?: string;
+  country?: string;
+}
+
 export interface AboutPageContent {
   _id: string;
   _type: 'aboutPageContent';
   hero?: {
     title: string;
     description?: string;
+    videoUrl?: string;
+    videoThumbnail?: SanityImage;
   };
   mission?: {
     title: string;
@@ -380,13 +398,31 @@ export interface AboutPageContent {
     values?: Array<{
       title: string;
       description: string;
-      icon: string;
-      colorClass: string;
+      icon?: string;
+      colorClass?: string;
     }>;
   };
   story?: {
     title: string;
     content?: PortableTextBlock[];
+  };
+  videoSection?: {
+    title?: string;
+    videoUrl?: string;
+    thumbnail?: SanityImage;
+  };
+  collaboratorsSection?: {
+    title: string;
+    subtitle?: string;
+  };
+  whatWeDo?: {
+    sectionTitle: string;
+    items?: Array<{
+      title: string;
+      description: string;
+      link: string;
+      icon?: string;
+    }>;
   };
   researchFocus?: {
     sectionTitle: string;

@@ -120,8 +120,8 @@ export const fallbackAboutPageContent: AboutPageContent = {
   _id: 'fallback-about',
   _type: 'aboutPageContent',
   hero: {
-    title: 'About AMBSO',
-    description: 'Africa Medical and Behavioural Sciences Organization (AMBSO) is a Ugandan not-for-profit entity focused on research and service delivery regarding HIV, infectious diseases, and non-communicable conditions.',
+    title: 'Welcome to AMBSO',
+    description: 'Africa Medical and Behavioural Sciences Organization (AMBSO) is a locally registered not-for-profit Research and Service based Organization that is immensely contributing to knowledge on HIV infection, other infectious and non-communicable diseases at both national and international levels.',
   },
   mission: {
     title: 'Our Mission',
@@ -137,32 +137,61 @@ export const fallbackAboutPageContent: AboutPageContent = {
       {
         title: 'Integrity',
         description: 'Exhibiting ethical conduct in all our research and program services',
-        icon: 'Heart',
-        colorClass: 'bg-blue-100 text-primary',
       },
       {
         title: 'Respect for Diversity',
-        description: 'Embracing inclusivity across all our operations and partnerships',
-        icon: 'CheckCircle',
-        colorClass: 'bg-green-100 text-green-600',
+        description: 'Embracing inclusivity across the execution of our services',
       },
       {
         title: 'Innovativeness',
-        description: 'Continuously seeking new approaches to emerging challenges',
-        icon: 'Lightbulb',
-        colorClass: 'bg-purple-100 text-purple-600',
+        description: 'Continuously seeking new approaches to advancing research to solve emerging challenges',
       },
       {
         title: 'Efficiency',
-        description: 'Delivering timely, resource-conscious outcomes with quality standards',
-        icon: 'Zap',
-        colorClass: 'bg-orange-100 text-orange-600',
+        description: 'Delivering timely and resource conscious outcomes while upholding high quality standards',
       },
     ],
   },
   story: {
-    title: 'Our Story',
+    title: 'Our History',
     content: undefined,
+  },
+  videoSection: {
+    title: 'Learn More About AMBSO',
+    videoUrl: 'https://www.youtube.com/embed/tNd3UStBslA',
+  },
+  collaboratorsSection: {
+    title: 'Our Collaborators',
+    subtitle: 'Working with leading institutions worldwide to advance health research',
+  },
+  whatWeDo: {
+    sectionTitle: 'What We Do',
+    items: [
+      {
+        title: 'Our Programs',
+        description: 'We implement clinical, community, and capacity building programs across Uganda',
+        link: '/programs',
+        icon: 'Briefcase',
+      },
+      {
+        title: 'Our Research',
+        description: 'We conduct clinical trials and behavioral research to address health challenges',
+        link: '/research',
+        icon: 'Microscope',
+      },
+      {
+        title: 'Our Partners',
+        description: 'We collaborate with leading academic and research institutions globally',
+        link: '/collaborations',
+        icon: 'Handshake',
+      },
+      {
+        title: 'Upcoming Events',
+        description: 'Stay updated with our latest events and community activities',
+        link: '/newsroom',
+        icon: 'Calendar',
+      },
+    ],
   },
   researchFocus: {
     sectionTitle: 'Our Research Focus',
@@ -178,6 +207,13 @@ export const fallbackAboutPageContent: AboutPageContent = {
     ],
   },
 };
+
+export const fallbackStoryContent = [
+  'Africa Medical and Behavioral Sciences Organization (AMBSO) was established in 2016 by experienced Ugandan epidemiologists and clinical trialists. The organization emerged from a collaborative partnership with Uro Care Hospital, initially focusing on Voluntary Medical Male Circumcision (VMMC) in partnership with the Infectious Diseases Institute (IDI), marking the beginning of our commitment to evidence-based HIV prevention strategies.',
+  'In 2017, AMBSO launched the Africa Population Health Surveillance (APHS) program, a landmark initiative designed to monitor and strengthen community health outcomes. This program represents our deep commitment to public health research and community-based service delivery.',
+  'Since then, we have significantly expanded our scope to address a broader spectrum of health challenges across Africa. Our work now encompasses gender-based violence prevention, substance abuse interventions, emergency resuscitation training, prostate cancer research, and comprehensive clinical trials.',
+  'In 2021, AMBSO entered the clinical trials arena, further strengthening our research capabilities. Today, we operate across three core domains: clinical programs, community-based initiatives, and capacity-building efforts. We maintain strategic partnerships with leading international institutions including Karolinska Institutet, USC, Boston College, UCLA, and various East African research centers.',
+];
 
 export const fallbackContactPageContent: ContactPageContent = {
   _id: 'fallback-contact',

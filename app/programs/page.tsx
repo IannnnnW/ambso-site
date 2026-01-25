@@ -15,8 +15,8 @@ import { getProgramCategories, getFeaturedPartners } from '@/lib/sanity.queries'
 // Icon mapping function
 function getCategoryIcon(slug: string) {
   const iconMap: Record<string, any> = {
-    'capacity-building-programs': GraduationCap,
-    'clinical-programs': Stethoscope,
+    'capacity-building': GraduationCap,
+    'clinical': Stethoscope,
     'resource-mobilization': DollarSign,
     'community-programs': HandHeart,
   };
@@ -27,10 +27,10 @@ function getCategoryIcon(slug: string) {
 // Color mapping function
 function getCategoryColor(slug: string) {
   const colorMap: Record<string, { bg: string; text: string }> = {
-    'capacity-building-programs': { bg: 'bg-blue-100', text: 'text-blue-600' },
-    'clinical-programs': { bg: 'bg-blue-100', text: 'text-blue-600' },
-    'resource-mobilization': { bg: 'bg-blue-100', text: 'text-blue-600' },
-    'community-programs': { bg: 'bg-blue-100', text: 'text-blue-600' },
+    'capacity-building': { bg: 'bg-blue-100', text: 'text-primary' },
+    'clinical': { bg: 'bg-blue-100', text: 'text-primary' },
+    'resource-mobilization': { bg: 'bg-blue-100', text: 'text-primary' },
+    'community-programs': { bg: 'bg-blue-100', text: 'text-primary' },
   };
   
   return colorMap[slug] || { bg: 'bg-blue-100', text: 'text-primary' };
