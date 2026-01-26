@@ -21,7 +21,7 @@ const navigation = [
     submenu: [
       { name: 'Community', href: '/programs/community' },
       { name: 'Clinical', href: '/programs/clinical' },
-      { name: 'Resource Mobilization', href: '/programs/resource-mobilization'}
+      { name: 'Capacity Building', href: '/programs/capacity-building'}
     ],
   },
   {
