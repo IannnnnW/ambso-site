@@ -19,7 +19,7 @@ const navigation = [
     name: 'Programs',
     href: '/programs',
     submenu: [
-      { name: 'Community', href: '/programs/community' },
+      { name: 'Community', href: '/programs/community-programs' },
       { name: 'Clinical', href: '/programs/clinical' },
       { name: 'Capacity Building', href: '/programs/capacity-building'}
     ],

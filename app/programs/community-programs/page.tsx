@@ -15,7 +15,7 @@ import {
   LucideIcon,
 } from 'lucide-react';
 
-const CATEGORY_SLUG = 'community';
+const CATEGORY_SLUG = 'community-programs';
 
 // Icon mapping for fallback data
 const iconMap: Record<string, LucideIcon> = {
