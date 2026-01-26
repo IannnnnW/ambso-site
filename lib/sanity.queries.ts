@@ -263,6 +263,58 @@ export const programsByCategorySlugQuery = groq`
   }
 `;
 
+// Get single program by slug
+export const singleProgramQuery = groq`
+  *[_type == "programs" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    description,
+    shortDescription,
+    featuredImages,
+    objectives,
+    targetPopulation,
+    outcomes,
+    startDate,
+    endDate,
+    status,
+    gallery,
+    order,
+    category->{
+      _id,
+      title,
+      slug,
+      shortDescription
+    },
+    partners[]->{
+      _id,
+      name,
+      logo,
+      website
+    },
+    teamMembers[]->{
+      _id,
+      name,
+      role,
+      image,
+      slug
+    },
+    locations[]->{
+      name,
+      city,
+      district
+    }
+  }
+`;
+
+// Get all program slugs with their category slugs for static generation
+export const allProgramSlugsQuery = groq`
+  *[_type == "programs"] {
+    "slug": slug.current,
+    "categorySlug": category->slug.current
+  }
+`;
+
 // Get all programs with their categories
 export const allProgramsWithCategoryQuery = groq`
   *[_type == "programs"] | order(order asc) {
@@ -914,6 +966,28 @@ export async function getAllProgramsWithCategories() {
     return data;
   } catch (error) {
     console.error('Error fetching all programs with categories:', error);
+    return [];
+  }
+}
+
+// Get single program by slug
+export async function getProgram(slug: string) {
+  try {
+    const data = await client.fetch(singleProgramQuery, { slug });
+    return data;
+  } catch (error) {
+    console.error('Error fetching program:', error);
+    return null;
+  }
+}
+
+// Get all program slugs for static generation
+export async function getAllProgramSlugs() {
+  try {
+    const data = await client.fetch(allProgramSlugsQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching program slugs:', error);
     return [];
   }
 }

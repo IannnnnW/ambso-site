@@ -5,88 +5,76 @@ import Button from '@/components/ui/Button';
 import { getProgramCategory, getProgramsByCategorySlug } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
 import {
-  Users,
-  GraduationCap,
-  Heart,
-  AlertTriangle,
-  Activity,
+  HandCoins,
+  Building2,
+  Globe,
+  FileCheck,
+  Briefcase,
   ArrowRight,
   FileText,
   LucideIcon,
 } from 'lucide-react';
 
-const CATEGORY_SLUG = 'community';
+const CATEGORY_SLUG = 'resource-mobilization';
 
 // Icon mapping for fallback data
 const iconMap: Record<string, LucideIcon> = {
-  Users,
-  GraduationCap,
-  Heart,
-  AlertTriangle,
-  Activity,
+  HandCoins,
+  Building2,
+  Globe,
+  FileCheck,
+  Briefcase,
   FileText,
 };
 
 // Fallback programs if Sanity is unavailable
 const fallbackPrograms = [
   {
-    title: 'Community Advisory Board (CAB)',
-    shortDescription: 'Facilitating community input and partnership in our research and programs. The CAB ensures that community voices are heard and integrated into our decision-making processes.',
-    icon: 'Users',
+    title: 'Grant Writing & Proposal Development',
+    shortDescription: 'Developing compelling grant proposals and funding applications to secure resources for health programs and research initiatives.',
+    icon: 'FileCheck',
     color: 'bg-blue-100 text-blue-600',
     details: [
-      'Community representation in research',
-      'Feedback mechanism for programs',
-      'Community-led initiatives support',
-      'Partnership development',
+      'Grant proposal writing',
+      'Funding landscape analysis',
+      'Budget development',
+      'Compliance documentation',
     ],
   },
   {
-    title: 'Health Education',
-    shortDescription: 'Providing comprehensive health education initiatives to empower communities with knowledge about disease prevention, healthy living, and healthcare access.',
-    icon: 'GraduationCap',
+    title: 'Partnership Development',
+    shortDescription: 'Building strategic partnerships with donors, foundations, and organizations to support sustainable program funding.',
+    icon: 'Building2',
     color: 'bg-green-100 text-green-600',
     details: [
-      'Health literacy programs',
-      'Disease prevention education',
-      'Nutrition and wellness workshops',
-      'Youth health education',
+      'Donor relationship management',
+      'Corporate partnerships',
+      'Foundation engagement',
+      'Government collaboration',
     ],
   },
   {
-    title: 'Community Engagement Interventions',
-    shortDescription: 'Implementing targeted community-focused activities that address specific health challenges and promote community well-being.',
-    icon: 'Activity',
+    title: 'Fundraising Initiatives',
+    shortDescription: 'Implementing diverse fundraising strategies to support health research and community programs across Africa.',
+    icon: 'HandCoins',
     color: 'bg-purple-100 text-purple-600',
     details: [
-      'Outreach campaigns',
-      'Community health screening',
-      'Health promotion events',
-      'Mobile clinic services',
+      'Crowdfunding campaigns',
+      'Donor cultivation events',
+      'Individual giving programs',
+      'Corporate sponsorships',
     ],
   },
   {
-    title: 'Gender Based Violence (GBV)',
-    shortDescription: 'Comprehensive programs addressing and responding to gender-based violence through prevention, support services, and advocacy.',
-    icon: 'AlertTriangle',
-    color: 'bg-red-100 text-red-600',
-    details: [
-      'GBV prevention programs',
-      'Survivor support services',
-      'Community awareness campaigns',
-      'Referral networks',
-    ],
-  },
-  {
-    title: 'Illicit Drug Rehabilitation',
-    shortDescription: 'Prevention, response, and rehabilitation services for individuals affected by substance use and illicit drug abuse.',
-    icon: 'Heart',
+    title: 'International Funding',
+    shortDescription: 'Accessing international funding mechanisms and global health financing opportunities for sustainable program implementation.',
+    icon: 'Globe',
     color: 'bg-orange-100 text-orange-600',
     details: [
-      'Substance abuse prevention',
-      'Rehabilitation services',
-      'Counseling and support groups',
-      'Community reintegration programs',
+      'Global fund applications',
+      'Bilateral funding access',
+      'International foundation grants',
+      'Cross-border partnerships',
     ],
   },
 ];
@@ -96,14 +84,14 @@ const colorClasses = [
   'bg-blue-100 text-blue-600',
   'bg-green-100 text-green-600',
   'bg-purple-100 text-purple-600',
-  'bg-red-100 text-red-600',
   'bg-orange-100 text-orange-600',
   'bg-teal-100 text-teal-600',
+  'bg-red-100 text-red-600',
 ];
 
 export const metadata = {
-  title: 'Community Programs | AMBSO Programs',
-  description: 'Empowering communities through health education, violence prevention, and comprehensive support services that address social health determinants.',
+  title: 'Resource Mobilization | AMBSO Programs',
+  description: 'Securing sustainable funding for health research and program implementation through strategic partnerships and innovative fundraising.',
 };
 
 interface Program {
@@ -116,7 +104,7 @@ interface Program {
   objectives?: string[];
 }
 
-export default async function CommunityProgramPage() {
+export default async function ResourceMobilizationPage() {
   const [category, programs] = await Promise.all([
     getProgramCategory(CATEGORY_SLUG),
     getProgramsByCategorySlug(CATEGORY_SLUG),
@@ -131,27 +119,27 @@ export default async function CommunityProgramPage() {
         <Container>
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {category?.title || 'Community Programs'}
+              {category?.title || 'Resource Mobilization'}
             </h1>
             <p className="text-xl text-gray-100 leading-relaxed">
               {category?.shortDescription ||
-                'Empowering communities through health education, violence prevention, and comprehensive support services that address social health determinants.'}
+                'Securing sustainable funding for health research and program implementation through strategic partnerships and innovative fundraising.'}
             </p>
           </div>
         </Container>
       </section>
 
-      {/* Program Overview */}
+      {/* Overview */}
       <section className="py-16 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Building Stronger Communities
+              Sustaining Impact Through Strategic Funding
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Our community programs are designed to address social health determinants including violence
-              prevention, substance abuse, health literacy, and community empowerment through structured
-              advisory mechanisms. We work hand-in-hand with community members to create sustainable health solutions.
+              Our resource mobilization efforts focus on building diverse funding streams to ensure
+              the sustainability of health programs and research initiatives. We work with local and
+              international partners to secure the resources needed to transform healthcare across Africa.
             </p>
           </div>
 
@@ -211,7 +199,7 @@ export default async function CommunityProgramPage() {
             </div>
           ) : (
             // Fallback UI when no Sanity programs
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 gap-8">
               {fallbackPrograms.map((program) => {
                 const Icon = iconMap[program.icon] || FileText;
                 return (
@@ -237,71 +225,83 @@ export default async function CommunityProgramPage() {
         </Container>
       </section>
 
-      {/* Impact Section */}
+      {/* Funding Impact */}
       <section className="py-16 bg-gray-50">
         <Container>
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-            Our Community Impact
+            Our Funding Impact
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">50+</div>
-              <p className="text-gray-600">Communities Served</p>
+              <div className="text-4xl font-bold text-primary mb-2">$2M+</div>
+              <p className="text-gray-600">Funds Mobilized</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">10,000+</div>
-              <p className="text-gray-600">People Reached</p>
+              <div className="text-4xl font-bold text-primary mb-2">25+</div>
+              <p className="text-gray-600">Funding Partners</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">500+</div>
-              <p className="text-gray-600">Health Education Sessions</p>
+              <div className="text-4xl font-bold text-primary mb-2">40+</div>
+              <p className="text-gray-600">Grants Secured</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">100+</div>
-              <p className="text-gray-600">Community Leaders Trained</p>
+              <div className="text-4xl font-bold text-primary mb-2">15+</div>
+              <p className="text-gray-600">Countries Supported</p>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Community Involvement */}
+      {/* Partner Types */}
       <section className="py-16 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8">
-              Get Involved
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+              Our Funding Partners
             </h2>
-            <p className="text-lg text-gray-700 text-center mb-12 leading-relaxed">
-              We believe in the power of community participation. Whether you're a community member,
-              organization, or supporter, there are many ways to engage with our programs.
-            </p>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center p-6 bg-primary/5 rounded-xl">
-                <h3 className="font-bold text-gray-900 mb-2">Volunteer</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Join our community programs as a volunteer
-                </p>
-                <Button href="/contact" variant="outline" size="sm">
-                  Learn More
-                </Button>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-primary/5 p-8 rounded-xl">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Institutional Partners</h3>
+                <ul className="space-y-3 text-gray-700">
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    International health organizations
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Academic and research institutions
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Government health ministries
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    Multilateral development agencies
+                  </li>
+                </ul>
               </div>
-              <div className="text-center p-6 bg-primary/5 rounded-xl">
-                <h3 className="font-bold text-gray-900 mb-2">Partner With Us</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Collaborate on community health initiatives
-                </p>
-                <Button href="/collaborations" variant="outline" size="sm">
-                  Partner
-                </Button>
-              </div>
-              <div className="text-center p-6 bg-primary/5 rounded-xl">
-                <h3 className="font-bold text-gray-900 mb-2">Support</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Support our community programs through donations
-                </p>
-                <Button href="/donate" variant="outline" size="sm">
-                  Donate
-                </Button>
+
+              <div className="bg-accent/10 p-8 rounded-xl">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Private Sector Partners</h3>
+                <ul className="space-y-3 text-gray-700">
+                  <li className="flex items-start">
+                    <span className="text-accent-dark mr-2">•</span>
+                    Private foundations
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-accent-dark mr-2">•</span>
+                    Corporate social responsibility programs
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-accent-dark mr-2">•</span>
+                    Individual philanthropists
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-accent-dark mr-2">•</span>
+                    Impact investors
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -313,14 +313,25 @@ export default async function CommunityProgramPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Join Our Community Programs
+              Partner With Us
             </h2>
             <p className="text-xl text-gray-100 mb-8 leading-relaxed">
-              Together, we can build healthier, more resilient communities across Africa.
+              Join us in transforming healthcare across Africa. Your partnership can help fund
+              life-changing health programs and research initiatives.
             </p>
-            <Button href="/contact" variant="secondary" size="lg">
-              Contact Us
-            </Button>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button href="/donate" variant="secondary" size="lg">
+                Make a Donation
+              </Button>
+              <Button
+                href="/contact"
+                variant="outline"
+                size="lg"
+                className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white hover:text-primary"
+              >
+                Become a Partner
+              </Button>
+            </div>
           </div>
         </Container>
       </section>

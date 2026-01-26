@@ -1,19 +1,115 @@
+import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { Scissors, TestTube, HeartPulse, Users } from 'lucide-react';
+import { getProgramCategory, getProgramsByCategorySlug } from '@/lib/sanity.queries';
+import { urlFor } from '@/lib/sanity.client';
+import {
+  Scissors,
+  TestTube,
+  HeartPulse,
+  Users,
+  ArrowRight,
+  FileText,
+  LucideIcon,
+} from 'lucide-react';
 
-export default function ClinicalProgramsPage() {
+const CATEGORY_SLUG = 'clinical';
+
+// Icon mapping for fallback data
+const iconMap: Record<string, LucideIcon> = {
+  Scissors,
+  TestTube,
+  HeartPulse,
+  Users,
+  FileText,
+};
+
+// Fallback services if Sanity is unavailable
+const fallbackServices = [
+  {
+    title: 'HIV Counseling & Testing',
+    description: 'Professional HIV counseling and testing services with confidential results and linkage to care.',
+    icon: 'TestTube',
+    color: 'bg-blue-100 text-blue-600',
+  },
+  {
+    title: 'STD Screening',
+    description: 'Comprehensive screening for sexually transmitted diseases with treatment and counseling.',
+    icon: 'HeartPulse',
+    color: 'bg-purple-100 text-purple-600',
+  },
+  {
+    title: 'Reproductive Health Services',
+    description: 'Information and referral for reproductive health services and family planning.',
+    icon: 'Users',
+    color: 'bg-green-100 text-green-600',
+  },
+  {
+    title: 'Medical Circumcision',
+    description: 'Safe, professional medical circumcision procedures performed by trained healthcare providers.',
+    icon: 'Scissors',
+    color: 'bg-red-100 text-red-600',
+  },
+  {
+    title: 'Post-Operative Follow-up',
+    description: 'Comprehensive follow-up monitoring to ensure safe wound healing and address any concerns.',
+    icon: 'HeartPulse',
+    color: 'bg-orange-100 text-orange-600',
+  },
+  {
+    title: 'Community Coordination',
+    description: 'Partnership with local governments and organizations for program coordination and demand generation.',
+    icon: 'Users',
+    color: 'bg-yellow-100 text-yellow-600',
+  },
+];
+
+// Color classes for dynamic programs
+const colorClasses = [
+  'bg-blue-100 text-blue-600',
+  'bg-purple-100 text-purple-600',
+  'bg-green-100 text-green-600',
+  'bg-red-100 text-red-600',
+  'bg-orange-100 text-orange-600',
+  'bg-teal-100 text-teal-600',
+];
+
+export const metadata = {
+  title: 'Clinical Programs | AMBSO Programs',
+  description: 'Providing evidence-based HIV prevention services through Voluntary Medical Male Circumcision and comprehensive clinical care.',
+};
+
+interface Program {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  shortDescription?: string;
+  featuredImages?: Array<{ asset?: { _ref: string }; alt?: string; isPrimary?: boolean }>;
+  status?: string;
+  objectives?: string[];
+}
+
+export default async function ClinicalProgramsPage() {
+  const [category, programs] = await Promise.all([
+    getProgramCategory(CATEGORY_SLUG),
+    getProgramsByCategorySlug(CATEGORY_SLUG),
+  ]);
+
+  const hasPrograms = programs && programs.length > 0;
+
   return (
     <div className="pt-20">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Clinical Programs</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              {category?.title || 'Clinical Programs'}
+            </h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Providing evidence-based HIV prevention services through Voluntary Medical Male Circumcision
-              and comprehensive clinical care.
+              {category?.shortDescription ||
+                'Providing evidence-based HIV prevention services through Voluntary Medical Male Circumcision and comprehensive clinical care.'}
             </p>
           </div>
         </Container>
@@ -42,73 +138,83 @@ export default function ClinicalProgramsPage() {
         </Container>
       </section>
 
-      {/* Comprehensive Services */}
+      {/* Programs from Sanity or Fallback Services */}
       <section className="py-16 bg-gray-50">
         <Container>
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-            Comprehensive Service Package
+            {hasPrograms ? 'Our Clinical Programs' : 'Comprehensive Service Package'}
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card hover className="p-6">
-              <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
-                <TestTube size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">HIV Counseling & Testing</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Professional HIV counseling and testing services with confidential results and linkage to care.
-              </p>
-            </Card>
 
-            <Card hover className="p-6">
-              <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4">
-                <HeartPulse size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">STD Screening</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Comprehensive screening for sexually transmitted diseases with treatment and counseling.
-              </p>
-            </Card>
+          {hasPrograms ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(programs as Program[]).map((program, index) => {
+                const primaryImage = program.featuredImages?.find(
+                  (img) => img.isPrimary
+                ) || program.featuredImages?.[0];
+                const colorClass = colorClasses[index % colorClasses.length];
 
-            <Card hover className="p-6">
-              <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
-                <Users size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Reproductive Health Services</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Information and referral for reproductive health services and family planning.
-              </p>
-            </Card>
-
-            <Card hover className="p-6">
-              <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4">
-                <Scissors size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Medical Circumcision</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Safe, professional medical circumcision procedures performed by trained healthcare providers.
-              </p>
-            </Card>
-
-            <Card hover className="p-6">
-              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4">
-                <HeartPulse size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Post-Operative Follow-up</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Comprehensive follow-up monitoring to ensure safe wound healing and address any concerns.
-              </p>
-            </Card>
-
-            <Card hover className="p-6">
-              <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mb-4">
-                <Users size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Community Coordination</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Partnership with local governments and organizations for program coordination and demand generation.
-              </p>
-            </Card>
-          </div>
+                return (
+                  <Link
+                    key={program._id}
+                    href={`/programs/${CATEGORY_SLUG}/${program.slug.current}`}
+                    className="group"
+                  >
+                    <Card hover className="p-6 h-full flex flex-col">
+                      {primaryImage?.asset ? (
+                        <div className="w-full h-40 rounded-lg overflow-hidden mb-4">
+                          <img
+                            src={urlFor(primaryImage).width(400).height(200).url()}
+                            alt={primaryImage.alt || program.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      ) : (
+                        <div className={`w-16 h-16 ${colorClass} rounded-full flex items-center justify-center mb-4`}>
+                          <FileText size={32} />
+                        </div>
+                      )}
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                        {program.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
+                        {program.shortDescription}
+                      </p>
+                      {program.objectives && program.objectives.length > 0 && (
+                        <div className="space-y-2 mb-4">
+                          {program.objectives.slice(0, 3).map((objective, objIndex) => (
+                            <div key={objIndex} className="flex items-start text-sm text-gray-600">
+                              <span className="text-primary mr-2">✓</span>
+                              <span className="line-clamp-1">{objective}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex items-center text-primary font-medium mt-auto">
+                        Learn More
+                        <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            // Fallback UI when no Sanity programs
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {fallbackServices.map((service) => {
+                const Icon = iconMap[service.icon] || FileText;
+                return (
+                  <Card key={service.title} hover className="p-6">
+                    <div className={`w-16 h-16 ${service.color} rounded-full flex items-center justify-center mb-4`}>
+                      <Icon size={32} />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{service.description}</p>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </Container>
       </section>
 

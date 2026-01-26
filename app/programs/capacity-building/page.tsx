@@ -1,13 +1,38 @@
+import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { Stethoscope, BookOpen, Award, Handshake, Users2 } from 'lucide-react';
+import { getProgramCategory, getProgramsByCategorySlug } from '@/lib/sanity.queries';
+import { urlFor } from '@/lib/sanity.client';
+import {
+  Stethoscope,
+  BookOpen,
+  Award,
+  Handshake,
+  Users2,
+  ArrowRight,
+  FileText,
+  LucideIcon,
+} from 'lucide-react';
 
-const programs = [
+const CATEGORY_SLUG = 'capacity-building';
+
+// Icon mapping for fallback data
+const iconMap: Record<string, LucideIcon> = {
+  Stethoscope,
+  BookOpen,
+  Award,
+  Handshake,
+  Users2,
+  FileText,
+};
+
+// Fallback programs if Sanity is unavailable
+const fallbackPrograms = [
   {
     title: 'Emergency Resuscitation Training',
-    description: 'Hands-on instruction in emergency response and resuscitation techniques for healthcare professionals and first responders.',
-    icon: Stethoscope,
+    shortDescription: 'Hands-on instruction in emergency response and resuscitation techniques for healthcare professionals and first responders.',
+    icon: 'Stethoscope',
     color: 'bg-red-100 text-red-600',
     features: [
       'Basic Life Support (BLS)',
@@ -18,8 +43,8 @@ const programs = [
   },
   {
     title: 'Continuous Medical Education (CME)',
-    description: 'Ongoing professional development opportunities to keep medical staff current with evolving practices and medical advancements.',
-    icon: BookOpen,
+    shortDescription: 'Ongoing professional development opportunities to keep medical staff current with evolving practices and medical advancements.',
+    icon: 'BookOpen',
     color: 'bg-blue-100 text-blue-600',
     features: [
       'Monthly CME sessions',
@@ -30,8 +55,8 @@ const programs = [
   },
   {
     title: 'AMBSO Scholarly Grant',
-    description: 'Supporting researchers and professionals pursuing advanced studies and innovative projects within our focus areas.',
-    icon: Award,
+    shortDescription: 'Supporting researchers and professionals pursuing advanced studies and innovative projects within our focus areas.',
+    icon: 'Award',
     color: 'bg-purple-100 text-purple-600',
     features: [
       'Research funding',
@@ -42,8 +67,8 @@ const programs = [
   },
   {
     title: 'Technical Assistance',
-    description: 'Expert support and guidance to partner organizations and healthcare facilities to strengthen their capacity.',
-    icon: Handshake,
+    shortDescription: 'Expert support and guidance to partner organizations and healthcare facilities to strengthen their capacity.',
+    icon: 'Handshake',
     color: 'bg-green-100 text-green-600',
     features: [
       'Program design support',
@@ -54,8 +79,8 @@ const programs = [
   },
   {
     title: 'Internship Training',
-    description: 'Creating opportunities for students and early-career professionals to gain practical experience in clinical and research settings.',
-    icon: Users2,
+    shortDescription: 'Creating opportunities for students and early-career professionals to gain practical experience in clinical and research settings.',
+    icon: 'Users2',
     color: 'bg-orange-100 text-orange-600',
     features: [
       'Clinical internships',
@@ -66,17 +91,51 @@ const programs = [
   },
 ];
 
-export default function CapacityBuildingPage() {
+// Color classes for dynamic programs
+const colorClasses = [
+  'bg-red-100 text-red-600',
+  'bg-blue-100 text-blue-600',
+  'bg-purple-100 text-purple-600',
+  'bg-green-100 text-green-600',
+  'bg-orange-100 text-orange-600',
+  'bg-teal-100 text-teal-600',
+];
+
+export const metadata = {
+  title: 'Capacity Building | AMBSO Programs',
+  description: 'Strengthening healthcare infrastructure and human resources through comprehensive training, education, and professional development programs.',
+};
+
+interface Program {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  shortDescription?: string;
+  featuredImages?: Array<{ asset?: { _ref: string }; alt?: string; isPrimary?: boolean }>;
+  status?: string;
+  objectives?: string[];
+}
+
+export default async function CapacityBuildingPage() {
+  const [category, programs] = await Promise.all([
+    getProgramCategory(CATEGORY_SLUG),
+    getProgramsByCategorySlug(CATEGORY_SLUG),
+  ]);
+
+  const hasPrograms = programs && programs.length > 0;
+
   return (
     <div className="pt-20">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Capacity Building</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              {category?.title || 'Capacity Building'}
+            </h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Strengthening healthcare infrastructure and human resources through comprehensive
-              training, education, and professional development programs.
+              {category?.shortDescription ||
+                'Strengthening healthcare infrastructure and human resources through comprehensive training, education, and professional development programs.'}
             </p>
           </div>
         </Container>
@@ -96,28 +155,85 @@ export default function CapacityBuildingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {programs.map((program) => {
-              const Icon = program.icon;
-              return (
-                <Card key={program.title} hover className="p-6">
-                  <div className={`w-16 h-16 ${program.color} rounded-full flex items-center justify-center mb-4`}>
-                    <Icon size={32} />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{program.title}</h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">{program.description}</p>
-                  <div className="space-y-2">
-                    {program.features.map((feature, index) => (
-                      <div key={index} className="flex items-start text-sm text-gray-600">
-                        <span className="text-primary mr-2">✓</span>
-                        {feature}
+          {/* Programs Grid */}
+          {hasPrograms ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(programs as Program[]).map((program, index) => {
+                const primaryImage = program.featuredImages?.find(
+                  (img) => img.isPrimary
+                ) || program.featuredImages?.[0];
+                const colorClass = colorClasses[index % colorClasses.length];
+
+                return (
+                  <Link
+                    key={program._id}
+                    href={`/programs/${CATEGORY_SLUG}/${program.slug.current}`}
+                    className="group"
+                  >
+                    <Card hover className="p-6 h-full flex flex-col">
+                      {primaryImage?.asset ? (
+                        <div className="w-full h-40 rounded-lg overflow-hidden mb-4">
+                          <img
+                            src={urlFor(primaryImage).width(400).height(200).url()}
+                            alt={primaryImage.alt || program.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      ) : (
+                        <div className={`w-16 h-16 ${colorClass} rounded-full flex items-center justify-center mb-4`}>
+                          <FileText size={32} />
+                        </div>
+                      )}
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                        {program.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
+                        {program.shortDescription}
+                      </p>
+                      {program.objectives && program.objectives.length > 0 && (
+                        <div className="space-y-2 mb-4">
+                          {program.objectives.slice(0, 3).map((objective, objIndex) => (
+                            <div key={objIndex} className="flex items-start text-sm text-gray-600">
+                              <span className="text-primary mr-2">✓</span>
+                              <span className="line-clamp-1">{objective}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex items-center text-primary font-medium mt-auto">
+                        Learn More
+                        <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                       </div>
-                    ))}
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            // Fallback UI when no Sanity programs
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {fallbackPrograms.map((program) => {
+                const Icon = iconMap[program.icon] || FileText;
+                return (
+                  <Card key={program.title} hover className="p-6">
+                    <div className={`w-16 h-16 ${program.color} rounded-full flex items-center justify-center mb-4`}>
+                      <Icon size={32} />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{program.title}</h3>
+                    <p className="text-gray-600 mb-4 leading-relaxed">{program.shortDescription}</p>
+                    <div className="space-y-2">
+                      {program.features.map((feature, index) => (
+                        <div key={index} className="flex items-start text-sm text-gray-600">
+                          <span className="text-primary mr-2">✓</span>
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </Container>
       </section>
 
