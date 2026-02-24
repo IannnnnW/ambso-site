@@ -83,7 +83,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
   ) || program.featuredImages?.[0];
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary to-primary-dark text-white py-16 md:py-24">
         {primaryImage?.asset && (

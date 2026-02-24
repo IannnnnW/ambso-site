@@ -6,7 +6,7 @@
   --primary: #002866;
   --primary-dark: #001a40;
   --primary-light: #003d99;
-  --accent: #BCD640;
+  --accent: #FFEE00;
   --accent-orange: #FA8F05;
 }
 
@@ -35,7 +35,7 @@ html {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -44,9 +44,52 @@ html {
 
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-dark);
+}
+
+/* ─── Hero Carousel Animations ─────────────────────────────────────────────── */
+
+@keyframes heroSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1.07); }
+  to   { transform: scale(1);    }
+}
+
+/* Applied to the background image wrapper for a gentle zoom-in-settle effect */
+.hero-image-animate {
+  animation: kenBurns 7s ease-out forwards;
+}
+
+/* ─── Navigation Animations ─────────────────────────────────────────────────── */
+
+/* Animated underline: grows from left on hover */
+.nav-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 2px;
+  background-color: var(--accent);
+  border-radius: 9999px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.nav-link-group:hover .nav-underline {
+  transform: scaleX(1);
 }

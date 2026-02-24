@@ -3,7 +3,7 @@ import Card from '@/components/ui/Card';
 
 export default function ActiveStudiesPage() {
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Active Studies</h1>

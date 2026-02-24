@@ -13,7 +13,7 @@ export default function NotFound() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 pt-20">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 pt-20 lg:pt-28">
       <Container>
         <div className="max-w-2xl mx-auto text-center">
           {/* 404 Illustration */}

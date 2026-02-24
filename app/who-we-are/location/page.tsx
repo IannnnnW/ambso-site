@@ -27,7 +27,7 @@ const locations = [
 
 export default function LocationPage() {
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>

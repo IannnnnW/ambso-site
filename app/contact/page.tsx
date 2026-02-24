@@ -6,35 +6,47 @@ import Button from '@/components/ui/Button';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 import { fallbackContactPageContent } from '@/lib/fallback-data';
 
-// For static export, we use fallback content directly
-// When Sanity content is needed at runtime, a separate API route can be used
 const content = fallbackContactPageContent;
 
+type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
+
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-  });
+  const [status, setStatus] = useState<SubmitStatus>('idle');
+  const [resultMessage, setResultMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission
-  };
+    setStatus('loading');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const formData = new FormData(e.currentTarget);
+    formData.append('access_key', process.env.NEXT_WEB_3_FORMS_CONTACT_FORM ?? '');
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus('success');
+        setResultMessage('Your message has been sent successfully!');
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setStatus('error');
+        setResultMessage(data.message ?? 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setStatus('error');
+      setResultMessage('Network error. Please check your connection and try again.');
+    }
   };
 
   const subjects = content.formSection?.subjects ?? [];
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">
@@ -51,12 +63,17 @@ export default function ContactPage() {
       <section className="py-16 bg-white">
         <Container>
           <div className="grid lg:grid-cols-2 gap-12">
+
             {/* Contact Form */}
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
                 {content.formSection?.title}
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+
+              <form onSubmit={onSubmit} className="space-y-6">
+                {/* Honeypot spam protection */}
+                <input type="checkbox" name="botcheck" className="hidden" />
+
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name *
@@ -66,8 +83,6 @@ export default function ContactPage() {
                     id="name"
                     name="name"
                     required
-                    value={formData.name}
-                    onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
@@ -81,8 +96,6 @@ export default function ContactPage() {
                     id="email"
                     name="email"
                     required
-                    value={formData.email}
-                    onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
@@ -95,8 +108,6 @@ export default function ContactPage() {
                     type="tel"
                     id="phone"
                     name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
@@ -109,8 +120,6 @@ export default function ContactPage() {
                     id="subject"
                     name="subject"
                     required
-                    value={formData.subject}
-                    onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   >
                     <option value="">Select a subject</option>
@@ -131,15 +140,30 @@ export default function ContactPage() {
                     name="message"
                     required
                     rows={6}
-                    value={formData.message}
-                    onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
 
-                <Button type="submit" size="lg" className="w-full">
+                {/* Status feedback */}
+                {status === 'success' && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                    ✅ {resultMessage}
+                  </div>
+                )}
+                {status === 'error' && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    ❌ {resultMessage}
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full"
+                  disabled={status === 'loading'}
+                >
                   <Send size={20} className="mr-2" />
-                  Send Message
+                  {status === 'loading' ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </div>
@@ -207,6 +231,7 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
+
           </div>
         </Container>
       </section>

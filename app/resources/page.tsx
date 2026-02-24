@@ -27,7 +27,7 @@ export default async function ResourcesPage() {
   ).length;
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary via-primary to-primary-dark text-white py-20">
         <Container>

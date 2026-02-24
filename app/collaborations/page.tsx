@@ -19,7 +19,7 @@ const regionalPartners = [
 
 export default function CollaborationsPage() {
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">

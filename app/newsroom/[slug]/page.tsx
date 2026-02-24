@@ -145,7 +145,7 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
   const readingTime = getReadingTime(article.content);
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       {/* Hero Section with Featured Image */}
       <section className="relative bg-gray-900">
         {article.featuredImage && (

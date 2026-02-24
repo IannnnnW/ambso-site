@@ -113,7 +113,7 @@ export default async function ResourceMobilizationPage() {
   const hasPrograms = programs && programs.length > 0;
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>

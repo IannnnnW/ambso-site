@@ -111,7 +111,7 @@ export default async function TeamMemberPage({ params }: PageProps) {
     member.socialMedia?.orcid;
 
   return (
-    <div className="pt-20 bg-gray-50 min-h-screen">
+    <div className="pt-20 lg:pt-28 bg-gray-50 min-h-screen">
       {/* Back Navigation */}
       <div className="bg-white border-b">
         <Container>

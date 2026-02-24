@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import VideoEmbed from '@/components/ui/VideoEmbed';
 import { Target, Eye, ArrowRight, Briefcase, Microscope, Handshake, Calendar, LucideIcon } from 'lucide-react';
@@ -38,10 +39,22 @@ export default async function AboutPage() {
   ) || [];
 
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary via-primary to-primary-dark text-white py-20">
-        <Container>
+    <div className="pt-20 lg:pt-28">
+      {/* Hero Section — staff.jpg background */}
+      <section className="relative text-white py-24 overflow-hidden">
+        {/* Background: staff photo */}
+        <Image
+          src="/ambso-site/images/staff.jpg"
+          alt="AMBSO Staff"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        {/* Overlay: dark primary blue from left so text is legible,
+            fades to a lighter tint on the right to let the photo breathe */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/93 via-primary/78 to-primary-dark/60" />
+
+        <Container className="relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">

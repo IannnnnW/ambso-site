@@ -26,7 +26,7 @@ export default async function NewsroomPage() {
   const newsItems: NewsType[] = await getAllNews();
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">

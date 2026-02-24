@@ -40,7 +40,7 @@ export default async function ProgramsPage() {
   const categories: ProgramCategory[] = await getProgramCategories();
   const partners: Partner[] = await getFeaturedPartners();
   return (
-    <div className="pt-20">
+    <div className="pt-20 lg:pt-28">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Programs</h1>
