@@ -19,7 +19,7 @@ export default function ContactPage() {
     setStatus('loading');
 
     const formData = new FormData(e.currentTarget);
-    formData.append('access_key', process.env.NEXT_WEB_3_FORMS_CONTACT_FORM ?? '');
+    formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? '');
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -28,7 +28,6 @@ export default function ContactPage() {
       });
 
       const data = await response.json();
-
       if (data.success) {
         setStatus('success');
         setResultMessage('Your message has been sent successfully!');
@@ -100,7 +99,7 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                     Phone Number
                   </label>
@@ -110,9 +109,9 @@ export default function ContactPage() {
                     name="phone"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
                     Subject *
                   </label>
@@ -129,7 +128,7 @@ export default function ContactPage() {
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
@@ -147,12 +146,12 @@ export default function ContactPage() {
                 {/* Status feedback */}
                 {status === 'success' && (
                   <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
-                    ✅ {resultMessage}
+                    {resultMessage}
                   </div>
                 )}
                 {status === 'error' && (
                   <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                    ❌ {resultMessage}
+                    {resultMessage}
                   </div>
                 )}
 
