@@ -233,6 +233,7 @@ export default function ContactPage() {
 
           </div>
         </Container>
+        
       </section>
     </div>
   );
