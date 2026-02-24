@@ -131,7 +131,7 @@ export default function NotFound() {
           {/* Footer Note */}
           <p className="mt-8 text-sm text-gray-500">
             If you believe this is an error, please{' '}
-            <a href="/contact" className="text-primary hover:underline">
+            <a href="/ambso-site/contact" className="text-primary hover:underline">
               contact us
             </a>{' '}
             and let us know.

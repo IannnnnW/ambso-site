@@ -16,11 +16,11 @@ import { getProgramCategories, getFeaturedPartners } from '@/lib/sanity.queries'
 function getCategoryIcon(slug: string) {
   const iconMap: Record<string, any> = {
     'capacity-building': GraduationCap,
-    'clinical': Stethoscope,
+    'clinical-programs': Stethoscope,
     'resource-mobilization': DollarSign,
     'community-programs': HandHeart,
   };
-  
+
   return iconMap[slug] || Microscope;
 }
 
@@ -28,11 +28,11 @@ function getCategoryIcon(slug: string) {
 function getCategoryColor(slug: string) {
   const colorMap: Record<string, { bg: string; text: string }> = {
     'capacity-building': { bg: 'bg-blue-100', text: 'text-primary' },
-    'clinical': { bg: 'bg-blue-100', text: 'text-primary' },
+    'clinical-programs': { bg: 'bg-blue-100', text: 'text-primary' },
     'resource-mobilization': { bg: 'bg-blue-100', text: 'text-primary' },
     'community-programs': { bg: 'bg-blue-100', text: 'text-primary' },
   };
-  
+
   return colorMap[slug] || { bg: 'bg-blue-100', text: 'text-primary' };
 }
 

@@ -75,7 +75,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Our Programs</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/programs/clinical" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/programs/clinical-programs" className="text-gray-300 hover:text-white transition-colors">
                   Clinical Programs
                 </Link>
               </li>
