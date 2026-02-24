@@ -248,7 +248,7 @@ export default function Header() {
 
             {/* Mobile Donate */}
             <Link
-              href="/donate"
+              href="/contact"
               className="mt-3 mx-1 px-6 py-2.5 bg-accent text-primary text-center text-[14px] font-semibold rounded-full hover:bg-accent/85 transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
