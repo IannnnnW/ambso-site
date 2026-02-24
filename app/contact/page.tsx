@@ -20,7 +20,8 @@ export default function ContactPage() {
 
     const formData = new FormData(e.currentTarget);
     formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? '');
-
+    console.log(process.env.NEXT_PUBLIC_WEB3FORMS_KEY) 
+    
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -233,7 +234,7 @@ export default function ContactPage() {
 
           </div>
         </Container>
-        
+
       </section>
     </div>
   );
