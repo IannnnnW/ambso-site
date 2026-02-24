@@ -169,7 +169,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               {/* Donate button — accent color for maximum visibility */}
               <Link
-                href="/donate"
+                href="/contact"
                 className="hidden lg:inline-flex items-center px-5 py-2 bg-accent text-primary rounded-full text-sm font-semibold hover:bg-accent/85 hover:shadow-md hover:shadow-accent/30 transition-all duration-200 hover:scale-[1.03]"
               >
                 Donate
