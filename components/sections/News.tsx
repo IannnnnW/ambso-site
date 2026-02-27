@@ -2,7 +2,7 @@ import Container from '../ui/Container';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import { Calendar } from 'lucide-react';
-import { getAllNews } from '@/lib/sanity.queries';
+import { getLatestNews } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
 import { News as NewsType } from '@/lib/sanity.types';
 
@@ -23,7 +23,7 @@ const defaultContent = {
 };
 
 export default async function News({ content }: NewsProps) {
-  const newsItems: NewsType[] = await getAllNews();
+  const newsItems: NewsType[] = await getLatestNews();
 
   const title = content?.title ?? defaultContent.title;
   const subtitle = content?.subtitle ?? defaultContent.subtitle;

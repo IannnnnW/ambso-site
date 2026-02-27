@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import Container from '../ui/Container';
 
 interface ImpactProps {
@@ -69,8 +70,18 @@ export default function Impact({ content }: ImpactProps) {
   const stats = content?.stats ?? defaultContent.stats;
 
   return (
-    <section className="py-20 bg-primary text-white">
-      <Container>
+    <section className="relative py-20 overflow-hidden text-white">
+      {/* Molecular background image */}
+      <Image
+        src="/ambso-site/images/molecular-bkg.jpg"
+        alt=""
+        fill
+        className="object-cover object-center"
+        aria-hidden="true"
+      />
+      {/* Primary navy overlay — lets the molecular texture breathe while keeping text legible */}
+      <div className="absolute inset-0 bg-primary/85" />
+      <Container className="relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
           <p className="text-lg text-gray-200 max-w-2xl mx-auto">{subtitle}</p>

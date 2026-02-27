@@ -1,5 +1,23 @@
 import { PortableTextBlock } from 'sanity';
 
+/**
+ * Represents a tweet stored in Sanity as a `tweetEmbed` document.
+ * Editors paste a tweet ID (the numeric portion of the tweet URL) into
+ * Sanity Studio; the frontend fetches the oEmbed HTML at build time.
+ */
+export interface TweetEmbed {
+  _id: string;
+  _type: 'tweetEmbed';
+  /** Numeric tweet ID, e.g. "1234567890123456789" */
+  tweetId: string;
+  /** Optional editorial label — not shown on frontend */
+  label?: string;
+  /** Controls display order (ascending) */
+  order?: number;
+  /** Only tweets with isActive === true are shown */
+  isActive: boolean;
+}
+
 export interface SanityImage {
   _type: 'image';
   asset: {

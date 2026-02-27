@@ -1,8 +1,10 @@
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
-import { Calendar, Newspaper } from 'lucide-react';
-import { getAllNews } from '@/lib/sanity.queries';
-import { News as NewsType } from '@/lib/sanity.types';
+import TweetCard from '@/components/ui/TweetCard';
+import { Calendar, Newspaper, Twitter } from 'lucide-react';
+import { getAllNews, getTweetEmbeds } from '@/lib/sanity.queries';
+import { fetchTweetOEmbeds } from '@/lib/twitter';
+import { News as NewsType, TweetEmbed } from '@/lib/sanity.types';
 import { urlFor } from '@/lib/sanity.client';
 
 export const metadata = {
@@ -23,10 +25,20 @@ function getCategoryColor(category: string): string {
 }
 
 export default async function NewsroomPage() {
-  const newsItems: NewsType[] = await getAllNews();
+  // Fetch news articles and tweet embed IDs from Sanity in parallel
+  const [newsItems, tweetEmbeds] = await Promise.all([
+    getAllNews() as Promise<NewsType[]>,
+    getTweetEmbeds() as Promise<TweetEmbed[]>,
+  ]);
 
+  // Fetch oEmbed HTML for each active tweet server-side (build time, no CORS)
+  const tweetIds = tweetEmbeds.map((t) => t.tweetId);
+  console.log(tweetIds)
+  const tweets = tweetIds.length > 0 ? await fetchTweetOEmbeds(tweetIds) : [];
+  console.log(tweetIds.length)
   return (
     <div className="pt-20 lg:pt-28">
+      {/* ── Page Header ─────────────────────────────────────────────── */}
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">
@@ -42,6 +54,7 @@ export default async function NewsroomPage() {
         </Container>
       </section>
 
+      {/* ── News Articles Grid ───────────────────────────────────────── */}
       <section className="py-16 bg-white">
         <Container>
           {!newsItems || newsItems.length === 0 ? (
@@ -88,6 +101,50 @@ export default async function NewsroomPage() {
           )}
         </Container>
       </section>
+
+      {/* ── From Our X (Twitter) Feed ────────────────────────────────── */}
+      {tweets.length > 0 && (
+        <section className="py-16 bg-gray-50 border-t border-gray-100">
+          <Container>
+            {/* Section header */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#1DA1F2]/10 text-[#1DA1F2] rounded-full text-xs font-semibold mb-3">
+                  <Twitter size={12} />
+                  <span>X / Twitter</span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                  From Our Feed
+                </h2>
+                <p className="text-gray-500 text-sm mt-1.5">
+                  Latest updates from AMBSO on X (Twitter)
+                </p>
+              </div>
+              <a
+                href="https://x.com/AMBSO_Uganda"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#1DA1F2] text-[#1DA1F2] rounded-full text-sm font-semibold hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 self-start sm:self-auto shrink-0"
+              >
+                <Twitter size={15} />
+                Follow @AMBSO
+              </a>
+            </div>
+
+            {/* Tweet grid: 1 col → 2 col → 3 col */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+              {tweets.map((tweet) => (
+                <TweetCard
+                  key={tweet.tweetId}
+                  html={tweet.html}
+                  tweetId={tweet.tweetId}
+                  authorName={tweet.authorName}
+                />
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
     </div>
   );
 }

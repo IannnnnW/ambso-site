@@ -264,12 +264,12 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
         </Container>
       </section>
 
-      {/* Related Articles */}
+      {/* Latest News */}
       {article.relatedNews && article.relatedNews.length > 0 && (
         <section className="py-16 bg-gray-50">
           <Container>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-              Related Articles
+              Latest News
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {article.relatedNews.map((related: {

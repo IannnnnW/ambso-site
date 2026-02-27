@@ -1063,3 +1063,29 @@ export async function getHeroSlides() {
     return [];
   }
 }
+
+// ── Tweet Embed Queries ──────────────────────────────────────────────────────
+
+/**
+ * Fetches all active tweet embeds from Sanity, ordered by `order` asc.
+ * The returned `tweetId` values are passed to fetchTweetOEmbeds() in
+ * the newsroom page to get the actual HTML from Twitter's oEmbed API.
+ */
+export const tweetEmbedsQuery = groq`
+  *[_type == "tweetEmbed" && isActive == true] | order(order asc, _createdAt desc) {
+    _id,
+    tweetId,
+    label,
+    order
+  }
+`;
+
+export async function getTweetEmbeds() {
+  try {
+    const data = await client.fetch(tweetEmbedsQuery);
+    return data ?? [];
+  } catch (error) {
+    console.error('Error fetching tweet embeds:', error);
+    return [];
+  }
+}

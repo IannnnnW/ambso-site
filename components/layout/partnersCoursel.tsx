@@ -56,7 +56,7 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
         {duplicatedPartners.map((partner, index) => (
           <div
             key={`${partner._id}-${index}`}
-            className="flex-shrink-0 w-56 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300"
+            className="flex-shrink-0 w-56 flex items-center justify-center transition-all duration-300"
           >
             {partner.logo ? (
             <a href={partner.website || '#'} target="_blank" rel="noopener noreferrer" className="block relative w-full h-32">

@@ -201,7 +201,7 @@ export default async function AboutPage() {
                     <img
                       src={urlFor(partner.logo).height(60).url()}
                       alt={partner.name}
-                      className="h-12 md:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100"
+                      className="h-12 md:h-16 w-auto object-contain transition-all"
                     />
                   ) : (
                     <span className="text-gray-500 font-medium">{partner.name}</span>

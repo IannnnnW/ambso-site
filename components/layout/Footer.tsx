@@ -4,8 +4,18 @@ import { Facebook, Twitter, Linkedin, Instagram, Youtube, Mail, Phone, MapPin } 
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="relative text-white overflow-hidden">
+      {/* Background texture */}
+      <Image
+        src="/ambso-site/images/footer-bkg.jpg"
+        alt=""
+        fill
+        className="object-cover object-center"
+        aria-hidden="true"
+      />
+      {/* Primary navy overlay — preserves existing colour palette */}
+      <div className="absolute inset-0 bg-primary/93" />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About */}
           <div>
