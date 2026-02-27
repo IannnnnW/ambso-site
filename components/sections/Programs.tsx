@@ -216,18 +216,14 @@ export default function Programs({ content }: ProgramsProps) {
 
         {/* ── Bottom CTA ── */}
         <div className="relative text-center mt-14">
-          <a
+           <Button
             href="/programs"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wide transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
-            style={{
-              background: '#38BDF8',
-              color: '#002866',
-              boxShadow: '0 4px 24px rgba(56,189,248,0.25)',
-            }}
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wide transition-all duration-200 hover:scale-[1.03] hover:shadow-lg !bg-[#38BDF8] !text-[#002866] !border-0"
+            style={{ boxShadow: '0 4px 24px rgba(56,189,248,0.25)' }}
           >
             View All Programs
             <ArrowRight size={15} />
-          </a>
+          </Button>
         </div>
       </Container>
     </section>
