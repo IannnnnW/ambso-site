@@ -63,31 +63,17 @@ const navigation: NavItem[] = [
   },
   { name: 'Collaborations', href: '/collaborations' },
   {
-    name: 'Media & Resources',
+    name: 'Info & Resources',
     href: '/newsroom',
     mega: true,
-    description: 'Stay informed with the latest news, publications, and downloadable resources from AMBSO.',
+    description: 'Stay informed with the latest news, publications, opportunities and downloadable resources from AMBSO.',
     columns: [
       {
         heading: 'Stay Informed',
         items: [
           { name: 'Newsroom',  href: '/newsroom' },
           { name: 'Resources', href: '/resources' },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Opportunities',
-    href: '/opportunities',
-    mega: true,
-    description: 'Join the AMBSO team or partner with us through open career positions and procurement tenders.',
-    columns: [
-      {
-        heading: 'Join Us',
-        items: [
-          { name: 'Careers', href: '/opportunities/careers' },
-          { name: 'Tenders', href: '/opportunities/tenders' },
+          { name: 'Opportunities', href: '/opportunities'}
         ],
       },
     ],
@@ -140,7 +126,7 @@ export default function Header() {
                 className="flex items-center gap-1.5 text-white/65 hover:text-accent text-xs transition-colors duration-200"
               >
                 <Phone size={11} strokeWidth={2} />
-                <span>(+256) 394 500 421</span>
+                <span>(+256) 200 911 459</span>
               </a>
               <a
                 href="mailto:info@ambso.org"
