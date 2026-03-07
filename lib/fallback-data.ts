@@ -237,7 +237,7 @@ export const fallbackContactPageContent: ContactPageContent = {
     title: 'Contact Information',
     headquarters: 'Masaka, Uganda',
     additionalOffices: 'Additional offices in Nansana and Hoima',
-    phone: '(+256) 394 500 421',
+    phone: '(+256) 200 911 459',
     email: 'info@ambso.org',
     weekdayHours: 'Monday - Friday: 8:00 AM - 5:00 PM',
     weekendHours: 'Saturday - Sunday: Closed',

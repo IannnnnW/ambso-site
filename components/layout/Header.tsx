@@ -38,7 +38,7 @@ const navigation: NavItem[] = [
     ],
   },
   {
-    name: 'What We Do',
+    name: 'Research and Programs',
     href: '/programs',
     mega: true,
     description: 'Our work spans clinical research, community interventions, and capacity building — all aimed at improving health outcomes across Uganda and Africa.',
@@ -63,7 +63,7 @@ const navigation: NavItem[] = [
   },
   { name: 'Collaborations', href: '/collaborations' },
   {
-    name: 'Info & Resources',
+    name: 'News & Resources',
     href: '/newsroom',
     mega: true,
     description: 'Stay informed with the latest news, publications, opportunities and downloadable resources from AMBSO.',
@@ -104,7 +104,6 @@ export default function Header() {
     leaveTimer.current = setTimeout(() => setActiveDesktop(null), 130);
   };
 
-  // An item is "active" if the current path starts with its href (or is exact for home)
   const isActive = (item: NavItem) => {
     if (item.href === '/') return pathname === '/';
     return pathname.startsWith(item.href);
@@ -114,6 +113,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* ── Top Utility Strip ─────────────────────────────────────── */}
+      {/* --primary: #1355AB */}
       <div className="hidden lg:block bg-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-9">
@@ -123,14 +123,14 @@ export default function Header() {
             <div className="flex items-center gap-6">
               <a
                 href="tel:+256394500421"
-                className="flex items-center gap-1.5 text-white/65 hover:text-accent text-xs transition-colors duration-200"
+                className="flex items-center gap-1.5 text-white/65 hover:text-accent-light text-xs transition-colors duration-200"
               >
                 <Phone size={11} strokeWidth={2} />
                 <span>(+256) 200 911 459</span>
               </a>
               <a
                 href="mailto:info@ambso.org"
-                className="flex items-center gap-1.5 text-white/65 hover:text-accent text-xs transition-colors duration-200"
+                className="flex items-center gap-1.5 text-white/65 hover:text-accent-light text-xs transition-colors duration-200"
               >
                 <Mail size={11} strokeWidth={2} />
                 <span>info@ambso.org</span>
@@ -144,10 +144,11 @@ export default function Header() {
       <div
         className={`relative transition-all duration-300 ${
           isScrolled
-            ? 'bg-white shadow-[0_2px_20px_rgba(0,40,102,0.10)]'
+            ? 'bg-white shadow-[0_2px_20px_rgba(19,85,171,0.12)]'
             : 'bg-white/97 backdrop-blur-md'
         }`}
       >
+        {/* Scroll indicator line — primary → primary-light → accent */}
         {isScrolled && (
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-primary-light to-accent opacity-40 pointer-events-none" />
         )}
@@ -155,7 +156,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-1">
           <div className="flex items-center h-[68px]">
 
-            {/* Logo — anchored left with fixed width */}
+            {/* Logo */}
             <Link href="/" className="flex items-center shrink-0 w-44">
               <Image
                 src="/ambso-site/images/logo.png"
@@ -167,13 +168,13 @@ export default function Header() {
               />
             </Link>
 
-            {/* ── Desktop Nav + CTA — pushed to the far right ─────── */}
+            {/* ── Desktop Nav + CTA ─────── */}
             <div className="hidden lg:flex items-center ml-auto">
               <nav className="flex items-center">
                 {navigation.map((item) => {
-                  const isMega   = 'mega' in item && item.mega;
+                  const isMega      = 'mega' in item && item.mega;
                   const isPanelOpen = activeDesktop === item.name;
-                  const active   = isActive(item);
+                  const active      = isActive(item);
 
                   return (
                     <div
@@ -182,7 +183,7 @@ export default function Header() {
                       onMouseEnter={isMega ? () => openPanel(item.name) : undefined}
                       onMouseLeave={isMega ? closePanel : undefined}
                     >
-                      {/* ── Top-level link ── */}
+                      {/* Top-level link */}
                       <Link
                         href={item.href}
                         className={`relative flex items-center gap-1 px-4 py-2 text-[11px] font-semibold tracking-wide uppercase whitespace-nowrap transition-colors duration-200 ${
@@ -201,7 +202,7 @@ export default function Header() {
                             }`}
                           />
                         )}
-                        {/* Active / hover underline */}
+                        {/* Active / hover underline — primary (#1355AB) */}
                         <span
                           className={`absolute bottom-0 left-3 right-3 h-[2px] bg-primary rounded-full transition-transform duration-200 origin-left ${
                             active || isPanelOpen ? 'scale-x-100' : 'scale-x-0'
@@ -209,7 +210,7 @@ export default function Header() {
                         />
                       </Link>
 
-                      {/* ── Mega Panel ── */}
+                      {/* Mega Panel */}
                       {isMega && (
                         <div
                           className={`fixed left-0 right-0 transition-all duration-200 ease-out ${
@@ -221,7 +222,9 @@ export default function Header() {
                           onMouseEnter={() => openPanel(item.name)}
                           onMouseLeave={closePanel}
                         >
-                          <div className="bg-primary shadow-[0_16px_48px_rgba(0,40,102,0.28)]">
+                          {/* Panel background — primary (#1355AB) */}
+                          <div className="bg-primary shadow-[0_16px_48px_rgba(19,85,171,0.30)]">
+                            {/* Top accent line — accent-light → white → accent-light */}
                             <div className="h-[3px] bg-gradient-to-r from-accent/60 via-white/20 to-accent/60" />
                             <div className="max-w-7xl mx-auto px-8 py-10 flex gap-0">
 
@@ -232,7 +235,7 @@ export default function Header() {
                                 </p>
                                 <Link
                                   href={item.href}
-                                  className="mt-5 inline-flex items-center gap-1.5 text-accent text-sm font-semibold hover:gap-3 transition-all duration-150"
+                                  className="mt-5 inline-flex items-center gap-1.5 text-accent-light text-sm font-semibold hover:gap-3 transition-all duration-150"
                                 >
                                   View all →
                                 </Link>
@@ -252,7 +255,7 @@ export default function Header() {
                                             href={sub.href}
                                             className={`block text-[13.5px] py-1.5 hover:translate-x-1 transition-all duration-150 ${
                                               pathname === sub.href
-                                                ? 'text-accent font-semibold'
+                                                ? 'text-accent-light font-semibold'
                                                 : 'text-white/80 hover:text-white'
                                             }`}
                                           >
@@ -264,7 +267,6 @@ export default function Header() {
                                   </div>
                                 ))}
                               </div>
-
                             </div>
                           </div>
                         </div>
@@ -274,11 +276,11 @@ export default function Header() {
                 })}
               </nav>
 
-              {/* Separator + Donate */}
+              {/* Separator + Donate CTA — accent (#1D6FD8) fill, white text */}
               <div className="flex items-center gap-2 pl-4 ml-2 border-l border-gray-200">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center px-5 py-2 bg-accent text-primary rounded-full text-sm font-semibold hover:bg-accent/85 hover:shadow-md hover:shadow-accent/30 transition-all duration-200 hover:scale-[1.03]"
+                  className="inline-flex items-center px-5 py-2 bg-accent text-white rounded-full text-sm font-semibold hover:bg-accent-light hover:shadow-md hover:shadow-accent/30 transition-all duration-200 hover:scale-[1.03]"
                 >
                   Donate
                 </Link>
@@ -309,9 +311,9 @@ export default function Header() {
                   ? item.columns.flatMap((c) => c.items)
                   : [];
 
-              const hasSub  = mobileItems.length > 0;
-              const isOpen  = openMobile === item.name;
-              const active  = isActive(item);
+              const hasSub = mobileItems.length > 0;
+              const isOpen = openMobile === item.name;
+              const active = isActive(item);
 
               return (
                 <div key={item.name}>
@@ -345,6 +347,7 @@ export default function Header() {
                         isOpen ? 'max-h-72 opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
+                      {/* Mobile sub-items — accent border (#1D6FD8) */}
                       <div className="pl-4 pb-1 border-l-2 border-accent/40 ml-3 mt-0.5 space-y-0.5">
                         {mobileItems.map((sub) => (
                           <Link
@@ -352,8 +355,8 @@ export default function Header() {
                             href={sub.href}
                             className={`block px-3 py-2 text-[12px] font-medium tracking-wide uppercase transition-colors rounded-md ${
                               pathname === sub.href
-                                ? 'text-primary bg-blue-50/60'
-                                : 'text-gray-500 hover:text-primary hover:bg-blue-50/50'
+                                ? 'text-primary bg-primary/5'
+                                : 'text-gray-500 hover:text-primary hover:bg-primary/5'
                             }`}
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
@@ -367,9 +370,10 @@ export default function Header() {
               );
             })}
 
+            {/* Mobile Donate CTA — accent (#1D6FD8) fill, white text */}
             <Link
               href="/contact"
-              className="mt-3 mx-1 px-6 py-2.5 bg-accent text-primary text-center text-[14px] font-semibold rounded-full hover:bg-accent/85 transition-colors"
+              className="mt-3 mx-1 px-6 py-2.5 bg-accent text-white text-center text-[14px] font-semibold rounded-full hover:bg-accent-light transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Donate

@@ -12,6 +12,7 @@ interface ProgramsProps {
       icon: string;
       href: string;
       colorClass: string;
+      image?: string;
     }>;
   };
 }
@@ -23,8 +24,13 @@ const iconMap: Record<string, LucideIcon> = {
   HandHeart,
 };
 
-// Single accent — every card uses the brand sky blue at varying opacities
-const accent = { border: '#38BDF8', text: '#38BDF8', bg: 'rgba(56,189,248,0.10)' };
+// Maps each program icon to its representative photo
+const imageMap: Record<string, string> = {
+  Microscope:   '/ambso-site/images/labwork.jpg',
+  Users:        '/ambso-site/images/community.jpg',
+  GraduationCap: '/ambso-site/images/capacity-building.png',
+  HandHeart:    '/ambso-site/images/resource-mobilization.jpeg',
+};
 
 const defaultPrograms = [
   {
@@ -63,77 +69,36 @@ const defaultContent = {
   programs: defaultPrograms,
 };
 
-// ── Inline SVG background: dot-grid world-map silhouette + decorative rings ──
-function BackgroundDecor() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
-
-      {/* Large faint cross / plus — medical motif, top-right */}
-      <svg
-        className="absolute -top-16 -right-16 opacity-[0.04]"
-        width="520" height="520" viewBox="0 0 520 520" fill="none"
-      >
-        <rect x="180" y="0"   width="160" height="520" rx="80" fill="white" />
-        <rect x="0"   y="180" width="520" height="160" rx="80" fill="white" />
-      </svg>
-
-      {/* Smaller cross — bottom-left */}
-      <svg
-        className="absolute -bottom-10 -left-10 opacity-[0.05]"
-        width="280" height="280" viewBox="0 0 280 280" fill="none"
-      >
-        <rect x="95"  y="0"   width="90" height="280" rx="45" fill="white" />
-        <rect x="0"   y="95"  width="280" height="90" rx="45" fill="white" />
-      </svg>
-
-      {/* Concentric arc rings — centre-right */}
-      <svg
-        className="absolute top-1/2 right-0 -translate-y-1/2 opacity-[0.06]"
-        width="400" height="600" viewBox="0 0 400 600" fill="none"
-      >
-        {[340, 280, 220, 160, 100].map((r, i) => (
-          <circle key={i} cx="400" cy="300" r={r} stroke="white" strokeWidth="1.5" />
-        ))}
-      </svg>
-
-      {/* Dot grid — subtle texture across the whole panel */}
-      <svg
-        className="absolute inset-0 w-full h-full opacity-[0.045]"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="1.5" fill="white" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#dots)" />
-      </svg>
-
-      {/* Diagonal gradient wash — creates depth from bottom-left */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-transparent" />
-
-      {/* Subtle top highlight line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-    </div>
-  );
-}
-
 export default function Programs({ content }: ProgramsProps) {
   const title    = content?.title    ?? defaultContent.title;
   const subtitle = content?.subtitle ?? defaultContent.subtitle;
   const programs = content?.programs ?? defaultContent.programs;
 
   return (
-    <section
-      className="relative py-24 overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #001a40 0%, #002866 55%, #003d99 100%)' }}
-    >
-      <BackgroundDecor />
+    <section className="relative py-24 bg-[#f8f9fb] overflow-hidden">
+      {/* Subtle dot texture */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none" aria-hidden="true">
+        <defs>
+          <pattern id="prog-dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1.2" fill="#002866" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#prog-dots)" />
+      </svg>
+
+      {/* Faint cross — bottom-right, mirrors Mission section */}
+      <svg
+        className="absolute -bottom-20 -right-20 opacity-[0.04] pointer-events-none select-none"
+        width="440" height="440" viewBox="0 0 440 440" fill="none"
+        aria-hidden="true"
+      >
+        <rect x="150" y="0"   width="140" height="440" rx="70" fill="#002866" />
+        <rect x="0"   y="150" width="440" height="140" rx="70" fill="#002866" />
+      </svg>
 
       <Container>
         {/* ── Section header ── */}
         <div className="relative text-center mb-16">
-          {/* Eyebrow label */}
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="block w-8 h-px bg-[#38BDF8]" />
             <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.2em]">
@@ -141,56 +106,51 @@ export default function Programs({ content }: ProgramsProps) {
             </span>
             <span className="block w-8 h-px bg-[#38BDF8]" />
           </div>
-
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#002866] mb-5 leading-tight">
             {title}
           </h2>
-          <p className="text-white/60 text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[#1f2937]/60 text-lg max-w-2xl mx-auto leading-relaxed">
             {subtitle}
           </p>
         </div>
 
         {/* ── Program cards ── */}
         <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {programs.map((program, idx) => {
-            const Icon = iconMap[program.icon] || Microscope;
+          {programs.map((program) => {
+            const Icon  = iconMap[program.icon] || Microscope;
+            const image = imageMap[program.icon];
 
             return (
               <div
                 key={program.title}
-                className="group relative flex flex-col rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.10)',
-                }}
+                className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5"
               >
-                {/* Accent top border */}
-                <div
-                  className="h-[3px] w-full transition-all duration-300 group-hover:h-[4px]"
-                  style={{ background: accent.border }}
-                />
+                {/* ── Photo ── */}
+                <div className="relative h-52 overflow-hidden">
+                  {image && (
+                    <img
+                      src={image}
+                      alt={program.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                  )}
+                  {/* Soft gradient at photo bottom to blend into card */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
-                <div className="flex flex-col flex-1 p-7">
-                  {/* Icon */}
-                  <div
-                    className="inline-flex items-center justify-center w-14 h-14 rounded-xl mb-6 transition-transform duration-300 group-hover:scale-110"
-                    style={{ background: accent.bg, border: `1px solid ${accent.border}30` }}
-                  >
-                    <Icon size={26} style={{ color: accent.text }} />
+                  {/* Icon badge — floats over photo bottom-left */}
+                  <div className="absolute bottom-3 left-4 inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/90 backdrop-blur-sm shadow-md">
+                    <Icon size={18} className="text-[#002866]" />
                   </div>
+                </div>
 
-                  {/* Title */}
-                  <h3 className="text-lg font-bold text-white mb-3 leading-snug">
+                {/* ── Content ── */}
+                <div className="flex flex-col flex-1 p-6">
+                  <h3 className="text-base font-bold text-[#002866] mb-2 leading-snug">
                     {program.title}
                   </h3>
-
-                  {/* Description */}
-                  <p className="text-white/50 text-sm leading-relaxed flex-1 mb-7">
+                  <p className="text-[#4b5563] text-sm leading-relaxed flex-1 mb-6">
                     {program.description}
                   </p>
-
-                  {/* CTA link */}
                   <Button
                     href={program.href}
                     variant="outline"
@@ -198,17 +158,9 @@ export default function Programs({ content }: ProgramsProps) {
                     className="self-start !border-[#38BDF8] !text-[#38BDF8] hover:!bg-[#38BDF8]/10 inline-flex items-center gap-1.5"
                   >
                     Learn More
-                    <ArrowRight size={14} />
+                    <ArrowRight size={13} />
                   </Button>
                 </div>
-
-                {/* Hover glow overlay */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-                  style={{
-                    background: `radial-gradient(circle at 50% 0%, ${accent.bg} 0%, transparent 70%)`,
-                  }}
-                />
               </div>
             );
           })}
@@ -216,7 +168,7 @@ export default function Programs({ content }: ProgramsProps) {
 
         {/* ── Bottom CTA ── */}
         <div className="relative text-center mt-14">
-           <Button
+          <Button
             href="/programs"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wide transition-all duration-200 hover:scale-[1.03] hover:shadow-lg !bg-[#38BDF8] !text-[#002866] !border-0"
             style={{ boxShadow: '0 4px 24px rgba(56,189,248,0.25)' }}

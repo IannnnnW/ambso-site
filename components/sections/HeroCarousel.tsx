@@ -236,7 +236,7 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                       {slide.ctaLink && (
                         <Link
                           href={slide.ctaLink}
-                          className="inline-flex items-center rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-primary shadow-lg hover:bg-accent/85 hover:shadow-accent/30 hover:shadow-lg transition-all hover:scale-105"
+                          className="inline-flex items-center rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-accent/85 hover:shadow-accent/30 hover:shadow-lg transition-all hover:scale-105"
                         >
                           {slide.ctaText || 'Learn More'}
                           <ChevronRight className="ml-1.5 h-4 w-4" />
