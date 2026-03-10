@@ -41,7 +41,7 @@ export default async function AboutPage() {
   return (
     <div className="pt-20 lg:pt-28">
       {/* Hero Section — staff.jpg background */}
-      <section className="relative text-white py-24 overflow-hidden">
+      <section className="relative text-white py-24 min-h-[480px] flex items-center overflow-hidden">
         {/* Background: staff photo */}
         <Image
           src="/ambso-site/images/staff.jpg"
@@ -52,7 +52,7 @@ export default async function AboutPage() {
         />
         {/* Overlay: dark primary blue from left so text is legible,
             fades to a lighter tint on the right to let the photo breathe */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/93 via-primary/78 to-primary-dark/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/55 via-primary/35 to-primary/15" />
 
         <Container className="relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">

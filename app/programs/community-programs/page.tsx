@@ -127,8 +127,14 @@ export default async function CommunityProgramPage() {
   return (
     <div className="pt-20 lg:pt-28">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
-        <Container>
+      <section className="relative text-white py-20 min-h-[420px] flex items-center overflow-hidden">
+        <img
+          src="/ambso-site/images/community.jpg"
+          alt="AMBSO Community Programs"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#002866]/75 via-[#002866]/55 to-[#002866]/30" />
+        <Container className="relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               {category?.title || 'Community Programs'}
