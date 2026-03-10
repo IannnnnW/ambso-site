@@ -38,7 +38,7 @@ const navigation: NavItem[] = [
     ],
   },
   {
-    name: 'Research and Programs',
+    name: 'Research & Programs',
     href: '/programs',
     mega: true,
     description: 'Our work spans clinical research, community interventions, and capacity building — all aimed at improving health outcomes across Uganda and Africa.',
