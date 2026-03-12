@@ -1,5 +1,4 @@
 // Document types
-import siteSettings from './documents/siteSettings'
 import news from './documents/news'
 import program from './documents/program'
 import teamMember from './documents/teamMember'
@@ -29,7 +28,6 @@ import faq from './objects/faq'
 
 export const schemaTypes = [
   // Pages
-  siteSettings,
   headerContent,
   footerContent,
   homepageContent,

@@ -16,9 +16,6 @@ export const deskStructure = (S: StructureBuilder) =>
             .title('Configuration')
             .items([
               S.listItem()
-                .title('Site Settings')
-                .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
-              S.listItem()
                 .title('Header')
                 .child(S.document().schemaType('headerContent').documentId('headerContent')),
               S.listItem()

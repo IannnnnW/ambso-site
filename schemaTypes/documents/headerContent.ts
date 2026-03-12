@@ -4,75 +4,150 @@ export default defineType({
   name: 'headerContent',
   title: 'Header',
   type: 'document',
+  groups: [
+    { name: 'utilityStrip', title: 'Utility Strip' },
+    { name: 'logo',         title: 'Logo' },
+    { name: 'navigation',   title: 'Navigation' },
+    { name: 'cta',          title: 'CTA Button' },
+  ],
   fields: [
+    // ── Utility Strip ─────────────────────────────────────────────────────────
     defineField({
       name: 'orgName',
-      title: 'Organisation Name (Utility Strip)',
+      title: 'Organisation Name',
+      description: 'Full name shown in the top bar on desktop',
       type: 'string',
-      description: 'Displayed in the top bar on desktop',
+      group: 'utilityStrip',
       initialValue: 'African Medical and Behavioral Sciences Organization',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'phone',
-      title: 'Phone (Utility Strip)',
+      title: 'Phone (display)',
+      description: 'Displayed in the top bar, e.g. (+256) 200 911 459',
       type: 'string',
+      group: 'utilityStrip',
       initialValue: '(+256) 200 911 459',
     }),
     defineField({
-      name: 'email',
-      title: 'Email (Utility Strip)',
+      name: 'phoneTel',
+      title: 'Phone (tel: link)',
+      description: 'Used for the tel: href — include country code, no spaces, e.g. +256200911459',
       type: 'string',
-      initialValue: 'info@ambso.org',
+      group: 'utilityStrip',
+      initialValue: '+256200911459',
     }),
     defineField({
+      name: 'email',
+      title: 'Email',
+      type: 'string',
+      group: 'utilityStrip',
+      initialValue: 'info@ambso.org',
+    }),
+
+    // ── Logo ──────────────────────────────────────────────────────────────────
+    defineField({
       name: 'logo',
-      title: 'Logo',
+      title: 'Logo Image',
+      description: 'Upload a logo to override the default /images/logo.png',
       type: 'image',
-      description: 'Leave empty to use the default /images/logo.png',
+      group: 'logo',
       options: { hotspot: true },
     }),
     defineField({
-      name: 'ctaText',
-      title: 'CTA Button Text',
+      name: 'logoAlt',
+      title: 'Logo Alt Text',
       type: 'string',
+      group: 'logo',
+      initialValue: 'AMBSO Logo',
+    }),
+
+    // ── CTA Button ────────────────────────────────────────────────────────────
+    defineField({
+      name: 'ctaText',
+      title: 'CTA Button Label',
+      type: 'string',
+      group: 'cta',
       initialValue: 'Donate',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'ctaHref',
       title: 'CTA Button Link',
       type: 'string',
+      group: 'cta',
       initialValue: '/contact',
+      validation: (Rule) => Rule.required(),
     }),
+
+    // ── Navigation ────────────────────────────────────────────────────────────
     defineField({
       name: 'navigation',
       title: 'Navigation Items',
+      description: 'Order controls the left-to-right sequence in the nav bar',
       type: 'array',
+      group: 'navigation',
       of: [
         {
           type: 'object',
           name: 'navItem',
           title: 'Nav Item',
           preview: {
-            select: { title: 'name', subtitle: 'href' },
+            select: { title: 'name', subtitle: 'href', isMega: 'isMega' },
+            prepare({ title, subtitle, isMega }) {
+              return { title, subtitle: `${subtitle}${isMega ? '  (mega)' : ''}` }
+            },
           },
+          groups: [
+            { name: 'basic', title: 'Basic' },
+            { name: 'mega',  title: 'Mega Menu' },
+          ],
           fields: [
-            { name: 'name', title: 'Label', type: 'string', validation: (Rule) => Rule.required() },
-            { name: 'href', title: 'Link', type: 'string', validation: (Rule) => Rule.required() },
-            { name: 'isMega', title: 'Has Mega Menu?', type: 'boolean', initialValue: false },
+            {
+              name: 'name',
+              title: 'Label',
+              type: 'string',
+              group: 'basic',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'href',
+              title: 'Link',
+              type: 'string',
+              group: 'basic',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'isMega',
+              title: 'Has Mega Menu?',
+              type: 'boolean',
+              group: 'basic',
+              initialValue: false,
+            },
             {
               name: 'description',
               title: 'Mega Menu Description',
+              description: 'Blurb shown in the left panel of the mega dropdown',
               type: 'text',
               rows: 3,
-              description: 'Shown in the left panel of the mega menu',
-              hidden: ({ parent }) => !parent?.isMega,
+              group: 'mega',
+              hidden: ({ parent }: { parent?: { isMega?: boolean } }) => !parent?.isMega,
+            },
+            {
+              name: 'viewAllText',
+              title: '"View all" Link Text',
+              description: 'Text for the "View all →" link at the bottom of the left panel',
+              type: 'string',
+              group: 'mega',
+              initialValue: 'View all →',
+              hidden: ({ parent }: { parent?: { isMega?: boolean } }) => !parent?.isMega,
             },
             {
               name: 'columns',
               title: 'Mega Menu Columns',
               type: 'array',
-              hidden: ({ parent }) => !parent?.isMega,
+              group: 'mega',
+              hidden: ({ parent }: { parent?: { isMega?: boolean } }) => !parent?.isMega,
               of: [
                 {
                   type: 'object',

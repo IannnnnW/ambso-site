@@ -17,6 +17,7 @@ export interface HeaderNavItem {
   href: string;
   isMega?: boolean;
   description?: string;
+  viewAllText?: string;
   columns?: HeaderNavColumn[];
 }
 
@@ -25,8 +26,10 @@ export interface HeaderContent {
   _type: 'headerContent';
   orgName?: string;
   phone?: string;
+  phoneTel?: string;
   email?: string;
   logo?: SanityImage;
+  logoAlt?: string;
   ctaText?: string;
   ctaHref?: string;
   navigation?: HeaderNavItem[];
@@ -40,6 +43,9 @@ export interface FooterLink {
 export interface FooterContent {
   _id: string;
   _type: 'footerContent';
+  backgroundImage?: SanityImage;
+  logo?: SanityImage;
+  logoAlt?: string;
   description?: string;
   socialMedia?: {
     facebook?: string;
@@ -55,8 +61,10 @@ export interface FooterContent {
   contactHeading?: string;
   contactAddress?: string;
   contactPhone?: string;
+  contactPhoneTel?: string;
   contactEmail?: string;
   copyrightName?: string;
+  copyrightSuffix?: string;
   bottomLinks?: FooterLink[];
 }
 

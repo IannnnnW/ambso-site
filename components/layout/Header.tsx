@@ -6,15 +6,16 @@ import Image from 'next/image';
 import { Menu, X, ChevronDown, Phone, Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import type { HeaderContent } from '@/lib/sanity.types';
+import { urlFor } from '@/lib/sanity.client';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface NavLink   { name: string; href: string }
 interface NavColumn { heading: string; items: NavLink[] }
 
-interface SimpleNavItem { name: string; href: string; icon?: boolean }
+interface SimpleNavItem { name: string; href: string }
 interface MegaNavItem   {
   name: string; href: string; mega: true;
-  description: string; columns: NavColumn[];
+  description: string; viewAllText: string; columns: NavColumn[];
 }
 
 type NavItem = SimpleNavItem | MegaNavItem;
@@ -28,6 +29,7 @@ function toNavItems(navigation: HeaderContent['navigation']): NavItem[] {
         href: item.href,
         mega: true as const,
         description: item.description ?? '',
+        viewAllText: item.viewAllText ?? 'View all →',
         columns: (item.columns ?? []).map((col) => ({
           heading: col.heading,
           items: col.items ?? [],
@@ -66,18 +68,20 @@ export default function Header({ data }: { data: HeaderContent }) {
     return pathname.startsWith(item.href);
   };
 
-  const navigation = toNavItems(data.navigation);
-  const orgName    = data.orgName ?? 'African Medical and Behavioral Sciences Organization';
-  const phone      = data.phone   ?? '(+256) 200 911 459';
-  const email      = data.email   ?? 'info@ambso.org';
-  const ctaText    = data.ctaText ?? 'Donate';
-  const ctaHref    = data.ctaHref ?? '/contact';
+  const navigation  = toNavItems(data.navigation);
+  const orgName     = data.orgName  ?? 'African Medical and Behavioral Sciences Organization';
+  const phone       = data.phone    ?? '(+256) 200 911 459';
+  const phoneTel    = data.phoneTel ?? phone.replace(/[^+\d]/g, '');
+  const email       = data.email    ?? 'info@ambso.org';
+  const ctaText     = data.ctaText  ?? 'Donate';
+  const ctaHref     = data.ctaHref  ?? '/contact';
+  const logoAlt     = data.logoAlt  ?? 'AMBSO Logo';
+  const logoSrc     = data.logo?.asset ? urlFor(data.logo).width(320).url() : '/images/logo.png';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* ── Top Utility Strip ─────────────────────────────────────── */}
-      {/* --primary: #1355AB */}
       <div className="hidden lg:block bg-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-9">
@@ -86,7 +90,7 @@ export default function Header({ data }: { data: HeaderContent }) {
             </span>
             <div className="flex items-center gap-6">
               <a
-                href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+                href={`tel:${phoneTel}`}
                 className="flex items-center gap-1.5 text-white/65 hover:text-accent-light text-xs transition-colors duration-200"
               >
                 <Phone size={11} strokeWidth={2} />
@@ -112,7 +116,6 @@ export default function Header({ data }: { data: HeaderContent }) {
             : 'bg-white/97 backdrop-blur-md'
         }`}
       >
-        {/* Scroll indicator line — primary → primary-light → accent */}
         {isScrolled && (
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-primary-light to-accent opacity-40 pointer-events-none" />
         )}
@@ -123,8 +126,8 @@ export default function Header({ data }: { data: HeaderContent }) {
             {/* Logo */}
             <Link href="/" className="flex items-center shrink-0 w-44">
               <Image
-                src="/images/logo.png"
-                alt="AMBSO Logo"
+                src={logoSrc}
+                alt={logoAlt}
                 width={160}
                 height={70}
                 className="h-14 w-auto"
@@ -147,7 +150,6 @@ export default function Header({ data }: { data: HeaderContent }) {
                       onMouseEnter={isMega ? () => openPanel(item.name) : undefined}
                       onMouseLeave={isMega ? closePanel : undefined}
                     >
-                      {/* Top-level link */}
                       <Link
                         href={item.href}
                         className={`relative flex items-center gap-1 px-4 py-2 text-[11px] font-semibold tracking-wide uppercase whitespace-nowrap transition-colors duration-200 ${
@@ -166,7 +168,6 @@ export default function Header({ data }: { data: HeaderContent }) {
                             }`}
                           />
                         )}
-                        {/* Active / hover underline — primary (#1355AB) */}
                         <span
                           className={`absolute bottom-0 left-3 right-3 h-[2px] bg-primary rounded-full transition-transform duration-200 origin-left ${
                             active || isPanelOpen ? 'scale-x-100' : 'scale-x-0'
@@ -186,9 +187,7 @@ export default function Header({ data }: { data: HeaderContent }) {
                           onMouseEnter={() => openPanel(item.name)}
                           onMouseLeave={closePanel}
                         >
-                          {/* Panel background — primary (#1355AB) */}
                           <div className="bg-primary shadow-[0_16px_48px_rgba(19,85,171,0.30)]">
-                            {/* Top accent line — accent-light → white → accent-light */}
                             <div className="h-[3px] bg-gradient-to-r from-accent/60 via-white/20 to-accent/60" />
                             <div className="max-w-7xl mx-auto px-8 py-10 flex gap-0">
 
@@ -201,7 +200,7 @@ export default function Header({ data }: { data: HeaderContent }) {
                                   href={item.href}
                                   className="mt-5 inline-flex items-center gap-1.5 text-accent-light text-sm font-semibold hover:gap-3 transition-all duration-150"
                                 >
-                                  View all →
+                                  {item.viewAllText}
                                 </Link>
                               </div>
 
@@ -240,7 +239,7 @@ export default function Header({ data }: { data: HeaderContent }) {
                 })}
               </nav>
 
-              {/* Separator + CTA — accent (#1D6FD8) fill, white text */}
+              {/* CTA Button */}
               <div className="flex items-center gap-2 pl-4 ml-2 border-l border-gray-200">
                 <Link
                   href={ctaHref}
@@ -311,7 +310,6 @@ export default function Header({ data }: { data: HeaderContent }) {
                         isOpen ? 'max-h-72 opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
-                      {/* Mobile sub-items — accent border (#1D6FD8) */}
                       <div className="pl-4 pb-1 border-l-2 border-accent/40 ml-3 mt-0.5 space-y-0.5">
                         {mobileItems.map((sub) => (
                           <Link
@@ -334,7 +332,7 @@ export default function Header({ data }: { data: HeaderContent }) {
               );
             })}
 
-            {/* Mobile CTA — accent (#1D6FD8) fill, white text */}
+            {/* Mobile CTA */}
             <Link
               href={ctaHref}
               className="mt-3 mx-1 px-6 py-2.5 bg-accent text-white text-center text-[14px] font-semibold rounded-full hover:bg-accent-light transition-colors"

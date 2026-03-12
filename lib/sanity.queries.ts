@@ -1097,8 +1097,10 @@ export const headerContentQuery = groq`
     _id,
     orgName,
     phone,
+    phoneTel,
     email,
     logo,
+    logoAlt,
     ctaText,
     ctaHref,
     navigation[] {
@@ -1106,6 +1108,7 @@ export const headerContentQuery = groq`
       href,
       isMega,
       description,
+      viewAllText,
       columns[] {
         heading,
         items[] {
@@ -1120,6 +1123,9 @@ export const headerContentQuery = groq`
 export const footerContentQuery = groq`
   *[_type == "footerContent" && _id == "footerContent"][0] {
     _id,
+    backgroundImage,
+    logo,
+    logoAlt,
     description,
     socialMedia,
     quickLinksHeading,
@@ -1129,8 +1135,10 @@ export const footerContentQuery = groq`
     contactHeading,
     contactAddress,
     contactPhone,
+    contactPhoneTel,
     contactEmail,
     copyrightName,
+    copyrightSuffix,
     bottomLinks[] { name, href }
   }
 `;

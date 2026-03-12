@@ -318,7 +318,9 @@ export const fallbackHeaderContent: HeaderContent = {
   _type: 'headerContent',
   orgName: 'African Medical and Behavioral Sciences Organization',
   phone: '(+256) 200 911 459',
+  phoneTel: '+256200911459',
   email: 'info@ambso.org',
+  logoAlt: 'AMBSO Logo',
   ctaText: 'Donate',
   ctaHref: '/contact',
   navigation: [
@@ -328,6 +330,7 @@ export const fallbackHeaderContent: HeaderContent = {
       href: '/who-we-are/about',
       isMega: true,
       description: "Learn about AMBSO's mission, the people driving our work, and where we operate across Uganda and beyond.",
+      viewAllText: 'View all →',
       columns: [
         {
           heading: 'Organisation',
@@ -344,6 +347,7 @@ export const fallbackHeaderContent: HeaderContent = {
       href: '/programs',
       isMega: true,
       description: 'Our work spans clinical research, community interventions, and capacity building — all aimed at improving health outcomes across Uganda and Africa.',
+      viewAllText: 'View all →',
       columns: [
         {
           heading: 'Research',
@@ -369,6 +373,7 @@ export const fallbackHeaderContent: HeaderContent = {
       href: '/newsroom',
       isMega: true,
       description: 'Stay informed with the latest news, publications, opportunities and downloadable resources from AMBSO.',
+      viewAllText: 'View all →',
       columns: [
         {
           heading: 'Stay Informed',
@@ -413,8 +418,11 @@ export const fallbackFooterContent: FooterContent = {
   contactHeading: 'Contact Us',
   contactAddress: 'Kampala, Uganda',
   contactPhone: '(+256) 394 500 421',
+  contactPhoneTel: '+256394500421',
   contactEmail: 'info@ambso.org',
   copyrightName: 'AMBSO',
+  copyrightSuffix: 'All rights reserved.',
+  logoAlt: 'AMBSO Logo',
   bottomLinks: [
     { name: 'Privacy Policy', href: '/privacy-policy' },
     { name: 'Terms of Service', href: '/terms' },
