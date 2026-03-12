@@ -6,7 +6,7 @@ export default function ClinicalTrialsPage() {
     <div className="pt-20 lg:pt-28">
       <section className="relative text-white py-20 min-h-[420px] flex items-center overflow-hidden">
         <img
-          src="/ambso-site/images/labwork.jpg"
+          src="/images/labwork.jpg"
           alt="AMBSO Laboratory Work"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />

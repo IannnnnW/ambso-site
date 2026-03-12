@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="relative text-white overflow-hidden">
       {/* Background texture */}
       <Image
-        src="/ambso-site/images/footer-bkg.jpg"
+        src="/images/footer-bkg.jpg"
         alt=""
         fill
         className="object-cover object-center"
@@ -20,7 +20,7 @@ export default function Footer() {
           {/* About */}
           <div>
             <Image
-              src="/ambso-site/images/logo.png"
+              src="/images/logo.png"
               alt="AMBSO Logo"
               width={120}
               height={60}

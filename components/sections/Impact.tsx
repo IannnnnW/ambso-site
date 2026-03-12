@@ -73,7 +73,7 @@ export default function Impact({ content }: ImpactProps) {
     <section className="relative py-20 overflow-hidden text-white">
       {/* Molecular background image */}
       <Image
-        src="/ambso-site/images/molecular-bkg.jpg"
+        src="/images/molecular-bkg.jpg"
         alt=""
         fill
         className="object-cover object-center"

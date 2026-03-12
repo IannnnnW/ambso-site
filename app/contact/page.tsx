@@ -49,7 +49,7 @@ export default function ContactPage() {
     <div className="pt-20 lg:pt-28">
       <section className="relative text-white py-20 min-h-[420px] flex items-center overflow-hidden">
         <img
-          src="/ambso-site/images/staff.jpg"
+          src="/images/staff.jpg"
           alt="AMBSO Team"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />

@@ -44,7 +44,7 @@ export default async function AboutPage() {
       <section className="relative text-white py-24 min-h-[480px] flex items-center overflow-hidden">
         {/* Background: staff photo */}
         <Image
-          src="/ambso-site/images/staff.jpg"
+          src="/images/staff.jpg"
           alt="AMBSO Staff"
           fill
           className="object-cover object-center"

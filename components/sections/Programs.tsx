@@ -26,10 +26,10 @@ const iconMap: Record<string, LucideIcon> = {
 
 // Maps each program icon to its representative photo
 const imageMap: Record<string, string> = {
-  Microscope:   '/ambso-site/images/labwork.jpg',
-  Users:        '/ambso-site/images/community.jpg',
-  GraduationCap: '/ambso-site/images/capacity-building.png',
-  HandHeart:    '/ambso-site/images/resource-mobilization.jpeg',
+  Microscope:   '/images/labwork.jpg',
+  Users:        '/images/community.jpg',
+  GraduationCap: '/images/capacity-building.png',
+  HandHeart:    '/images/resource-mobilization.jpeg',
 };
 
 const defaultPrograms = [

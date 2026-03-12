@@ -129,7 +129,7 @@ export default async function CommunityProgramPage() {
       {/* Hero Section */}
       <section className="relative text-white py-20 min-h-[420px] flex items-center overflow-hidden">
         <img
-          src="/ambso-site/images/community.jpg"
+          src="/images/community.jpg"
           alt="AMBSO Community Programs"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
