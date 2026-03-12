@@ -6,7 +6,7 @@ import Footer from './Footer'
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isStudio = pathname?.startsWith('/ambso-backend')
+  const isStudio = pathname?.startsWith('/ambso-backend') || pathname?.startsWith('/structure')
 
   return (
     <>
