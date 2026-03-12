@@ -42,17 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Debug Sanity data
-        env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
-          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
-        run: |
-          echo "Project ID: $NEXT_PUBLIC_SANITY_PROJECT_ID"
-          echo "Dataset: $NEXT_PUBLIC_SANITY_DATASET"
-          curl -s "https://$NEXT_PUBLIC_SANITY_PROJECT_ID.api.sanity.io/v2024-01-01/data/query/$NEXT_PUBLIC_SANITY_DATASET?query=*[_type==\"heroSlide\"]|order(order+asc){_id,title,isActive}" \
-            -H "Accept: application/json" | python3 -m json.tool
-
+      
       - name: Build with Next.js
         env:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
