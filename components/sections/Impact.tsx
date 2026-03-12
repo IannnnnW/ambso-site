@@ -20,9 +20,9 @@ const defaultContent = {
   title: 'Our Impact',
   subtitle: 'Making a measurable difference in communities across Africa',
   stats: [
-    { value: 50000, label: 'People Reached', suffix: '+' },
-    { value: 120, label: 'Research Studies', suffix: '+' },
-    { value: 25, label: 'Partner Organizations', suffix: '+' },
+    { value: 57000, label: 'Male Circumcisions', suffix: '+' },
+    { value: 35, label: 'Peer Reviewed Publications', suffix: '+' },
+    { value: 15, label: 'Partner Organizations', suffix: '+' },
     { value: 15, label: 'Years of Impact', suffix: '' },
   ],
 };
