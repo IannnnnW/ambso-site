@@ -1145,7 +1145,7 @@ export const footerContentQuery = groq`
 
 export async function getHeaderContent() {
   try {
-    const data = await client.fetch(headerContentQuery);
+    const data = await client.fetch(headerContentQuery, {}, { next: { revalidate: 60 } });
     return data ?? null;
   } catch (error) {
     console.error('Error fetching header content:', error);
@@ -1155,7 +1155,7 @@ export async function getHeaderContent() {
 
 export async function getFooterContent() {
   try {
-    const data = await client.fetch(footerContentQuery);
+    const data = await client.fetch(footerContentQuery, {}, { next: { revalidate: 60 } });
     return data ?? null;
   } catch (error) {
     console.error('Error fetching footer content:', error);
