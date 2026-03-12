@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, ChevronDown, Phone, Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import type { HeaderContent } from '@/lib/sanity.types';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface NavLink   { name: string; href: string }
@@ -18,71 +19,27 @@ interface MegaNavItem   {
 
 type NavItem = SimpleNavItem | MegaNavItem;
 
-// ─── Navigation Structure ──────────────────────────────────────────────────────
-const navigation: NavItem[] = [
-  { name: 'Home', href: '/' },
-  {
-    name: 'Who We Are',
-    href: '/who-we-are/about',
-    mega: true,
-    description: "Learn about AMBSO's mission, the people driving our work, and where we operate across Uganda and beyond.",
-    columns: [
-      {
-        heading: 'Organisation',
-        items: [
-          { name: 'About Us',     href: '/who-we-are/about' },
-          { name: 'Our Team',     href: '/who-we-are/team' },
-          { name: 'Our Location', href: '/who-we-are/location' },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Research & Programs',
-    href: '/programs',
-    mega: true,
-    description: 'Our work spans clinical research, community interventions, and capacity building — all aimed at improving health outcomes across Uganda and Africa.',
-    columns: [
-      {
-        heading: 'Research',
-        items: [
-          { name: 'Clinical Trials',            href: '/research/clinical-trials' },
-          { name: 'EPI & Behavioral Research',  href: '/research/behavioral' },
-        ],
-      },
-      {
-        heading: 'Programs',
-        items: [
-          { name: 'Clinical Programs',      href: '/programs/clinical-programs' },
-          { name: 'Community Programs',     href: '/programs/community-programs' },
-          { name: 'Capacity Building',      href: '/programs/capacity-building' },
-          { name: 'Resource Mobilization',  href: '/programs/resource-mobilization' },
-        ],
-      },
-    ],
-  },
-  { name: 'Collaborations', href: '/collaborations' },
-  {
-    name: 'News & Resources',
-    href: '/newsroom',
-    mega: true,
-    description: 'Stay informed with the latest news, publications, opportunities and downloadable resources from AMBSO.',
-    columns: [
-      {
-        heading: 'Stay Informed',
-        items: [
-          { name: 'Newsroom',  href: '/newsroom' },
-          { name: 'Resources', href: '/resources' },
-          { name: 'Opportunities', href: '/opportunities'}
-        ],
-      },
-    ],
-  },
-  { name: 'Contact Us', href: '/contact' },
-];
+function toNavItems(navigation: HeaderContent['navigation']): NavItem[] {
+  if (!navigation?.length) return [];
+  return navigation.map((item) => {
+    if (item.isMega) {
+      return {
+        name: item.name,
+        href: item.href,
+        mega: true as const,
+        description: item.description ?? '',
+        columns: (item.columns ?? []).map((col) => ({
+          heading: col.heading,
+          items: col.items ?? [],
+        })),
+      } satisfies MegaNavItem;
+    }
+    return { name: item.name, href: item.href } satisfies SimpleNavItem;
+  });
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
-export default function Header() {
+export default function Header({ data }: { data: HeaderContent }) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled]             = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -109,6 +66,13 @@ export default function Header() {
     return pathname.startsWith(item.href);
   };
 
+  const navigation = toNavItems(data.navigation);
+  const orgName    = data.orgName ?? 'African Medical and Behavioral Sciences Organization';
+  const phone      = data.phone   ?? '(+256) 200 911 459';
+  const email      = data.email   ?? 'info@ambso.org';
+  const ctaText    = data.ctaText ?? 'Donate';
+  const ctaHref    = data.ctaHref ?? '/contact';
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
 
@@ -118,22 +82,22 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-9">
             <span className="text-white/55 text-xs font-light tracking-wide">
-              African Medical and Behavioral Sciences Organization
+              {orgName}
             </span>
             <div className="flex items-center gap-6">
               <a
-                href="tel:+256394500421"
+                href={`tel:${phone.replace(/[^+\d]/g, '')}`}
                 className="flex items-center gap-1.5 text-white/65 hover:text-accent-light text-xs transition-colors duration-200"
               >
                 <Phone size={11} strokeWidth={2} />
-                <span>(+256) 200 911 459</span>
+                <span>{phone}</span>
               </a>
               <a
-                href="mailto:info@ambso.org"
+                href={`mailto:${email}`}
                 className="flex items-center gap-1.5 text-white/65 hover:text-accent-light text-xs transition-colors duration-200"
               >
                 <Mail size={11} strokeWidth={2} />
-                <span>info@ambso.org</span>
+                <span>{email}</span>
               </a>
             </div>
           </div>
@@ -276,13 +240,13 @@ export default function Header() {
                 })}
               </nav>
 
-              {/* Separator + Donate CTA — accent (#1D6FD8) fill, white text */}
+              {/* Separator + CTA — accent (#1D6FD8) fill, white text */}
               <div className="flex items-center gap-2 pl-4 ml-2 border-l border-gray-200">
                 <Link
-                  href="/contact"
+                  href={ctaHref}
                   className="inline-flex items-center px-5 py-2 bg-accent text-white rounded-full text-sm font-semibold hover:bg-accent-light hover:shadow-md hover:shadow-accent/30 transition-all duration-200 hover:scale-[1.03]"
                 >
-                  Donate
+                  {ctaText}
                 </Link>
               </div>
             </div>
@@ -370,13 +334,13 @@ export default function Header() {
               );
             })}
 
-            {/* Mobile Donate CTA — accent (#1D6FD8) fill, white text */}
+            {/* Mobile CTA — accent (#1D6FD8) fill, white text */}
             <Link
-              href="/contact"
+              href={ctaHref}
               className="mt-3 mx-1 px-6 py-2.5 bg-accent text-white text-center text-[14px] font-semibold rounded-full hover:bg-accent-light transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Donate
+              {ctaText}
             </Link>
           </nav>
         </div>

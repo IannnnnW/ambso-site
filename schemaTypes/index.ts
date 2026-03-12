@@ -17,6 +17,8 @@ import contactPageContent from './documents/contactPageContent'
 import teamPageContent from './documents/teamPageContent'
 import resourcesPageContent from './documents/resourcePageContent'
 import tweetEmbed from './documents/tweetEmbed'
+import headerContent from './documents/headerContent'
+import footerContent from './documents/footerContent'
 
 // Object types
 import blockContent from './objects/blockContent'
@@ -28,6 +30,8 @@ import faq from './objects/faq'
 export const schemaTypes = [
   // Pages
   siteSettings,
+  headerContent,
+  footerContent,
   homepageContent,
   aboutPageContent,
   contactPageContent,

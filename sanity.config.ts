@@ -19,6 +19,12 @@ export const deskStructure = (S: StructureBuilder) =>
                 .title('Site Settings')
                 .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
               S.listItem()
+                .title('Header')
+                .child(S.document().schemaType('headerContent').documentId('headerContent')),
+              S.listItem()
+                .title('Footer')
+                .child(S.document().schemaType('footerContent').documentId('footerContent')),
+              S.listItem()
                 .title('Homepage')
                 .child(S.document().schemaType('homepageContent').documentId('homepageContent')),
               S.listItem()

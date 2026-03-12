@@ -1,5 +1,65 @@
 import { PortableTextBlock } from 'sanity';
 
+// ─── Header & Footer ─────────────────────────────────────────────────────────
+
+export interface HeaderNavLink {
+  name: string;
+  href: string;
+}
+
+export interface HeaderNavColumn {
+  heading: string;
+  items: HeaderNavLink[];
+}
+
+export interface HeaderNavItem {
+  name: string;
+  href: string;
+  isMega?: boolean;
+  description?: string;
+  columns?: HeaderNavColumn[];
+}
+
+export interface HeaderContent {
+  _id: string;
+  _type: 'headerContent';
+  orgName?: string;
+  phone?: string;
+  email?: string;
+  logo?: SanityImage;
+  ctaText?: string;
+  ctaHref?: string;
+  navigation?: HeaderNavItem[];
+}
+
+export interface FooterLink {
+  name: string;
+  href: string;
+}
+
+export interface FooterContent {
+  _id: string;
+  _type: 'footerContent';
+  description?: string;
+  socialMedia?: {
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+  };
+  quickLinksHeading?: string;
+  quickLinks?: FooterLink[];
+  programLinksHeading?: string;
+  programLinks?: FooterLink[];
+  contactHeading?: string;
+  contactAddress?: string;
+  contactPhone?: string;
+  contactEmail?: string;
+  copyrightName?: string;
+  bottomLinks?: FooterLink[];
+}
+
 /**
  * Represents a tweet stored in Sanity as a `tweetEmbed` document.
  * Editors paste a tweet ID (the numeric portion of the tweet URL) into

@@ -1,8 +1,22 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Facebook, Twitter, Linkedin, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import type { FooterContent } from '@/lib/sanity.types';
 
-export default function Footer() {
+export default function Footer({ data }: { data: FooterContent }) {
+  const description      = data.description      ?? 'Transforming Africa through innovative research, training and service provision.';
+  const social           = data.socialMedia       ?? {};
+  const quickLinksTitle  = data.quickLinksHeading ?? 'Quick Links';
+  const quickLinks       = data.quickLinks        ?? [];
+  const programTitle     = data.programLinksHeading ?? 'Our Programs';
+  const programLinks     = data.programLinks      ?? [];
+  const contactTitle     = data.contactHeading    ?? 'Contact Us';
+  const address          = data.contactAddress    ?? 'Kampala, Uganda';
+  const phone            = data.contactPhone      ?? '(+256) 394 500 421';
+  const email            = data.contactEmail      ?? 'info@ambso.org';
+  const copyrightName    = data.copyrightName     ?? 'AMBSO';
+  const bottomLinks      = data.bottomLinks       ?? [];
+
   return (
     <footer className="relative text-white overflow-hidden">
       {/* Background texture */}
@@ -27,104 +41,83 @@ export default function Footer() {
               className="h-12 w-auto"
             />
             <p className="text-gray-300 text-sm leading-relaxed">
-              Transforming Africa through innovative research, training and service provision.
+              {description}
             </p>
             <div className="flex space-x-4 mt-6">
-              <a href="#" className="hover:text-accent transition-colors">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="hover:text-accent transition-colors">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className="hover:text-accent transition-colors">
-                <Linkedin size={20} />
-              </a>
-              <a href="#" className="hover:text-accent transition-colors">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className="hover:text-accent transition-colors">
-                <Youtube size={20} />
-              </a>
+              {social.facebook && (
+                <a href={social.facebook} className="hover:text-accent transition-colors" target="_blank" rel="noopener noreferrer">
+                  <Facebook size={20} />
+                </a>
+              )}
+              {social.twitter && (
+                <a href={social.twitter} className="hover:text-accent transition-colors" target="_blank" rel="noopener noreferrer">
+                  <Twitter size={20} />
+                </a>
+              )}
+              {social.linkedin && (
+                <a href={social.linkedin} className="hover:text-accent transition-colors" target="_blank" rel="noopener noreferrer">
+                  <Linkedin size={20} />
+                </a>
+              )}
+              {social.instagram && (
+                <a href={social.instagram} className="hover:text-accent transition-colors" target="_blank" rel="noopener noreferrer">
+                  <Instagram size={20} />
+                </a>
+              )}
+              {social.youtube && (
+                <a href={social.youtube} className="hover:text-accent transition-colors" target="_blank" rel="noopener noreferrer">
+                  <Youtube size={20} />
+                </a>
+              )}
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">{quickLinksTitle}</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/who-we-are/about" className="text-gray-300 hover:text-white transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/programs" className="text-gray-300 hover:text-white transition-colors">
-                  Our Programs
-                </Link>
-              </li>
-              <li>
-                <Link href="/research" className="text-gray-300 hover:text-white transition-colors">
-                  Research
-                </Link>
-              </li>
-              <li>
-                <Link href="/newsroom" className="text-gray-300 hover:text-white transition-colors">
-                  Newsroom
-                </Link>
-              </li>
-              <li>
-                <Link href="/opportunities/careers" className="text-gray-300 hover:text-white transition-colors">
-                  Careers
-                </Link>
-              </li>
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Programs */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Our Programs</h3>
+            <h3 className="text-lg font-semibold mb-4">{programTitle}</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/programs/clinical-programs" className="text-gray-300 hover:text-white transition-colors">
-                  Clinical Programs
-                </Link>
-              </li>
-              <li>
-                <Link href="/programs/community-programs" className="text-gray-300 hover:text-white transition-colors">
-                  Community Programs
-                </Link>
-              </li>
-              <li>
-                <Link href="/programs/capacity-building" className="text-gray-300 hover:text-white transition-colors">
-                  Capacity Building
-                </Link>
-              </li>
-              <li>
-                <Link href="/research/clinical-trials" className="text-gray-300 hover:text-white transition-colors">
-                  Clinical Trials
-                </Link>
-              </li>
+              {programLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-4">{contactTitle}</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start space-x-3">
                 <MapPin size={18} className="mt-0.5 flex-shrink-0" />
-                <span className="text-gray-300">Kampala, Uganda</span>
+                <span className="text-gray-300">{address}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone size={18} className="flex-shrink-0" />
-                <a href="tel:+256394500421" className="text-gray-300 hover:text-white transition-colors">
-                  (+256) 394 500 421
+                <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="text-gray-300 hover:text-white transition-colors">
+                  {phone}
                 </a>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail size={18} className="flex-shrink-0" />
-                <a href="mailto:info@ambso.org" className="text-gray-300 hover:text-white transition-colors">
-                  info@ambso.org
+                <a href={`mailto:${email}`} className="text-gray-300 hover:text-white transition-colors">
+                  {email}
                 </a>
               </li>
             </ul>
@@ -133,15 +126,14 @@ export default function Footer() {
 
         <div className="mt-12 pt-8 border-t border-primary-light">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-300">
-            <p>&copy; {new Date().getFullYear()} AMBSO. All rights reserved.</p>
-            
+            <p>&copy; {new Date().getFullYear()} {copyrightName}. All rights reserved.</p>
+
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy-policy" className="hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-white transition-colors">
-                Terms of Service
-              </Link>
+              {bottomLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="hover:text-white transition-colors">
+                  {link.name}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

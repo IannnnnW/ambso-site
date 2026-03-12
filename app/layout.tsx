@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
+import HeaderServer from '@/components/layout/HeaderServer';
+import FooterServer from '@/components/layout/FooterServer';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +38,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning>
-        <ConditionalLayout>
+        <ConditionalLayout header={<HeaderServer />} footer={<FooterServer />}>
           {children}
         </ConditionalLayout>
       </body>

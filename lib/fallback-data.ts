@@ -10,6 +10,8 @@ import type {
   ContactPageContent,
   TeamPageContent,
   ResourcesPageContent,
+  HeaderContent,
+  FooterContent,
 } from './sanity.types';
 
 export const fallbackSiteSettings: SiteSettings = {
@@ -310,3 +312,111 @@ export function deepMergeWithFallback<T extends object>(
 
   return result;
 }
+
+export const fallbackHeaderContent: HeaderContent = {
+  _id: 'headerContent',
+  _type: 'headerContent',
+  orgName: 'African Medical and Behavioral Sciences Organization',
+  phone: '(+256) 200 911 459',
+  email: 'info@ambso.org',
+  ctaText: 'Donate',
+  ctaHref: '/contact',
+  navigation: [
+    { name: 'Home', href: '/' },
+    {
+      name: 'Who We Are',
+      href: '/who-we-are/about',
+      isMega: true,
+      description: "Learn about AMBSO's mission, the people driving our work, and where we operate across Uganda and beyond.",
+      columns: [
+        {
+          heading: 'Organisation',
+          items: [
+            { name: 'About Us', href: '/who-we-are/about' },
+            { name: 'Our Team', href: '/who-we-are/team' },
+            { name: 'Our Location', href: '/who-we-are/location' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Research & Programs',
+      href: '/programs',
+      isMega: true,
+      description: 'Our work spans clinical research, community interventions, and capacity building — all aimed at improving health outcomes across Uganda and Africa.',
+      columns: [
+        {
+          heading: 'Research',
+          items: [
+            { name: 'Clinical Trials', href: '/research/clinical-trials' },
+            { name: 'EPI & Behavioral Research', href: '/research/behavioral' },
+          ],
+        },
+        {
+          heading: 'Programs',
+          items: [
+            { name: 'Clinical Programs', href: '/programs/clinical-programs' },
+            { name: 'Community Programs', href: '/programs/community-programs' },
+            { name: 'Capacity Building', href: '/programs/capacity-building' },
+            { name: 'Resource Mobilization', href: '/programs/resource-mobilization' },
+          ],
+        },
+      ],
+    },
+    { name: 'Collaborations', href: '/collaborations' },
+    {
+      name: 'News & Resources',
+      href: '/newsroom',
+      isMega: true,
+      description: 'Stay informed with the latest news, publications, opportunities and downloadable resources from AMBSO.',
+      columns: [
+        {
+          heading: 'Stay Informed',
+          items: [
+            { name: 'Newsroom', href: '/newsroom' },
+            { name: 'Resources', href: '/resources' },
+            { name: 'Opportunities', href: '/opportunities' },
+          ],
+        },
+      ],
+    },
+    { name: 'Contact Us', href: '/contact' },
+  ],
+};
+
+export const fallbackFooterContent: FooterContent = {
+  _id: 'footerContent',
+  _type: 'footerContent',
+  description: 'Transforming Africa through innovative research, training and service provision.',
+  socialMedia: {
+    facebook: '#',
+    twitter: '#',
+    linkedin: '#',
+    instagram: '#',
+    youtube: '#',
+  },
+  quickLinksHeading: 'Quick Links',
+  quickLinks: [
+    { name: 'About Us', href: '/who-we-are/about' },
+    { name: 'Our Programs', href: '/programs' },
+    { name: 'Research', href: '/research' },
+    { name: 'Newsroom', href: '/newsroom' },
+    { name: 'Careers', href: '/opportunities/careers' },
+  ],
+  programLinksHeading: 'Our Programs',
+  programLinks: [
+    { name: 'Clinical Programs', href: '/programs/clinical-programs' },
+    { name: 'Community Programs', href: '/programs/community-programs' },
+    { name: 'Capacity Building', href: '/programs/capacity-building' },
+    { name: 'Clinical Trials', href: '/research/clinical-trials' },
+  ],
+  contactHeading: 'Contact Us',
+  contactAddress: 'Kampala, Uganda',
+  contactPhone: '(+256) 394 500 421',
+  contactEmail: 'info@ambso.org',
+  copyrightName: 'AMBSO',
+  bottomLinks: [
+    { name: 'Privacy Policy', href: '/privacy-policy' },
+    { name: 'Terms of Service', href: '/terms' },
+  ],
+};

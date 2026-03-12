@@ -1089,3 +1089,68 @@ export async function getTweetEmbeds() {
     return [];
   }
 }
+
+// ── Header & Footer Queries ───────────────────────────────────────────────────
+
+export const headerContentQuery = groq`
+  *[_type == "headerContent" && _id == "headerContent"][0] {
+    _id,
+    orgName,
+    phone,
+    email,
+    logo,
+    ctaText,
+    ctaHref,
+    navigation[] {
+      name,
+      href,
+      isMega,
+      description,
+      columns[] {
+        heading,
+        items[] {
+          name,
+          href
+        }
+      }
+    }
+  }
+`;
+
+export const footerContentQuery = groq`
+  *[_type == "footerContent" && _id == "footerContent"][0] {
+    _id,
+    description,
+    socialMedia,
+    quickLinksHeading,
+    quickLinks[] { name, href },
+    programLinksHeading,
+    programLinks[] { name, href },
+    contactHeading,
+    contactAddress,
+    contactPhone,
+    contactEmail,
+    copyrightName,
+    bottomLinks[] { name, href }
+  }
+`;
+
+export async function getHeaderContent() {
+  try {
+    const data = await client.fetch(headerContentQuery);
+    return data ?? null;
+  } catch (error) {
+    console.error('Error fetching header content:', error);
+    return null;
+  }
+}
+
+export async function getFooterContent() {
+  try {
+    const data = await client.fetch(footerContentQuery);
+    return data ?? null;
+  } catch (error) {
+    console.error('Error fetching footer content:', error);
+    return null;
+  }
+}
