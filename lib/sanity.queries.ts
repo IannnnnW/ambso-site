@@ -1093,7 +1093,7 @@ export async function getTweetEmbeds() {
 // ── Header & Footer Queries ───────────────────────────────────────────────────
 
 export const headerContentQuery = groq`
-  *[_type == "headerContent" && _id == "headerContent"][0] {
+  *[_type == "headerContent"][0] {
     _id,
     orgName,
     phone,
@@ -1121,7 +1121,7 @@ export const headerContentQuery = groq`
 `;
 
 export const footerContentQuery = groq`
-  *[_type == "footerContent" && _id == "footerContent"][0] {
+  *[_type == "footerContent"][0] {
     _id,
     backgroundImage,
     logo,
