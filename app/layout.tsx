@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+import ConditionalLayout from '@/components/layout/ConditionalLayout';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,8 +21,8 @@ export const metadata: Metadata = {
     icon: [
       { url: '/icon.png', type: 'image/png' },
     ],
-  apple: '/apple-icon.png',
-  shortcut: '/icon.png',
+    apple: '/apple-icon.png',
+    shortcut: '/icon.png',
   },
 };
 
@@ -36,10 +35,10 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      suppressHydrationWarning>
-        <Header />
-        {children}
-        <Footer />
+        suppressHydrationWarning>
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
       </body>
     </html>
   );
