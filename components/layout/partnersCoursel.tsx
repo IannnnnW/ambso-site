@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { Partner } from '@/lib/sanity.types';
 import { urlFor } from '@/lib/sanity.client';
 import Image from 'next/image';
@@ -58,8 +59,8 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
             key={`${partner._id}-${index}`}
             className="flex-shrink-0 w-56 flex items-center justify-center transition-all duration-300"
           >
-            {partner.logo ? (
-            <a href={partner.website || '#'} target="_blank" rel="noopener noreferrer" className="block relative w-full h-32">
+            {partner.logo?.asset ? (
+              <Link href={`/collaborations/${partner.slug.current}`} className="block relative w-full h-32">
                 <Image
                   src={urlFor(partner.logo).width(300).url()}
                   alt={partner.name}
@@ -67,11 +68,14 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
                   className="object-contain"
                   sizes="(max-width: 768px) 100vw, 224px"
                 />
-              </a>
+              </Link>
             ) : (
-              <div className="flex items-center justify-center h-32 text-gray-600 font-semibold text-center px-4">
+              <Link
+                href={`/collaborations/${partner.slug.current}`}
+                className="flex items-center justify-center h-32 text-gray-600 font-semibold text-center px-4 hover:text-primary transition-colors"
+              >
                 {partner.name}
-              </div>
+              </Link>
             )}
           </div>
         ))}

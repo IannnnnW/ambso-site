@@ -445,6 +445,7 @@ export const featuredPartnersQuery = groq`
   *[_type == "partner"] {
     _id,
     name,
+    slug,
     logo,
     website
   }
