@@ -91,7 +91,7 @@ export default async function CollaborationsPage() {
                   className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
                 >
                   <div className="h-32 bg-gray-50 flex items-center justify-center p-4">
-                    {partner.logo ? (
+                    {partner.logo?.asset ? (
                       <img
                         src={urlFor(partner.logo).height(80).url()}
                         alt={partner.logo.alt || partner.name}

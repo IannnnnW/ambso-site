@@ -97,7 +97,7 @@ export default async function CollaboratorPage({ params }: CollaboratorPageProps
     notFound();
   }
 
-  const hasFeaturedImage = !!partner.featuredImage;
+  const hasFeaturedImage = !!(partner.featuredImage?.asset);
 
   return (
     <div className="pt-20 lg:pt-28">
@@ -136,7 +136,7 @@ export default async function CollaboratorPage({ params }: CollaboratorPageProps
                 )}
               </div>
 
-              {partner.logo && (
+              {partner.logo?.asset && (
                 <div className="bg-white rounded-xl p-4 inline-flex items-center justify-center shadow-lg flex-shrink-0">
                   <img
                     src={urlFor(partner.logo).height(64).url()}
@@ -197,7 +197,7 @@ export default async function CollaboratorPage({ params }: CollaboratorPageProps
                     >
                       <div className="flex items-start gap-4 mb-4">
                         <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
-                          {collab.picture ? (
+                          {collab.picture?.asset ? (
                             <img
                               src={urlFor(collab.picture).width(160).height(160).url()}
                               alt={collab.picture.alt || collab.name}
