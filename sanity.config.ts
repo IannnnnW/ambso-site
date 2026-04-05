@@ -39,7 +39,15 @@ export const deskStructure = (S: StructureBuilder) =>
             ])
         ),
       S.divider(),
-      // ... rest of content types
+      // Collaborators (Partners)
+      S.listItem()
+        .title('Collaborators')
+        .child(
+          S.documentTypeList('partner')
+            .title('All Collaborators')
+        ),
+      S.divider(),
+      // Other content types
     ])
     
 export default defineConfig({

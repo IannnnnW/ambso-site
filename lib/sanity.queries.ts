@@ -474,7 +474,20 @@ export const singlePartnerQuery = groq`
     partnerType,
     description,
     logo,
-    leadCollaborators,
+    featuredImage,
+    leadCollaborators[] {
+      name,
+      picture,
+      position,
+      title,
+      bio,
+      profileUrl
+    },
+    researchGroups[] {
+      name,
+      description,
+      readMoreUrl
+    },
     website,
     country,
     partnershipStartDate,
@@ -487,6 +500,12 @@ export const singlePartnerQuery = groq`
       title,
       slug
     }
+  }
+`;
+
+export const allPartnerSlugsQuery = groq`
+  *[_type == "partner" && defined(slug.current)] {
+    "slug": slug.current
   }
 `;
 
@@ -1028,6 +1047,16 @@ export async function getPartnersWithCollaborators() {
 
 export async function getPartner(slug: string) {
   return await client.fetch(singlePartnerQuery, { slug });
+}
+
+export async function getAllPartnerSlugs() {
+  try {
+    const data = await client.fetch(allPartnerSlugsQuery);
+    return data;
+  } catch (error) {
+    console.error('Error fetching partner slugs:', error);
+    return [];
+  }
 }
 
 export async function getCareers() {

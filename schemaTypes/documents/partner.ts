@@ -59,6 +59,22 @@ export default defineType({
       ],
     },
     {
+      name: 'featuredImage',
+      title: 'Featured/Banner Image',
+      type: 'image',
+      description: 'Optional large banner image displayed at the top of the collaborator page',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative text',
+        },
+      ],
+    },
+    {
       name: 'leadCollaborators',
       title: 'Lead Collaborators',
       type: 'array',
@@ -99,12 +115,61 @@ export default defineType({
               type: 'string',
               description: 'Professional title or designation',
             },
+            {
+              name: 'bio',
+              title: 'Bio',
+              type: 'text',
+              description: 'Short biography paragraph',
+              rows: 4,
+            },
+            {
+              name: 'profileUrl',
+              title: 'Profile URL',
+              type: 'url',
+              description: 'Link to their institutional profile page',
+            },
           ],
           preview: {
             select: {
               title: 'name',
               subtitle: 'position',
               media: 'picture',
+            },
+          },
+        },
+      ],
+    },
+    {
+      name: 'researchGroups',
+      title: 'Research Groups',
+      type: 'array',
+      description: 'Named research groups within this collaboration (e.g. GloSH, HELD at Karolinska)',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'name',
+              title: 'Group Name',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'description',
+              title: 'Description',
+              type: 'text',
+              rows: 3,
+            },
+            {
+              name: 'readMoreUrl',
+              title: 'Read More URL',
+              type: 'url',
+            },
+          ],
+          preview: {
+            select: {
+              title: 'name',
+              subtitle: 'description',
             },
           },
         },
