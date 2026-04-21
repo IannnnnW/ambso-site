@@ -2,7 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import VideoEmbed from '@/components/ui/VideoEmbed';
-import { Target, Eye, ArrowRight, Briefcase, Microscope, Handshake, Calendar, LucideIcon } from 'lucide-react';
+import CoreValueCard from '@/components/ui/CoreValueCard';
+import { ArrowRight, Briefcase, Microscope, Handshake, Calendar, LucideIcon } from 'lucide-react';
 import { getAboutPageContent, getPartnersWithCollaborators, getFeaturedPartners } from '@/lib/sanity.queries';
 import { deepMergeWithFallback, fallbackAboutPageContent, fallbackStoryContent } from '@/lib/fallback-data';
 import { urlFor } from '@/lib/sanity.client';
@@ -91,18 +92,18 @@ export default async function AboutPage() {
       {/* Core Values */}
       <section className="py-16 bg-white">
         <Container>
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">
             {content.coreValues?.sectionTitle}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {content.coreValues?.values?.map((value, index) => (
-              <div
+              <CoreValueCard
                 key={index}
-                className="bg-gray-50 p-6 rounded-xl border border-gray-100 hover:shadow-md transition-shadow"
-              >
-                <h3 className="text-lg font-semibold text-primary mb-3">{value.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{value.description}</p>
-              </div>
+                index={index}
+                keyword={value.title.split(' ')[0]}
+                title={value.title}
+                description={value.description}
+              />
             ))}
           </div>
         </Container>
@@ -112,29 +113,18 @@ export default async function AboutPage() {
       <section className="py-16 bg-gray-50">
         <Container>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white p-8 rounded-xl border-l-4 border-primary">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
-                  <Target className="text-primary" size={24} />
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900">{content.mission?.title}</h2>
-              </div>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                {content.mission?.description}
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl border-l-4 border-accent">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mr-4">
-                  <Eye className="text-accent-dark" size={24} />
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900">{content.vision?.title}</h2>
-              </div>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                {content.vision?.description}
-              </p>
-            </div>
+            <CoreValueCard
+              keyword="Mission"
+              title={content.mission?.title ?? 'Our Mission'}
+              description={content.mission?.description ?? ''}
+              heightClass="h-56"
+            />
+            <CoreValueCard
+              keyword="Vision"
+              title={content.vision?.title ?? 'Our Vision'}
+              description={content.vision?.description ?? ''}
+              heightClass="h-56"
+            />
           </div>
         </Container>
       </section>
