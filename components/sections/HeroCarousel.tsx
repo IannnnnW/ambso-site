@@ -154,23 +154,16 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                   />
                 </div>
               )}
-              {/* Gradient overlay — deeper on left for text legibility */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/25" />
-              {/* Subtle bottom vignette */}
-              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
+              {/* Bottom-left gradient — strong at the bottom where text lives, fades up and right */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
             </div>
 
-            {/* Slide Content */}
-            <div className="relative h-full flex items-center">
-              <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
-                {/*
-                  For the active slide, re-keying this div on each slide change
-                  forces a remount which restarts the CSS hero-animate animations.
-                  The staggered animation-delay values create the image-first,
-                  then-text sequential reveal.
-                */}
+            {/* Slide Content — anchored to bottom-left, stretches right */}
+            <div className="relative h-full flex items-end">
+              <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full pb-20 lg:pb-24">
                 {isActive ? (
-                  <div key={`content-${contentKey}`} className="max-w-2xl">
+                  <div key={`content-${contentKey}`} className="max-w-4xl">
 
                     {/* Category badge — appears first */}
                     {/* {category && CategoryIcon && (
@@ -194,19 +187,19 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                         className="text-accent text-base lg:text-lg font-semibold mb-3 tracking-wide uppercase"
                         style={{
                           opacity: 0,
-                          animation: 'heroSlideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.25s forwards',
+                          animation: 'heroSlideUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.05s forwards',
                         }}
                       >
                         {slide.subtitle}
                       </p>
                     )}
 
-                    {/* Title — the headline, arrives with most weight */}
+                    {/* Title */}
                     <h2
                       className="text-4xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.15]"
                       style={{
                         opacity: 0,
-                        animation: 'heroSlideUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.42s forwards',
+                        animation: 'heroSlideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards',
                       }}
                     >
                       {slide.title}
@@ -215,22 +208,22 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                     {/* Description */}
                     {slide.description && (
                       <p
-                        className="text-base lg:text-lg text-gray-200 mb-8 leading-relaxed max-w-xl font-light"
+                        className="text-base lg:text-lg text-gray-200 mb-8 leading-relaxed max-w-2xl font-light"
                         style={{
                           opacity: 0,
-                          animation: 'heroSlideUp 0.75s cubic-bezier(0.22,1,0.36,1) 0.65s forwards',
+                          animation: 'heroSlideUp 0.65s cubic-bezier(0.22,1,0.36,1) 0.28s forwards',
                         }}
                       >
                         {slide.description}
                       </p>
                     )}
 
-                    {/* CTA Buttons — appear last */}
+                    {/* CTA Buttons */}
                     <div
                       className="flex flex-wrap gap-3"
                       style={{
                         opacity: 0,
-                        animation: 'heroSlideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.88s forwards',
+                        animation: 'heroSlideUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.42s forwards',
                       }}
                     >
                       {slide.ctaLink && (
@@ -254,7 +247,7 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                   </div>
                 ) : (
                   /* Non-active slide — static, hidden by parent opacity */
-                  <div className="max-w-2xl opacity-0" aria-hidden>
+                  <div className="max-w-4xl opacity-0" aria-hidden>
                     {slide.subtitle && <p className="text-accent text-lg font-semibold mb-3">{slide.subtitle}</p>}
                     <h2 className="text-4xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.15]">{slide.title}</h2>
                     {slide.description && <p className="text-lg text-gray-200 mb-8">{slide.description}</p>}
