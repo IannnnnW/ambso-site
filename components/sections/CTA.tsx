@@ -44,7 +44,7 @@ export default function CTA({ content }: CTAProps) {
               href={secondaryButton.link}
               variant="outline"
               size="lg"
-              className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white hover:text-primary"
+              className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-primary hover:text-primary"
             >
               {secondaryButton.text}
             </Button>
