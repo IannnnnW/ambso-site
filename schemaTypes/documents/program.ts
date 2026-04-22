@@ -37,6 +37,70 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     },
     {
+      name: 'overviewTitle',
+      title: 'Overview Section Title',
+      type: 'string',
+      description: 'Heading for the program overview section (e.g. "Voluntary Medical Male Circumcision (VMMC)")',
+    },
+    {
+      name: 'overviewDescription',
+      title: 'Overview Description',
+      type: 'text',
+      rows: 4,
+      description: 'Main paragraph for the overview section',
+    },
+    {
+      name: 'overviewHighlight',
+      title: 'Overview Highlight Box',
+      type: 'text',
+      rows: 3,
+      description: 'Text shown inside the highlighted box (e.g. target population & service delivery details)',
+    },
+    {
+      name: 'statistics',
+      title: 'Impact Statistics',
+      type: 'array',
+      description: 'Key statistics shown in the "Our Clinical Impact" section',
+      of: [
+        {
+          type: 'object',
+          title: 'Statistic',
+          fields: [
+            {
+              name: 'value',
+              title: 'Value',
+              type: 'string',
+              description: 'e.g. "15,000+"',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+              description: 'e.g. "VMMC Procedures"',
+              validation: (Rule) => Rule.required(),
+            },
+          ],
+          preview: {
+            select: { title: 'value', subtitle: 'label' },
+          },
+        },
+      ],
+    },
+    {
+      name: 'ctaTitle',
+      title: 'CTA Title',
+      type: 'string',
+      description: 'Heading for the call-to-action banner at the bottom of the page',
+    },
+    {
+      name: 'ctaDescription',
+      title: 'CTA Description',
+      type: 'text',
+      rows: 3,
+      description: 'Supporting text for the call-to-action banner',
+    },
+    {
       name: 'programImages',
       title: 'Program Images with Captions',
       type: 'array',

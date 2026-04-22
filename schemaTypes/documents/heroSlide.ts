@@ -76,7 +76,6 @@ export const heroSlide = defineType({
       title: 'Primary Button Link',
       type: 'string',
       description: 'URL or path (e.g., /research/clinical-trials, /programs/community)',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'secondaryCtaText',

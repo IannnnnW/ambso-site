@@ -90,6 +90,30 @@ interface Program {
   objectives?: string[];
 }
 
+interface Statistic {
+  value: string;
+  label: string;
+}
+
+interface Partner {
+  name: string;
+  logo?: { asset?: { _ref: string } };
+  website?: string;
+}
+
+const fallbackStatistics: Statistic[] = [
+  { value: '15,000+', label: 'VMMC Procedures' },
+  { value: '20,000+', label: 'HIV Tests Conducted' },
+  { value: '3', label: 'Districts Served' },
+  { value: '98%', label: 'Client Satisfaction' },
+];
+
+const fallbackPartners: Partner[] = [
+  { name: 'Uro Care Hospital' },
+  { name: 'Infectious Diseases Institute' },
+  { name: 'Ministry of Health Uganda' },
+];
+
 export default async function ClinicalProgramsPage() {
   const [category, programs] = await Promise.all([
     getProgramCategory(CATEGORY_SLUG),
@@ -97,6 +121,8 @@ export default async function ClinicalProgramsPage() {
   ]);
 
   const hasPrograms = programs && programs.length > 0;
+  const statistics: Statistic[] = (category?.statistics as Statistic[]) || fallbackStatistics;
+  const partners: Partner[] = (category?.partners as Partner[]) || fallbackPartners;
 
   return (
     <div className="pt-20 lg:pt-28">
@@ -120,18 +146,17 @@ export default async function ClinicalProgramsPage() {
         <Container>
           <div className="max-w-4xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-6">
-              Voluntary Medical Male Circumcision (VMMC)
+              {category?.overviewTitle || 'Voluntary Medical Male Circumcision (VMMC)'}
             </h2>
             <p className="text-lg text-gray-700 text-center leading-relaxed mb-8">
-              AMBSO implements VMMC services in partnership with Uro Care Hospital under service contracts
-              with the Infectious Diseases Institute (IDI), aligned with UNAIDS and Uganda Ministry of Health
-              HIV prevention priorities.
+              {category?.overviewDescription ||
+                'AMBSO implements VMMC services in partnership with Uro Care Hospital under service contracts with the Infectious Diseases Institute (IDI), aligned with UNAIDS and Uganda Ministry of Health HIV prevention priorities.'}
             </p>
             <div className="bg-primary/5 p-8 rounded-xl">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Target Population & Service Delivery</h3>
               <p className="text-gray-700 leading-relaxed">
-                VMMC services are provided to males aged 15 years and above in Wakiso and neighboring districts,
-                utilizing both facility-based and community outreach approaches to maximize accessibility and impact.
+                {category?.overviewHighlight ||
+                  'VMMC services are provided to males aged 15 years and above in Wakiso and neighboring districts, utilizing both facility-based and community outreach approaches to maximize accessibility and impact.'}
               </p>
             </div>
           </div>
@@ -225,65 +250,50 @@ export default async function ClinicalProgramsPage() {
             Our Clinical Impact
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">15,000+</div>
-              <p className="text-gray-600">VMMC Procedures</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">20,000+</div>
-              <p className="text-gray-600">HIV Tests Conducted</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">3</div>
-              <p className="text-gray-600">Districts Served</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">98%</div>
-              <p className="text-gray-600">Client Satisfaction</p>
-            </div>
+            {statistics.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-4xl font-bold text-primary mb-2">{stat.value}</div>
+                <p className="text-gray-600">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </Container>
       </section>
 
       {/* Partnerships */}
-      <section className="py-16 bg-gray-50">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8">
-              Strategic Partnerships
-            </h2>
-            <p className="text-lg text-gray-700 text-center mb-12 leading-relaxed">
-              AMBSO has established collaborative partnerships to support program coordination and
-              maximize the impact of our clinical services.
-            </p>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-xl shadow-md text-center">
-                <h3 className="font-bold text-gray-900 mb-2">Uro Care Hospital</h3>
-                <p className="text-sm text-gray-600">Clinical Service Partner</p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-md text-center">
-                <h3 className="font-bold text-gray-900 mb-2">Infectious Diseases Institute</h3>
-                <p className="text-sm text-gray-600">Program Coordination</p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-md text-center">
-                <h3 className="font-bold text-gray-900 mb-2">Ministry of Health Uganda</h3>
-                <p className="text-sm text-gray-600">Policy Alignment</p>
+      {partners.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8">
+                Strategic Partnerships
+              </h2>
+              <p className="text-lg text-gray-700 text-center mb-12 leading-relaxed">
+                AMBSO has established collaborative partnerships to support program coordination and
+                maximize the impact of our clinical services.
+              </p>
+              <div className="grid md:grid-cols-3 gap-6">
+                {partners.map((partner) => (
+                  <div key={partner.name} className="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 className="font-bold text-gray-900 mb-2">{partner.name}</h3>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="py-16 bg-gradient-to-r from-primary to-primary-light text-white">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Access Our Clinical Services
+              {category?.ctaTitle || 'Access Our Clinical Services'}
             </h2>
             <p className="text-xl text-gray-100 mb-8 leading-relaxed">
-              Our clinical programs are designed to be accessible, professional, and client-centered.
-              Contact us to learn more about our services.
+              {category?.ctaDescription ||
+                'Our clinical programs are designed to be accessible, professional, and client-centered. Contact us to learn more about our services.'}
             </p>
             <Button href="/contact" variant="secondary" size="lg">
               Contact Us
