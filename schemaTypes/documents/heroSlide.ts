@@ -25,7 +25,7 @@ export const heroSlide = defineType({
       type: 'text',
       rows: 3,
       description: 'Supporting text displayed below the title (1-2 sentences)',
-      validation: (Rule) => Rule.required().max(250),
+      validation: (Rule) => Rule.max(250),
     }),
     defineField({
       name: 'category',
