@@ -462,6 +462,15 @@ export interface PartnerWithCollaborators {
   country?: string;
 }
 
+export interface HistoryMilestone {
+  year: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  image?: { asset?: SanityImage; alt?: string };
+  order: number;
+}
+
 export interface AboutPageContent {
   _id: string;
   _type: 'aboutPageContent';
@@ -484,6 +493,7 @@ export interface AboutPageContent {
     values?: Array<{
       title: string;
       description: string;
+      detailedDescription?: string;
       icon?: string;
       colorClass?: string;
     }>;
@@ -492,6 +502,7 @@ export interface AboutPageContent {
     title: string;
     content?: PortableTextBlock[];
   };
+  historyMilestones?: HistoryMilestone[];
   videoSection?: {
     title?: string;
     videoUrl?: string;

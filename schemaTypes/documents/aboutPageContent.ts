@@ -59,7 +59,8 @@ export default defineType({
             type: 'object',
             fields: [
               { name: 'title', title: 'Title', type: 'string' },
-              { name: 'description', title: 'Description', type: 'text', rows: 2 },
+              { name: 'description', title: 'Short Description', type: 'text', rows: 2, description: 'Teaser shown on the card front (keep to 1–2 lines)' },
+              { name: 'detailedDescription', title: 'Detailed Description', type: 'text', rows: 4, description: 'Full explanation shown on the card back when flipped (2–4 sentences)' },
               { name: 'icon', title: 'Icon Name', type: 'string', description: 'Optional Lucide icon name' },
               { name: 'colorClass', title: 'Color Class', type: 'string', description: 'Optional Tailwind color classes' },
             ],
@@ -76,6 +77,76 @@ export default defineType({
       fields: [
         { name: 'title', title: 'Section Title', type: 'string', initialValue: 'Our History' },
         { name: 'content', title: 'Content', type: 'blockContent' },
+      ],
+    }),
+
+    // History Milestones (Timeline)
+    defineField({
+      name: 'historyMilestones',
+      title: 'History Milestones',
+      type: 'array',
+      description: 'Timeline milestones displayed in the animated "Our History" roadmap. Add in chronological order; use the Order field to control display sequence.',
+      of: [
+        {
+          type: 'object',
+          title: 'Milestone',
+          fields: [
+            {
+              name: 'year',
+              title: 'Year',
+              type: 'string',
+              description: 'e.g. "2016", "2018–2020", "Today"',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'title',
+              title: 'Title',
+              type: 'string',
+              description: 'Short headline for this milestone',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'description',
+              title: 'Description',
+              type: 'text',
+              rows: 3,
+              description: 'One or two sentences describing what happened',
+            },
+            {
+              name: 'icon',
+              title: 'Icon',
+              type: 'string',
+              description: 'Lucide icon name: Flag, Users, Globe, Award, Microscope, Heart, BookOpen, Star',
+            },
+            {
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: { hotspot: true },
+              fields: [
+                {
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string',
+                  description: 'Describes the image for accessibility',
+                },
+              ],
+            },
+            {
+              name: 'order',
+              title: 'Order',
+              type: 'number',
+              description: 'Lower numbers appear first in the timeline',
+              initialValue: 999,
+            },
+          ],
+          preview: {
+            select: { title: 'year', subtitle: 'title', media: 'image' },
+            prepare({ title, subtitle, media }) {
+              return { title: `${title} — ${subtitle}`, media };
+            },
+          },
+        },
       ],
     }),
 

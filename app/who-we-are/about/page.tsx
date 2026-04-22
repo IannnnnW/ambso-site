@@ -2,13 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import VideoEmbed from '@/components/ui/VideoEmbed';
-import CoreValueCard from '@/components/ui/CoreValueCard';
+import HistoryRoadmap from '@/components/about/HistoryRoadmap';
+import MissionVisionBand from '@/components/about/MissionVisionBand';
+import CoreValuesBand from '@/components/about/CoreValuesBand';
 import { ArrowRight, Briefcase, Microscope, Handshake, Calendar, LucideIcon } from 'lucide-react';
 import { getAboutPageContent, getPartnersWithCollaborators, getFeaturedPartners } from '@/lib/sanity.queries';
-import { deepMergeWithFallback, fallbackAboutPageContent, fallbackStoryContent } from '@/lib/fallback-data';
+import { deepMergeWithFallback, fallbackAboutPageContent, fallbackHistoryMilestones } from '@/lib/fallback-data';
 import { urlFor } from '@/lib/sanity.client';
-import { PortableText } from '@portabletext/react';
-import type { PartnerWithCollaborators, Partner } from '@/lib/sanity.types';
+import type { Partner } from '@/lib/sanity.types';
 
 const iconMap: Record<string, LucideIcon> = {
   Briefcase,
@@ -23,7 +24,7 @@ export const metadata = {
 };
 
 export default async function AboutPage() {
-  const [sanityContent, partnersWithCollaborators, partners] = await Promise.all([
+  const [sanityContent, , partners] = await Promise.all([
     getAboutPageContent(),
     getPartnersWithCollaborators(),
     getFeaturedPartners(),
@@ -31,13 +32,10 @@ export default async function AboutPage() {
 
   const content = deepMergeWithFallback(sanityContent, fallbackAboutPageContent);
 
-  // Check if story content is from Sanity (PortableTextBlock[]) or use fallback
-  const hasPortableTextContent = content.story?.content && Array.isArray(content.story.content) && content.story.content.length > 0;
-
-  // Extract all lead collaborators from partners
-  const allCollaborators = (partnersWithCollaborators as PartnerWithCollaborators[])?.flatMap(
-    (partner) => partner.leadCollaborators || []
-  ) || [];
+  const milestones =
+    content.historyMilestones && content.historyMilestones.length > 0
+      ? content.historyMilestones
+      : fallbackHistoryMilestones;
 
   return (
     <div className="pt-20 lg:pt-28">
@@ -89,67 +87,27 @@ export default async function AboutPage() {
         </section>
       )}
 
-      {/* Mission & Vision */}
-      <section className="py-16 bg-gray-50">
-        <Container>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <CoreValueCard
-              keyword="Mission"
-              title={content.mission?.title ?? 'Our Mission'}
-              description={content.mission?.description ?? ''}
-              heightClass="h-56"
-            />
-            <CoreValueCard
-              keyword="Vision"
-              title={content.vision?.title ?? 'Our Vision'}
-              description={content.vision?.description ?? ''}
-              heightClass="h-56"
-            />
-          </div>
-        </Container>
-      </section>
+      {/* Mission & Vision — full-bleed dark navy band */}
+      <MissionVisionBand
+        missionTitle={content.mission?.title}
+        missionDescription={content.mission?.description}
+        visionTitle={content.vision?.title}
+        visionDescription={content.vision?.description}
+      />
 
-      {/* Core Values */}
+      {/* Core Values — slate-50 band with staggered cards */}
+      <CoreValuesBand
+        sectionTitle={content.coreValues?.sectionTitle}
+        values={content.coreValues?.values}
+      />
+
+      {/* Our History — animated timeline */}
       <section className="py-16 bg-white">
         <Container>
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">
-            {content.coreValues?.sectionTitle}
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-14 text-center">
+            {content.story?.title ?? 'Our History'}
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {content.coreValues?.values?.map((value, index) => (
-              <CoreValueCard
-                key={index}
-                index={index}
-                keyword={value.title.split(' ')[0]}
-                title={value.title}
-                description={value.description}
-              />
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* Our History/Story */}
-      <section className="py-16 bg-white">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-              {content.story?.title}
-            </h2>
-            <div className="prose prose-lg max-w-none">
-              {hasPortableTextContent ? (
-                <div className="text-gray-700">
-                  <PortableText value={content.story!.content!} />
-                </div>
-              ) : (
-                fallbackStoryContent.map((paragraph, index) => (
-                  <p key={index} className="text-gray-700 leading-relaxed mb-6">
-                    {paragraph}
-                  </p>
-                ))
-              )}
-            </div>
-          </div>
+          <HistoryRoadmap milestones={milestones} />
         </Container>
       </section>
 

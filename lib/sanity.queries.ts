@@ -717,6 +717,14 @@ export const aboutPageContentQuery = groq`
     vision,
     coreValues,
     story,
+    historyMilestones[] | order(order asc) {
+      year,
+      title,
+      description,
+      icon,
+      image { asset->, alt },
+      order
+    },
     researchFocus
   }
 `;

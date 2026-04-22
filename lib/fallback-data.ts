@@ -12,6 +12,7 @@ import type {
   ResourcesPageContent,
   HeaderContent,
   FooterContent,
+  HistoryMilestone,
 } from './sanity.types';
 
 export const fallbackSiteSettings: SiteSettings = {
@@ -118,6 +119,49 @@ export const fallbackHomepageContent: HomepageContent = {
   },
 };
 
+export const fallbackHistoryMilestones: HistoryMilestone[] = [
+  {
+    year: '2016',
+    title: 'Foundation',
+    description:
+      'AMBSO was established by experienced Ugandan epidemiologists and clinical trialists, initially focusing on Voluntary Medical Male Circumcision (VMMC) in partnership with the Infectious Diseases Institute (IDI) — marking the beginning of our commitment to evidence-based HIV prevention.',
+    icon: 'Flag',
+    order: 1,
+  },
+  {
+    year: '2017',
+    title: 'APHS Launch',
+    description:
+      'AMBSO launched the Africa Population Health Surveillance (APHS) program — a landmark initiative designed to monitor and strengthen community health outcomes across Uganda.',
+    icon: 'Globe',
+    order: 2,
+  },
+  {
+    year: '2018–2020',
+    title: 'Expanding Horizons',
+    description:
+      'Our scope grew to address a broader spectrum of health challenges: gender-based violence prevention, substance abuse interventions, emergency resuscitation training, and prostate cancer research.',
+    icon: 'Users',
+    order: 3,
+  },
+  {
+    year: '2021',
+    title: 'Clinical Trials Era',
+    description:
+      'AMBSO entered the clinical trials arena, significantly strengthening our research capabilities and deepening our contribution to global health evidence.',
+    icon: 'Microscope',
+    order: 4,
+  },
+  {
+    year: 'Today',
+    title: 'Growing Impact',
+    description:
+      'We operate across three core domains — clinical programs, community-based initiatives, and capacity building — with strategic partnerships including Karolinska Institutet, USC, Boston College, UCLA, and various East African research centres.',
+    icon: 'Award',
+    order: 5,
+  },
+];
+
 export const fallbackAboutPageContent: AboutPageContent = {
   _id: 'fallback-about',
   _type: 'aboutPageContent',
@@ -139,18 +183,30 @@ export const fallbackAboutPageContent: AboutPageContent = {
       {
         title: 'Integrity',
         description: 'Exhibiting ethical conduct in all our research and program services',
+        detailedDescription:
+          'We uphold honesty, transparency, and accountability in every interaction with participants, partners, and the communities we serve. Ethical rigour is the foundation of every research study and service delivery activity we undertake.',
+        icon: 'Shield',
       },
       {
         title: 'Respect for Diversity',
         description: 'Embracing inclusivity across the execution of our services',
+        detailedDescription:
+          'We value diverse perspectives, backgrounds, and cultures, ensuring equitable access and culturally sensitive approaches in all programs. Every individual we work with deserves dignity, respect, and equal opportunity regardless of their background.',
+        icon: 'Heart',
       },
       {
         title: 'Innovativeness',
         description: 'Continuously seeking new approaches to advancing research to solve emerging challenges',
+        detailedDescription:
+          'We foster a culture of creative thinking and adaptability to drive sustainable health solutions. By questioning assumptions and exploring novel methodologies, we stay at the forefront of Africa\'s most pressing health challenges.',
+        icon: 'Lightbulb',
       },
       {
         title: 'Efficiency',
         description: 'Delivering timely and resource conscious outcomes while upholding high quality standards',
+        detailedDescription:
+          'We optimise our processes and workflows to maximise impact while maintaining rigorous quality controls. Every resource entrusted to us is stewarded responsibly so that more reaches the communities and researchers who need it most.',
+        icon: 'Zap',
       },
     ],
   },
@@ -158,6 +214,7 @@ export const fallbackAboutPageContent: AboutPageContent = {
     title: 'Our History',
     content: undefined,
   },
+  historyMilestones: fallbackHistoryMilestones,
   videoSection: {
     title: 'Learn More About AMBSO',
     videoUrl: 'https://www.youtube.com/embed/tNd3UStBslA',
