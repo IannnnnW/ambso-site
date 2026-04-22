@@ -161,7 +161,7 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
 
             {/* Slide Content — anchored to bottom-left, stretches right */}
             <div className="relative h-full flex items-end">
-              <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full pb-20 lg:pb-24">
+              <div className="mx-auto max-w-7xl px-2 lg:px-8 w-full pb-20 lg:pb-24">
                 {isActive ? (
                   <div key={`content-${contentKey}`} className="max-w-4xl">
 
