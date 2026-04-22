@@ -89,26 +89,6 @@ export default async function AboutPage() {
         </section>
       )}
 
-      {/* Core Values */}
-      <section className="py-16 bg-white">
-        <Container>
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">
-            {content.coreValues?.sectionTitle}
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {content.coreValues?.values?.map((value, index) => (
-              <CoreValueCard
-                key={index}
-                index={index}
-                keyword={value.title.split(' ')[0]}
-                title={value.title}
-                description={value.description}
-              />
-            ))}
-          </div>
-        </Container>
-      </section>
-
       {/* Mission & Vision */}
       <section className="py-16 bg-gray-50">
         <Container>
@@ -125,6 +105,26 @@ export default async function AboutPage() {
               description={content.vision?.description ?? ''}
               heightClass="h-56"
             />
+          </div>
+        </Container>
+      </section>
+
+      {/* Core Values */}
+      <section className="py-16 bg-white">
+        <Container>
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-10">
+            {content.coreValues?.sectionTitle}
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {content.coreValues?.values?.map((value, index) => (
+              <CoreValueCard
+                key={index}
+                index={index}
+                keyword={value.title.split(' ')[0]}
+                title={value.title}
+                description={value.description}
+              />
+            ))}
           </div>
         </Container>
       </section>
@@ -198,47 +198,6 @@ export default async function AboutPage() {
                   )}
                 </div>
               ))}
-            </div>
-          </Container>
-        </section>
-      )}
-
-      {/* Lead Collaborators */}
-      {allCollaborators.length > 0 && (
-        <section className="py-16 bg-gray-50">
-          <Container>
-            <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-              Lead Collaborators
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-              {allCollaborators.slice(0, 12).map((collaborator, index) => {
-                // Check if picture has a valid asset reference
-                const hasValidPicture = collaborator.picture?.asset?._ref;
-                return (
-                  <div key={index} className="text-center">
-                    <div className="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden bg-gray-200">
-                      {hasValidPicture ? (
-                        <img
-                          src={urlFor(collaborator.picture!).width(96).height(96).url()}
-                          alt={collaborator.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-2xl font-bold text-primary">
-                            {collaborator.name.charAt(0)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <h3 className="font-semibold text-gray-900 text-sm">{collaborator.name}</h3>
-                    {collaborator.title && (
-                      <p className="text-xs text-gray-500">{collaborator.title}</p>
-                    )}
-                    <p className="text-xs text-primary">{collaborator.position}</p>
-                  </div>
-                );
-              })}
             </div>
           </Container>
         </section>
