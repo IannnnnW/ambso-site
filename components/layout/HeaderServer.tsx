@@ -4,6 +4,5 @@ import Header from './Header';
 
 export default async function HeaderServer() {
   const data = await getHeaderContent() ?? fallbackHeaderContent;
-  console.log(JSON.stringify(data.navigation[1].columns.items))
   return <Header data={data} />;
 }
