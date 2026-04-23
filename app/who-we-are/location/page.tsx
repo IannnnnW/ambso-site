@@ -1,39 +1,61 @@
 import Container from '@/components/ui/Container';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { Clock } from 'lucide-react';
+import LocationsMapSection from '@/components/locations/LocationsMapSection';
+import { getLocations } from '@/lib/sanity.queries';
+import { FALLBACK_LOCATIONS } from '@/components/locations/types';
+import type { MapLocation } from '@/components/locations/types';
 
-const locations = [
-  {
-    name: 'Headquarters - Masaka',
-    address: 'Masaka, Uganda',
-    phone: '(+256) 394 500 421',
-    email: 'info@ambso.org',
-    isPrimary: true,
-  },
-  {
-    name: 'Nansana Office',
-    address: 'Nansana, Wakiso District, Uganda',
-    phone: '(+256) 394 500 421',
-    email: 'info@ambso.org',
-    isPrimary: false,
-  },
-  {
-    name: 'Hoima Office',
-    address: 'Hoima, Uganda',
-    phone: '(+256) 394 500 421',
-    email: 'info@ambso.org',
-    isPrimary: false,
-  },
-];
+export const metadata = {
+  title: 'Our Locations | AMBSO',
+  description: 'Find AMBSO offices across Uganda — Masaka headquarters, Nansana, and Hoima field offices.',
+};
 
-export default function LocationPage() {
+export default async function LocationPage() {
+  let mapLocations: MapLocation[] = FALLBACK_LOCATIONS;
+
+  try {
+    const sanityLocations = await getLocations();
+    if (sanityLocations && sanityLocations.length > 0) {
+      const mapped = sanityLocations
+        .filter((l: { coordinates?: { lat?: number; lng?: number } }) => l.coordinates?.lat && l.coordinates?.lng)
+        .map((l: {
+          _id: string;
+          name: string;
+          locationType: string;
+          address: string;
+          city: string;
+          district: string;
+          coordinates: { lat: number; lng: number };
+          contactPhone?: string;
+          contactEmail?: string;
+          isPrimary: boolean;
+        }) => ({
+          id: l._id,
+          name: l.name,
+          type: l.locationType === 'office' ? 'office' : 'headquarters' as 'headquarters' | 'office',
+          address: l.address,
+          city: l.city,
+          district: l.district,
+          lat: l.coordinates.lat,
+          lng: l.coordinates.lng,
+          phone: l.contactPhone,
+          email: l.contactEmail,
+          isPrimary: l.isPrimary,
+        }));
+      if (mapped.length > 0) mapLocations = mapped;
+    }
+  } catch {
+    // fall through to FALLBACK_LOCATIONS
+  }
+
   return (
-    <div className="pt-20 lg:pt-28">
+    <div className="pt-24 lg:pt-28">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
+      <section className="bg-gradient-to-r from-primary to-primary-light py-20 text-white">
         <Container>
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Locations</h1>
-            <p className="text-xl text-gray-100 leading-relaxed">
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">Our Locations</h1>
+            <p className="text-xl leading-relaxed text-gray-100">
               AMBSO operates across multiple strategic locations in Uganda, enabling us to deliver
               impactful health research and services to communities throughout the region.
             </p>
@@ -41,100 +63,52 @@ export default function LocationPage() {
         </Container>
       </section>
 
-      {/* Office Locations */}
-      <section className="py-16 bg-white">
-        <Container>
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {locations.map((location) => (
-              <div
-                key={location.name}
-                className={`${
-                  location.isPrimary
-                    ? 'bg-gradient-to-br from-primary to-primary-light text-white'
-                    : 'bg-white border-2 border-gray-200'
-                } p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow relative`}
-              >
-                {location.isPrimary && (
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1 bg-accent text-gray-900 text-xs font-bold rounded-full">
-                      Headquarters
-                    </span>
-                  </div>
-                )}
-
-                <div className={`w-16 h-16 ${location.isPrimary ? 'bg-white/20' : 'bg-primary/10'} rounded-full flex items-center justify-center mb-6`}>
-                  <MapPin className={location.isPrimary ? 'text-white' : 'text-primary'} size={32} />
-                </div>
-
-                <h3 className={`text-2xl font-bold mb-6 ${location.isPrimary ? 'text-white' : 'text-gray-900'}`}>
-                  {location.name}
-                </h3>
-
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <MapPin className={`${location.isPrimary ? 'text-white/80' : 'text-gray-500'} mr-3 mt-1 flex-shrink-0`} size={20} />
-                    <p className={location.isPrimary ? 'text-white/90' : 'text-gray-700'}>
-                      {location.address}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Phone className={`${location.isPrimary ? 'text-white/80' : 'text-gray-500'} mr-3 flex-shrink-0`} size={20} />
-                    <a
-                      href={`tel:${location.phone}`}
-                      className={`${location.isPrimary ? 'text-white/90 hover:text-white' : 'text-gray-700 hover:text-primary'} transition-colors`}
-                    >
-                      {location.phone}
-                    </a>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Mail className={`${location.isPrimary ? 'text-white/80' : 'text-gray-500'} mr-3 flex-shrink-0`} size={20} />
-                    <a
-                      href={`mailto:${location.email}`}
-                      className={`${location.isPrimary ? 'text-white/90 hover:text-white' : 'text-gray-700 hover:text-primary'} transition-colors`}
-                    >
-                      {location.email}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Container>
+      {/* Interactive Map Section — full-bleed */}
+      <section className="relative z-0 bg-white">
+        <div className="py-12">
+          <Container>
+            <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl" style={{ color: '#002866' }}>
+              Find Us in Uganda
+            </h2>
+            <p className="mx-auto mb-0 max-w-2xl text-center text-gray-600">
+              Our offices are strategically located across Uganda. Click any pin to explore
+              a location&apos;s details.
+            </p>
+          </Container>
+        </div>
+        <LocationsMapSection locations={mapLocations} />
       </section>
 
       {/* Working Hours */}
       <section className="py-16 bg-gray-50">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white p-8 rounded-xl shadow-md">
-              <div className="flex items-center justify-center mb-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+          <div className="mx-auto max-w-4xl">
+            <div className="rounded-xl bg-white p-8 shadow-md">
+              <div className="mb-8 flex items-center justify-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
                   <Clock className="text-primary" size={32} />
                 </div>
               </div>
 
-              <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Working Hours</h2>
+              <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">Working Hours</h2>
 
-              <div className="grid md:grid-cols-2 gap-8 text-center">
+              <div className="grid gap-8 text-center md:grid-cols-2">
                 <div>
-                  <h3 className="font-semibold text-primary text-lg mb-3">Weekdays</h3>
-                  <p className="text-gray-700 text-lg">Monday - Friday</p>
-                  <p className="text-gray-900 font-semibold text-xl mt-2">8:00 AM - 5:00 PM</p>
+                  <h3 className="mb-3 text-lg font-semibold text-primary">Weekdays</h3>
+                  <p className="text-lg text-gray-700">Monday - Friday</p>
+                  <p className="mt-2 text-xl font-semibold text-gray-900">8:00 AM - 5:00 PM</p>
                 </div>
-
                 <div>
-                  <h3 className="font-semibold text-primary text-lg mb-3">Weekends</h3>
-                  <p className="text-gray-700 text-lg">Saturday - Sunday</p>
-                  <p className="text-gray-900 font-semibold text-xl mt-2">Closed</p>
+                  <h3 className="mb-3 text-lg font-semibold text-primary">Weekends</h3>
+                  <p className="text-lg text-gray-700">Saturday - Sunday</p>
+                  <p className="mt-2 text-xl font-semibold text-gray-900">Closed</p>
                 </div>
               </div>
 
-              <div className="mt-8 pt-8 border-t border-gray-200">
+              <div className="mt-8 border-t border-gray-200 pt-8">
                 <p className="text-center text-gray-600">
                   For urgent inquiries outside working hours, please send an email to{' '}
-                  <a href="mailto:info@ambso.org" className="text-primary hover:underline font-semibold">
+                  <a href="mailto:info@ambso.org" className="font-semibold text-primary hover:underline">
                     info@ambso.org
                   </a>
                 </p>
@@ -144,50 +118,25 @@ export default function LocationPage() {
         </Container>
       </section>
 
-      {/* Map Section */}
-      <section className="py-16 bg-white">
-        <Container>
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8">
-            Find Us in Uganda
-          </h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Our offices are strategically located across Uganda to serve communities in Masaka,
-            Wakiso, and Hoima districts.
-          </p>
-          <div className="bg-gray-200 rounded-xl overflow-hidden" style={{ height: '450px' }}>
-            {/* Placeholder for Google Maps - Replace with actual map implementation */}
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
-              <div className="text-center">
-                <MapPin className="text-primary mx-auto mb-4" size={64} />
-                <p className="text-gray-600 text-lg">Map integration placeholder</p>
-                <p className="text-gray-500 text-sm mt-2">
-                  Google Maps or other mapping service can be integrated here
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
       {/* Contact CTA */}
-      <section className="py-16 bg-gradient-to-r from-primary to-primary-light text-white">
+      <section className="bg-gradient-to-r from-primary to-primary-light py-16 text-white">
         <Container>
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Visit Us Today</h2>
-            <p className="text-xl text-gray-100 mb-8 leading-relaxed">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="mb-6 text-3xl font-bold md:text-4xl">Visit Us Today</h2>
+            <p className="mb-8 text-xl leading-relaxed text-gray-100">
               We welcome visitors, partners, and community members to our offices.
               Contact us to schedule a visit or meeting.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href="mailto:info@ambso.org"
-                className="px-8 py-3 bg-white text-primary rounded-full font-semibold hover:bg-gray-100 transition-colors"
+                className="rounded-full bg-white px-8 py-3 font-semibold text-primary transition-colors hover:bg-gray-100"
               >
                 Email Us
               </a>
               <a
                 href="tel:+256394500421"
-                className="px-8 py-3 bg-accent text-gray-900 rounded-full font-semibold hover:bg-accent/90 transition-colors"
+                className="rounded-full bg-accent px-8 py-3 font-semibold text-gray-900 transition-colors hover:bg-accent/90"
               >
                 Call Us
               </a>

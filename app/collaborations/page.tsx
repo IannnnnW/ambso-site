@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
+import CollaboratorsMapSection from '@/components/collaborators/CollaboratorsMapSection';
 import { Handshake, Globe, ExternalLink } from 'lucide-react';
 import { getPartners } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
@@ -67,6 +68,11 @@ export default async function CollaborationsPage() {
             </p>
           </div>
         </Container>
+      </section>
+
+      {/* Interactive world collaborators map */}
+      <section className="relative z-0">
+        <CollaboratorsMapSection />
       </section>
 
       <section className="py-16 bg-white">
