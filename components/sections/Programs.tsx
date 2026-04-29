@@ -147,7 +147,7 @@ export default function Programs({ content }: ProgramsProps) {
                         'md:grid-cols-3';
 
   return (
-    <section className="relative py-24 bg-[#f8f9fb] overflow-hidden">
+    <section className="relative py-10 bg-[#f8f9fb] overflow-hidden">
       {/* Dot texture */}
       <svg className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none" aria-hidden="true">
         <defs>
