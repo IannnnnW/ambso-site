@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Microscope, Users, GraduationCap, Heart, Megaphone, Handshake, FlaskConical } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { urlFor } from '@/lib/sanity.client';
 
 interface HeroSlide {
@@ -32,15 +32,6 @@ interface HeroCarouselProps {
   autoplaySpeed?: number;
 }
 
-const categoryConfig: Record<string, { icon: React.ElementType; label: string; color: string }> = {
-  'clinical-trials': { icon: FlaskConical, label: 'Clinical Trials', color: 'bg-blue-600' },
-  research: { icon: Microscope, label: 'Research', color: 'bg-indigo-600' },
-  community: { icon: Users, label: 'Community Programs', color: 'bg-green-600' },
-  clinical: { icon: Heart, label: 'Clinical Programs', color: 'bg-red-600' },
-  training: { icon: GraduationCap, label: 'Capacity Building', color: 'bg-purple-600' },
-  announcement: { icon: Megaphone, label: 'Announcements', color: 'bg-amber-600' },
-  partnership: { icon: Handshake, label: 'Partnerships', color: 'bg-teal-600' },
-};
 
 export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -128,8 +119,6 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
     <div className="relative h-[600px] lg:h-[700px] overflow-hidden bg-gray-900 mt-[68px] lg:mt-[104px]">
       {/* ── Slides ──────────────────────────────────────────────────── */}
       {slides.map((slide, index) => {
-        const category = slide.category ? categoryConfig[slide.category] : null;
-        const CategoryIcon = category?.icon;
         const isActive = index === currentSlide;
 
         return (
@@ -161,7 +150,7 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
 
             {/* Slide Content — anchored to bottom-left, stretches right */}
             <div className="relative h-full flex items-end">
-              <div className="mx-auto max-w-7xl px-2 lg:px-8 w-full pb-20 lg:pb-24">
+              <div className="mx-auto max-w-7xl px-2 lg:px-8 w-full pb-28 lg:pb-36">
                 {isActive ? (
                   <div key={`content-${contentKey}`} className="max-w-4xl">
 
@@ -184,7 +173,7 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                     {/* Subtitle */}
                     {slide.subtitle && (
                       <p
-                        className="text-accent text-base lg:text-lg font-semibold mb-3 tracking-wide uppercase"
+                        className="text-accent text-sm lg:text-base font-semibold mb-3 tracking-wide uppercase"
                         style={{
                           opacity: 0,
                           animation: 'heroSlideUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.05s forwards',
@@ -196,7 +185,7 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
 
                     {/* Title */}
                     <h2
-                      className="text-4xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.15]"
+                      className="text-3xl lg:text-[2.75rem] font-bold text-white mb-4 leading-[1.15]"
                       style={{
                         opacity: 0,
                         animation: 'heroSlideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards',
@@ -208,7 +197,7 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                     {/* Description */}
                     {slide.description && (
                       <p
-                        className="text-base lg:text-lg text-gray-200 mb-8 leading-relaxed max-w-2xl font-light"
+                        className="text-sm lg:text-base text-gray-200 mb-7 leading-relaxed max-w-2xl font-light"
                         style={{
                           opacity: 0,
                           animation: 'heroSlideUp 0.65s cubic-bezier(0.22,1,0.36,1) 0.28s forwards',
@@ -248,9 +237,9 @@ export default function HeroCarousel({ slides, autoplaySpeed = 5000 }: HeroCarou
                 ) : (
                   /* Non-active slide — static, hidden by parent opacity */
                   <div className="max-w-4xl opacity-0" aria-hidden>
-                    {slide.subtitle && <p className="text-accent text-lg font-semibold mb-3">{slide.subtitle}</p>}
-                    <h2 className="text-4xl lg:text-[3.5rem] font-bold text-white mb-5 leading-[1.15]">{slide.title}</h2>
-                    {slide.description && <p className="text-lg text-gray-200 mb-8">{slide.description}</p>}
+                    {slide.subtitle && <p className="text-accent text-sm lg:text-base font-semibold mb-3">{slide.subtitle}</p>}
+                    <h2 className="text-3xl lg:text-[2.75rem] font-bold text-white mb-4 leading-[1.15]">{slide.title}</h2>
+                    {slide.description && <p className="text-sm lg:text-base text-gray-200 mb-7">{slide.description}</p>}
                   </div>
                 )}
               </div>

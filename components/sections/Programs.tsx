@@ -106,12 +106,7 @@ function ProgramCard({
 
       {/* Content — pinned bottom-right */}
       <div className="absolute inset-0 flex flex-col justify-end items-end px-6 py-6 lg:px-8 lg:py-7 text-right">
-        {/* Description slides up on hover */}
-        <p className="text-white/80 text-sm lg:text-base leading-relaxed mb-3 max-w-xs opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400">
-          {description}
-        </p>
-
-        <div className="flex items-center gap-3">
+         <div className="flex items-center gap-3">
           <h3 className="text-white font-bold text-xl lg:text-2xl group-hover:text-2xl lg:group-hover:text-3xl leading-tight transition-all duration-300">
             {title}
           </h3>
@@ -121,6 +116,10 @@ function ProgramCard({
             <ArrowRight size={15} className="text-accent program-arrow-bounce" />
           </span>
         </div>
+        {/* Description slides up on hover */}
+        <p className="text-white/80 text-sm lg:text-base leading-relaxed mb-3 max-w-xs opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400">
+          {description}
+        </p>
       </div>
     </Link>
   );
