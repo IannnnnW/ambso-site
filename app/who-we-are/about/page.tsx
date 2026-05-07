@@ -122,7 +122,7 @@ export default async function AboutPage() {
                 </h2>
               )}
               <VideoEmbed
-                videoUrl={content.videoSection.videoUrl}
+                videoUrl="https://youtu.be/p-c4IrdI354?si=fue2zYukZzQHHvic"
                 title={content.videoSection.title}
               />
             </div>
