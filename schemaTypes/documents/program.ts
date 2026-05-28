@@ -170,31 +170,6 @@ export default defineType({
       rows: 2,
     },
     {
-      name: 'startDate',
-      title: 'Start Date',
-      type: 'date',
-    },
-    {
-      name: 'endDate',
-      title: 'End Date',
-      type: 'date',
-      description: 'Leave empty for ongoing programs',
-    },
-    {
-      name: 'status',
-      title: 'Status',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Active', value: 'active'},
-          {title: 'Planned', value: 'planned'},
-          {title: 'Completed', value: 'completed'},
-          {title: 'On Hold', value: 'on-hold'},
-        ],
-      },
-      initialValue: 'active',
-    },
-    {
       name: 'partners',
       title: 'Program Partners',
       type: 'array',
