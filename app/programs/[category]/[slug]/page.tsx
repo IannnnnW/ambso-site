@@ -439,76 +439,350 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
     (img: { isPrimary?: boolean }) => img.isPrimary
   ) ?? program.featuredImages?.[0];
 
+  const heroImageUrl = primaryImage?.asset
+    ? urlFor(primaryImage).width(1920).height(700).url()
+    : null;
+
+  const hasTeam      = program.teamMembers && program.teamMembers.length > 0;
+  const hasPartners  = program.partners    && program.partners.length > 0;
+  const hasLocations = program.locations   && program.locations.length > 0;
+  const hasOutcomes  = program.outcomes    && program.outcomes.length > 0;
+  const hasGallery   = program.gallery     && program.gallery.length > 0;
+  const hasSidebar   = hasTeam || hasPartners || hasLocations;
+
+  const statusStyle  = STATUS_BADGE[program.status] ?? '';
+
   return (
     <div className="pt-20 lg:pt-28">
-      <section className="relative bg-gradient-to-br from-primary via-primary to-primary-light text-white py-16 md:py-24">
-        {primaryImage?.asset && (
-          <div className="absolute inset-0 opacity-20">
-            <img src={urlFor(primaryImage).width(1920).url()} alt="" className="w-full h-full object-cover" />
-          </div>
+
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <section className="relative bg-gradient-to-br from-primary via-primary to-primary-light text-white py-16 md:py-24 overflow-hidden">
+        {heroImageUrl && (
+          <>
+            <div className="absolute inset-0">
+              <img src={heroImageUrl} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/92 via-primary/82 to-primary/55" />
+          </>
         )}
+
+        {/* Concentric arcs — right */}
+        <svg
+          className="absolute right-0 inset-y-0 h-full opacity-[0.07] pointer-events-none"
+          viewBox="0 0 360 360" fill="none" preserveAspectRatio="xMaxYMid slice"
+          aria-hidden="true"
+        >
+          {[300, 240, 180, 120, 60].map((r, i) => (
+            <circle key={i} cx="360" cy="180" r={r} stroke="white" strokeWidth="1.5" />
+          ))}
+        </svg>
+
         <Container className="relative z-10">
-          <Link href={`/programs/${category}`} className="inline-flex items-center text-white/70 hover:text-white mb-6 transition-colors text-sm">
+          <Link
+            href={`/programs/${category}`}
+            className="inline-flex items-center text-white/70 hover:text-white mb-6 transition-colors text-sm"
+          >
             <ArrowLeft size={16} className="mr-2" />
             Back to {program.category?.title ?? 'Programs'}
           </Link>
+
+          {program.status && (
+            <div className="mb-5">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${statusStyle}`}>
+                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                {program.status.charAt(0).toUpperCase() + program.status.slice(1)}
+              </span>
+            </div>
+          )}
+
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight max-w-4xl">
             {program.title}
           </h1>
+
           {program.shortDescription && (
             <p className="text-xl text-white/80 leading-relaxed max-w-3xl">{program.shortDescription}</p>
           )}
+
           <div className="flex flex-wrap items-center gap-6 mt-8 text-white/65 text-sm">
             {program.startDate && (
-              <div className="flex items-center gap-2"><Calendar size={16} /><span>Started {formatDate(program.startDate)}</span></div>
+              <div className="flex items-center gap-2">
+                <Calendar size={16} />
+                <span>
+                  {formatDate(program.startDate)}
+                  {program.endDate ? ` – ${formatDate(program.endDate)}` : ' – Ongoing'}
+                </span>
+              </div>
             )}
-            {program.locations && program.locations.length > 0 && (
+            {program.targetPopulation && (
+              <div className="flex items-center gap-2">
+                <Users size={16} />
+                <span>{program.targetPopulation}</span>
+              </div>
+            )}
+            {hasLocations && (
               <div className="flex items-center gap-2">
                 <MapPin size={16} />
-                <span>{program.locations.map((l: { city: string }) => l.city).join(', ')}</span>
+                <span>
+                  {program.locations
+                    .map((l: { name: string; city?: string }) => l.city ?? l.name)
+                    .join(', ')}
+                </span>
               </div>
             )}
           </div>
         </Container>
       </section>
 
-      <section className="py-16 bg-white">
-        <Container>
-          <div className="grid lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2 space-y-12">
+      {/* ── Body ──────────────────────────────────────────────────────────── */}
+      <section className="relative py-16 bg-white overflow-hidden">
+        {/* Dot-grid decoration */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.03] pointer-events-none" aria-hidden="true">
+          <defs>
+            <pattern id="iprog-dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.2" fill="#002866" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#iprog-dots)" />
+        </svg>
+
+        <Container className="relative z-10">
+          <div className={`grid gap-12 ${hasSidebar ? 'lg:grid-cols-3' : ''}`}>
+
+            {/* Main content */}
+            <div className={`space-y-14 ${hasSidebar ? 'lg:col-span-2' : ''}`}>
+
+              {/* Description */}
               {program.description && program.description.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">About This Program</h2>
-                  <div className="prose prose-lg max-w-none text-gray-700">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="block w-6 h-px bg-[#38BDF8]" />
+                    <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.15em]">Overview</span>
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-[#002866] mb-6">
+                    About This Program
+                  </h2>
+                  <div className="prose prose-lg max-w-none text-[#1f2937]/75 prose-headings:text-[#002866] prose-a:text-[#38BDF8]">
                     <PortableText value={program.description} />
                   </div>
                 </div>
               )}
+
+              {/* Objectives */}
               {program.objectives && program.objectives.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <Target className="text-primary" size={24} />Objectives
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="block w-6 h-px bg-[#38BDF8]" />
+                    <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.15em]">Goals</span>
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-[#002866] mb-6 flex items-center gap-3">
+                    <Target className="text-[#38BDF8] flex-shrink-0" size={26} />
+                    Objectives
                   </h2>
                   <div className="space-y-3">
                     {program.objectives.map((obj: string, i: number) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <CheckCircle className="text-accent flex-shrink-0 mt-0.5" size={20} />
-                        <p className="text-gray-700">{obj}</p>
+                      <div
+                        key={i}
+                        className="flex items-start gap-4 p-4 bg-[#f8f9fb] rounded-xl border border-[#002866]/[0.06]"
+                      >
+                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#002866] flex items-center justify-center text-white text-xs font-extrabold">
+                          {i + 1}
+                        </span>
+                        <p className="text-[#1f2937]/75 leading-relaxed pt-0.5">{obj}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
+
+              {/* Outcomes */}
+              {hasOutcomes && (
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="block w-6 h-px bg-[#38BDF8]" />
+                    <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.15em]">Impact</span>
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-[#002866] mb-6 flex items-center gap-3">
+                    <CheckCircle className="text-[#38BDF8] flex-shrink-0" size={26} />
+                    Expected Outcomes
+                  </h2>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {program.outcomes.map((outcome: string, i: number) => (
+                      <div
+                        key={i}
+                        className="flex items-start gap-3 p-4 bg-[#002866]/[0.03] rounded-xl border border-[#002866]/[0.08]"
+                      >
+                        <CheckCircle className="text-[#38BDF8] flex-shrink-0 mt-0.5" size={18} />
+                        <p className="text-[#1f2937]/75 text-sm leading-relaxed">{outcome}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Gallery */}
+              {hasGallery && (
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="block w-6 h-px bg-[#38BDF8]" />
+                    <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.15em]">Gallery</span>
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-[#002866] mb-6">Program Gallery</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {program.gallery.map((img: { asset?: { _ref: string }; caption?: string }, i: number) =>
+                      img.asset ? (
+                        <div key={i} className="relative aspect-square rounded-xl overflow-hidden group">
+                          <img
+                            src={urlFor(img).width(400).height(400).url()}
+                            alt={img.caption ?? `Gallery image ${i + 1}`}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                          {img.caption && (
+                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                              <p className="text-white text-xs">{img.caption}</p>
+                            </div>
+                          )}
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Standalone CTA when no sidebar */}
+              {!hasSidebar && (
+                <div
+                  className="p-8 rounded-2xl text-white"
+                  style={{ background: 'linear-gradient(135deg, #002866 0%, #003d99 100%)' }}
+                >
+                  <h3 className="text-xl font-extrabold mb-3">Get Involved</h3>
+                  <p className="text-white/70 mb-5 leading-relaxed">
+                    Interested in this program? Contact us to learn how you can participate or support.
+                  </p>
+                  <Button href="/contact" className="!bg-[#38BDF8] !text-[#002866] !border-0 font-bold">
+                    Contact Us
+                  </Button>
+                </div>
+              )}
             </div>
-            <div>
-              <div className="bg-primary/5 p-6 rounded-2xl border border-primary/15">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">Get Involved</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Interested in this program? Contact us to learn how you can participate or support.
-                </p>
-                <Button href="/contact" className="w-full">Contact Us</Button>
+
+            {/* Sidebar */}
+            {hasSidebar && (
+              <div className="space-y-6">
+
+                {/* Team */}
+                {hasTeam && (
+                  <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
+                    <h3 className="text-base font-extrabold text-[#002866] mb-4 flex items-center gap-2">
+                      <Users className="text-[#38BDF8]" size={18} />
+                      Team
+                    </h3>
+                    <div className="space-y-3">
+                      {program.teamMembers.map((member: {
+                        _id: string; name: string; role?: string;
+                        image?: { asset?: { _ref: string } };
+                      }) => (
+                        <div key={member._id} className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full overflow-hidden bg-[#002866]/10 flex-shrink-0 flex items-center justify-center">
+                            {member.image?.asset ? (
+                              <img
+                                src={urlFor(member.image).width(40).height(40).url()}
+                                alt={member.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <User size={16} className="text-[#002866]" />
+                            )}
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-[#1f2937]">{member.name}</p>
+                            {member.role && <p className="text-xs text-[#1f2937]/55">{member.role}</p>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Partners */}
+                {hasPartners && (
+                  <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
+                    <h3 className="text-base font-extrabold text-[#002866] mb-4 flex items-center gap-2">
+                      <Building2 className="text-[#38BDF8]" size={18} />
+                      Partners
+                    </h3>
+                    <div className="space-y-3">
+                      {program.partners.map((partner: {
+                        _id: string; name: string;
+                        logo?: { asset?: { _ref: string } }; website?: string;
+                      }) => (
+                        <div key={partner._id} className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-white border border-[#002866]/10 flex items-center justify-center flex-shrink-0">
+                            {partner.logo?.asset ? (
+                              <img
+                                src={urlFor(partner.logo).height(28).url()}
+                                alt={partner.name}
+                                className="h-5 w-auto object-contain"
+                              />
+                            ) : (
+                              <Building2 size={14} className="text-[#002866]/40" />
+                            )}
+                          </div>
+                          {partner.website ? (
+                            <a
+                              href={partner.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm font-medium text-[#1f2937] hover:text-[#002866] transition-colors"
+                            >
+                              {partner.name}
+                            </a>
+                          ) : (
+                            <span className="text-sm font-medium text-[#1f2937]">{partner.name}</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Locations */}
+                {hasLocations && (
+                  <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
+                    <h3 className="text-base font-extrabold text-[#002866] mb-4 flex items-center gap-2">
+                      <MapPin className="text-[#38BDF8]" size={18} />
+                      Locations
+                    </h3>
+                    <div className="space-y-2">
+                      {program.locations.map((loc: { name: string; city?: string; district?: string }, i: number) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#38BDF8] mt-1.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-sm font-medium text-[#1f2937]">{loc.name ?? loc.city}</p>
+                            {loc.district && (
+                              <p className="text-xs text-[#1f2937]/55">{loc.district} District</p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* CTA */}
+                <div
+                  className="p-6 rounded-2xl text-white"
+                  style={{ background: 'linear-gradient(135deg, #002866 0%, #003d99 100%)' }}
+                >
+                  <h3 className="text-base font-extrabold mb-2">Get Involved</h3>
+                  <p className="text-white/70 text-sm mb-4 leading-relaxed">
+                    Interested in this program? Contact us to learn how you can participate or support.
+                  </p>
+                  <Button href="/contact" className="w-full !bg-[#38BDF8] !text-[#002866] !border-0 font-bold text-sm">
+                    Contact Us
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </Container>
       </section>
