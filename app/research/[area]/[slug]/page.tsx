@@ -76,10 +76,9 @@ function formatDate(d?: string) {
 
 export async function generateStaticParams() {
   const all = await getAllResearchSlugs().catch(() => []);
-  return (all ?? []).map((r: { area: string; slug: string }) => ({
-    area: r.area,
-    slug: r.slug,
-  }));
+  return (all ?? [])
+    .filter((r: { area: string; slug: string }) => typeof r.area === 'string' && typeof r.slug === 'string')
+    .map((r: { area: string; slug: string }) => ({ area: r.area, slug: r.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
