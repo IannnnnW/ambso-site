@@ -22,14 +22,8 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     },
     {
-      name: 'researchType',
-      title: 'Research Type',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    },
-    {
       name: 'description',
-      title: 'Project Description',
+      title: 'Description',
       type: 'blockContent',
     },
     {
