@@ -3,7 +3,8 @@ import news from './documents/news'
 import program from './documents/program'
 import teamMember from './documents/teamMember'
 import programs from './documents/programs'
-import research from './documents/research'
+import research from './documents/researchAreas'
+import researchProjects from './documents/researchProjects'
 import partner from './documents/partner'
 import career from './documents/career'
 import tender from './documents/tender'
@@ -35,7 +36,7 @@ export const schemaTypes = [
   contactPageContent,
   teamPageContent,
   resourcesPageContent,
-
+  researchProjects,
   // Pages and Sections
 //   page,
 //   heroSection,

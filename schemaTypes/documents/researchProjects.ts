@@ -22,34 +22,12 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     },
     {
-      name: 'researchType',
-      title: 'Research Type',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Clinical Trials', value: 'clinical-trials'},
-          {title: 'Epidemiological Research', value: 'epidemiological'},
-          {title: 'Behavioral Research', value: 'behavioral'},
-          {title: 'Implementation Science', value: 'implementation'},
-          {title: 'Other', value: 'other'},
-        ],
-      },
+      name: 'researchArea',
+      title: 'Research Area',
+      type: 'reference',
+      to: [{type: 'research'}],
       validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'studyPhase',
-      title: 'Study Phase',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Phase I', value: 'phase-1'},
-          {title: 'Phase II', value: 'phase-2'},
-          {title: 'Phase III', value: 'phase-3'},
-          {title: 'Phase IV', value: 'phase-4'},
-          {title: 'Not Applicable', value: 'na'},
-        ],
-      },
-      hidden: ({parent}) => parent?.researchType !== 'clinical-trials',
+      description: 'Select the Research Area this program belongs to',
     },
     {
       name: 'description',
@@ -69,11 +47,6 @@ export default defineType({
       title: 'Research Objectives',
       type: 'array',
       of: [{type: 'string'}],
-    },
-    {
-      name: 'methodology',
-      title: 'Methodology',
-      type: 'blockContent',
     },
     {
       name: 'principalInvestigator',
@@ -114,9 +87,8 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Planning', value: 'planning'},
-          {title: 'Recruiting', value: 'recruiting'},
-          {title: 'Active', value: 'active'},
+          {title: 'Ongoing', value: 'ongoing'},
+          {title: 'Upcoming', value: 'upcoming'},
           {title: 'Completed', value: 'completed'},
           {title: 'Suspended', value: 'suspended'},
         ],
@@ -165,17 +137,6 @@ export default defineType({
           ],
         },
       ],
-    },
-    {
-      name: 'ethicsApproval',
-      title: 'Ethics Approval Number',
-      type: 'string',
-    },
-    {
-      name: 'registrationNumber',
-      title: 'Trial Registration Number',
-      type: 'string',
-      description: 'e.g., ClinicalTrials.gov identifier',
     },
     {
       name: 'keywords',
