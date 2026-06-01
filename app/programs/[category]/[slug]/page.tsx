@@ -41,15 +41,11 @@ const RESEARCH_TYPE_LABEL: Record<string, string> = {
 };
 
 const STATUS_BADGE: Record<string, string> = {
-  // current values
-  ongoing:    'bg-accent/20 text-accent border border-accent/40',
-  upcoming:   'bg-amber-100 text-amber-700 border border-amber-200',
-  completed:  'bg-gray-100 text-gray-600 border border-gray-200',
-  recruiting: 'bg-green-100 text-green-700 border border-green-200',
-  suspended:  'bg-red-100 text-red-600 border border-red-200',
-  // legacy values – kept so older documents still show a badge
   active:     'bg-accent/20 text-accent border border-accent/40',
+  recruiting: 'bg-green-100 text-green-700 border border-green-200',
+  completed:  'bg-gray-100 text-gray-600 border border-gray-200',
   planning:   'bg-amber-100 text-amber-700 border border-amber-200',
+  suspended:  'bg-red-100 text-red-600 border border-red-200',
 };
 
 function formatDate(dateString?: string): string {
