@@ -221,6 +221,40 @@ export interface Research {
   keywords?: string[];
 }
 
+export interface ResearchProject {
+  _id: string;
+  _type: 'researchProject';
+  title: string;
+  slug: { current: string };
+  researchArea?: {
+    _id: string;
+    title: string;
+    slug: { current: string };
+  };
+  description?: PortableTextBlock[];
+  summary?: string;
+  objectives?: string[];
+  principalInvestigator?: TeamMember;
+  coInvestigators?: TeamMember[];
+  partners?: Partner[];
+  fundingSource?: string;
+  startDate?: string;
+  endDate?: string;
+  status: 'ongoing' | 'upcoming' | 'completed' | 'suspended';
+  targetEnrollment?: number;
+  currentEnrollment?: number;
+  featuredImage?: SanityImage;
+  publications?: Array<{
+    title: string;
+    authors: string;
+    journal: string;
+    year: number;
+    doi?: string;
+    url?: string;
+  }>;
+  keywords?: string[];
+}
+
 export interface Partner {
   _id: string;
   _type: 'partner';

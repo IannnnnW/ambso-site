@@ -1,16 +1,19 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
+import AnimateOnScroll from '@/components/ui/AnimateOnScroll';
+import ResearchProjectsGrid from '@/components/ui/ResearchProjectsGrid';
 import { PortableText } from '@portabletext/react';
 import {
-  getResearch,
   getAllResearch,
+  getResearchArea,
+  getResearchProjectsByArea,
   getProgram,
   getAllProgramSlugs,
 } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
+import { ResearchProject } from '@/lib/sanity.types';
 import {
   ArrowLeft,
   Calendar,
@@ -20,9 +23,6 @@ import {
   CheckCircle,
   Building2,
   FlaskConical,
-  FileText,
-  TrendingUp,
-  BookOpen,
   User,
 } from 'lucide-react';
 
@@ -31,14 +31,6 @@ interface PageProps {
 }
 
 // ── helpers ──────────────────────────────────────────────────────────────────
-
-const RESEARCH_TYPE_LABEL: Record<string, string> = {
-  'clinical-trials':  'Clinical Trial',
-  'epidemiological':  'Epidemiological Study',
-  'behavioral':       'Behavioral Research',
-  'implementation':   'Implementation Research',
-  'other':            'Research Study',
-};
 
 const STATUS_BADGE: Record<string, string> = {
   active:     'bg-accent/20 text-accent border border-accent/40',
@@ -80,11 +72,11 @@ export async function generateMetadata({ params }: PageProps) {
   const { category, slug } = await params;
 
   if (category === 'research') {
-    const research = await getResearch(slug);
-    if (!research) return { title: 'Research Not Found | AMBSO' };
+    const area = await getResearchArea(slug);
+    if (!area) return { title: 'Research Area Not Found | AMBSO' };
     return {
-      title: `${research.title} | AMBSO Research`,
-      description: research.summary ?? `Learn about the ${research.title} study at AMBSO`,
+      title: `${area.title} | AMBSO Research`,
+      description: area.summary ?? `Explore ${area.title} research at AMBSO`,
     };
   }
 
@@ -96,328 +88,173 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-// ── research project page ─────────────────────────────────────────────────────
+// ── research area detail page ─────────────────────────────────────────────────
 
-async function ResearchProjectPage({ category, slug }: { category: string; slug: string }) {
-  const research = await getResearch(slug);
-  if (!research) notFound();
+async function ResearchAreaDetailPage({ slug }: { slug: string }) {
+  const [area, projects] = await Promise.all([
+    getResearchArea(slug),
+    // projects fetched after we have the area _id
+    getResearchArea(slug).then(a => a ? getResearchProjectsByArea(a._id) : []),
+  ]);
 
-  const heroImage = research.featuredImage?.asset
-    ? urlFor(research.featuredImage).width(1920).height(600).url()
-    : null;
+  if (!area) notFound();
 
-  const statusStyle = STATUS_BADGE[research.status] ?? STATUS_BADGE.active;
+  const heroImage = area.featuredImage?.asset
+    ? urlFor(area.featuredImage).width(1920).height(600).url()
+    : '/images/labwork.jpg';
+
+  const safeProjects: ResearchProject[] = projects ?? [];
 
   return (
     <div className="pt-20 lg:pt-28">
 
-      {/* Hero */}
-      <section className="relative bg-gradient-to-br from-primary via-primary to-primary-light text-white py-16 md:py-24 overflow-hidden">
-        {heroImage && (
-          <div className="absolute inset-0 opacity-20">
-            <img src={heroImage} alt="" className="w-full h-full object-cover" />
-          </div>
-        )}
-        {/* arc decor */}
-        <svg className="absolute right-0 inset-y-0 h-full opacity-[0.07] pointer-events-none" viewBox="0 0 360 360" fill="none" preserveAspectRatio="xMaxYMid slice">
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <section className="relative text-white py-20 min-h-[380px] flex items-center overflow-hidden">
+        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/92 via-primary/78 to-primary/55" />
+
+        {/* Arc decor */}
+        <svg
+          className="absolute right-0 inset-y-0 h-full opacity-[0.07] pointer-events-none"
+          viewBox="0 0 360 360" fill="none" preserveAspectRatio="xMaxYMid slice"
+          aria-hidden="true"
+        >
           {[300, 240, 180, 120, 60].map((r, i) => (
             <circle key={i} cx="360" cy="180" r={r} stroke="white" strokeWidth="1.5" />
           ))}
         </svg>
 
+        {/* Dot-grid */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.04] pointer-events-none" aria-hidden="true">
+          <defs>
+            <pattern id="rad-hero-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.5" fill="white" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#rad-hero-dots)" />
+        </svg>
+
         <Container className="relative z-10">
           <Link
-            href={`/programs/${category}`}
+            href="/programs/research"
             className="inline-flex items-center text-white/70 hover:text-white mb-6 transition-colors text-sm"
           >
             <ArrowLeft size={16} className="mr-2" />
-            Back to Research
+            Research
           </Link>
 
-          {/* badges */}
-          <div className="flex flex-wrap gap-3 mb-5">
-            {research.status && (
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusStyle} backdrop-blur-sm`}>
-                <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                {research.status.charAt(0).toUpperCase() + research.status.slice(1)}
-              </span>
-            )}
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
-              {RESEARCH_TYPE_LABEL[research.researchType] ?? 'Research'}
-            </span>
-            {research.studyPhase && research.studyPhase !== 'na' && (
-              <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
-                {research.studyPhase.replace('phase-', 'Phase ')}
-              </span>
-            )}
+          <div className="inline-flex items-center gap-2 mb-4">
+            <span className="block w-8 h-px bg-[#38BDF8]" />
+            <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.2em]">Research Area</span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight max-w-4xl">
-            {research.title}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 max-w-3xl">
+            {area.title}
           </h1>
 
-          {research.summary && (
-            <p className="text-xl text-white/80 leading-relaxed max-w-3xl">{research.summary}</p>
+          {area.summary && (
+            <p className="text-xl text-white/80 leading-relaxed max-w-2xl">{area.summary}</p>
           )}
 
-          {/* meta row */}
-          <div className="flex flex-wrap items-center gap-6 mt-8 text-white/65 text-sm">
-            {research.startDate && (
-              <div className="flex items-center gap-2">
-                <Calendar size={16} />
-                <span>{formatDate(research.startDate)}{research.endDate ? ` – ${formatDate(research.endDate)}` : ' – Ongoing'}</span>
-              </div>
-            )}
-            {research.principalInvestigator && (
-              <div className="flex items-center gap-2">
-                <User size={16} />
-                <span>PI: {research.principalInvestigator.name}</span>
-              </div>
-            )}
-            {research.registrationNumber && (
-              <div className="flex items-center gap-2">
-                <FileText size={16} />
-                <span>{research.registrationNumber}</span>
-              </div>
-            )}
-          </div>
+          {safeProjects.length > 0 && (
+            <div className="mt-8 flex items-center gap-3 text-white/60 text-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+              <span>
+                {safeProjects.length} project{safeProjects.length !== 1 ? 's' : ''}
+                {' · '}
+                {safeProjects.filter(p => p.status === 'ongoing').length} ongoing
+              </span>
+            </div>
+          )}
         </Container>
       </section>
 
-      {/* Main content */}
-      <section className="py-16 bg-white">
-        <Container>
-          <div className="grid lg:grid-cols-3 gap-12">
-
-            {/* Left: main content */}
-            <div className="lg:col-span-2 space-y-12">
-
-              {/* Description */}
-              {research.description && research.description.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <FlaskConical className="text-primary" size={24} />
-                    About This Research Area
-                  </h2>
-                  <div className="prose prose-lg max-w-none text-gray-700">
-                    <PortableText value={research.description} />
-                  </div>
+      {/* ── Description ───────────────────────────────────────────────────── */}
+      {area.description && area.description.length > 0 && (
+        <section className="py-16 bg-white">
+          <Container>
+            <AnimateOnScroll animation="fade-up" threshold={0.1}>
+              <div className="max-w-3xl">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="block w-6 h-px bg-[#38BDF8]" />
+                  <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.15em]">Overview</span>
                 </div>
-              )}
-
-              {/* Objectives */}
-              {research.objectives && research.objectives.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <Target className="text-primary" size={24} />
-                    Study Objectives
-                  </h2>
-                  <div className="space-y-3">
-                    {research.objectives.map((obj: string, i: number) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <CheckCircle className="text-accent flex-shrink-0 mt-0.5" size={20} />
-                        <p className="text-gray-700">{obj}</p>
-                      </div>
-                    ))}
-                  </div>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-[#002866] mb-6 flex items-center gap-3">
+                  <FlaskConical className="text-[#38BDF8] flex-shrink-0" size={26} />
+                  About This Research Area
+                </h2>
+                <div className="prose prose-lg max-w-none text-[#1f2937]/75 prose-headings:text-[#002866] prose-a:text-[#38BDF8]">
+                  <PortableText value={area.description} />
                 </div>
-              )}
-
-              {/* Methodology */}
-              {research.methodology && research.methodology.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <BookOpen className="text-primary" size={24} />
-                    Methodology
-                  </h2>
-                  <div className="prose prose-lg max-w-none text-gray-700">
-                    <PortableText value={research.methodology} />
-                  </div>
-                </div>
-              )}
-
-              {/* Publications */}
-              {research.publications && research.publications.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <FileText className="text-primary" size={24} />
-                    Publications
-                  </h2>
-                  <div className="space-y-4">
-                    {research.publications.map((pub: {
-                      title: string; authors: string; journal: string;
-                      year: number; doi?: string; url?: string;
-                    }, i: number) => (
-                      <div key={i} className="p-5 bg-gray-50 rounded-xl border border-gray-100">
-                        <p className="font-semibold text-gray-900 mb-1">{pub.title}</p>
-                        <p className="text-sm text-gray-600 mb-1">{pub.authors}</p>
-                        <p className="text-sm text-gray-500">
-                          <em>{pub.journal}</em>, {pub.year}
-                          {pub.doi && (
-                            <> · <a href={`https://doi.org/${pub.doi}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">DOI: {pub.doi}</a></>
-                          )}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Right: sidebar */}
-            <div className="space-y-6">
-
-              {/* Enrollment */}
-              {(research.targetEnrollment || research.currentEnrollment) && (
-                <div className="bg-primary/5 p-6 rounded-2xl border border-primary/10">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <TrendingUp className="text-primary" size={20} />
-                    Enrollment
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {research.currentEnrollment != null && (
-                      <div className="text-center">
-                        <div className="text-3xl font-extrabold text-primary">{research.currentEnrollment.toLocaleString()}</div>
-                        <div className="text-xs text-gray-500 mt-1">Enrolled</div>
-                      </div>
-                    )}
-                    {research.targetEnrollment != null && (
-                      <div className="text-center">
-                        <div className="text-3xl font-extrabold text-gray-700">{research.targetEnrollment.toLocaleString()}</div>
-                        <div className="text-xs text-gray-500 mt-1">Target</div>
-                      </div>
-                    )}
-                  </div>
-                  {research.currentEnrollment != null && research.targetEnrollment != null && (
-                    <div className="mt-4">
-                      <div className="flex justify-between text-xs text-gray-500 mb-1">
-                        <span>Progress</span>
-                        <span>{Math.round((research.currentEnrollment / research.targetEnrollment) * 100)}%</span>
-                      </div>
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary rounded-full"
-                          style={{ width: `${Math.min(100, (research.currentEnrollment / research.targetEnrollment) * 100)}%` }}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Principal Investigator */}
-              {research.principalInvestigator && (
-                <div className="bg-gray-50 p-6 rounded-2xl">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <User className="text-primary" size={20} />
-                    Principal Investigator
-                  </h3>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full overflow-hidden bg-primary/10 flex-shrink-0 flex items-center justify-center">
-                      {research.principalInvestigator.image?.asset ? (
-                        <img
-                          src={urlFor(research.principalInvestigator.image).width(48).height(48).url()}
-                          alt={research.principalInvestigator.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <User size={20} className="text-primary" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900">{research.principalInvestigator.name}</p>
-                      <p className="text-sm text-gray-500">{research.principalInvestigator.role}</p>
-                    </div>
-                  </div>
-                  {research.principalInvestigator.email && (
-                    <a href={`mailto:${research.principalInvestigator.email}`} className="inline-block mt-3 text-sm text-primary hover:underline">
-                      {research.principalInvestigator.email}
-                    </a>
-                  )}
-                </div>
-              )}
-
-              {/* Funding */}
-              {research.fundingSource && (
-                <div className="bg-gray-50 p-6 rounded-2xl">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                    <Building2 className="text-primary" size={20} />
-                    Funding
-                  </h3>
-                  <p className="text-gray-700 text-sm">{research.fundingSource}</p>
-                </div>
-              )}
-
-              {/* Partners */}
-              {research.partners && research.partners.length > 0 && (
-                <div className="bg-gray-50 p-6 rounded-2xl">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Users className="text-primary" size={20} />
-                    Partners
-                  </h3>
-                  <div className="space-y-3">
-                    {research.partners.map((partner: { name: string; logo?: { asset?: { _ref: string } }; website?: string }) => (
-                      <div key={partner.name} className="flex items-center gap-3">
-                        {partner.logo?.asset ? (
-                          <img src={urlFor(partner.logo).height(28).url()} alt={partner.name} className="h-7 w-auto object-contain" />
-                        ) : (
-                          <div className="w-7 h-7 bg-gray-200 rounded flex items-center justify-center">
-                            <Building2 size={14} className="text-gray-400" />
-                          </div>
-                        )}
-                        {partner.website ? (
-                          <a href={partner.website} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
-                            {partner.name}
-                          </a>
-                        ) : (
-                          <span className="text-sm font-medium text-gray-700">{partner.name}</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Ethics / Registration */}
-              {(research.ethicsApproval || research.registrationNumber) && (
-                <div className="bg-gray-50 p-6 rounded-2xl">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                    <CheckCircle className="text-primary" size={20} />
-                    Approvals
-                  </h3>
-                  {research.ethicsApproval && (
-                    <p className="text-sm text-gray-700 mb-2"><span className="font-medium">Ethics:</span> {research.ethicsApproval}</p>
-                  )}
-                  {research.registrationNumber && (
-                    <p className="text-sm text-gray-700"><span className="font-medium">Registration:</span> {research.registrationNumber}</p>
-                  )}
-                </div>
-              )}
-
-              {/* CTA */}
-              <div className="bg-primary/5 p-6 rounded-2xl border border-primary/15">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">Interested in Participating?</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Contact our research team to learn about eligibility and how to get involved.
-                </p>
-                <Button href="/contact" className="w-full">
-                  Contact Research Team
-                </Button>
               </div>
-            </div>
+            </AnimateOnScroll>
+          </Container>
+        </section>
+      )}
 
-          </div>
+      {/* ── Projects ──────────────────────────────────────────────────────── */}
+      <section className="py-20 bg-[#f8f9fb] relative overflow-hidden">
+        {/* Dot-grid background */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.035] pointer-events-none" aria-hidden="true">
+          <defs>
+            <pattern id="rad-body-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.5" fill="#002866" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#rad-body-dots)" />
+        </svg>
+
+        <Container className="relative z-10">
+          <AnimateOnScroll animation="fade-up" threshold={0.1}>
+            <div className="mb-12">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <span className="block w-8 h-px bg-[#38BDF8]" />
+                <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.2em]">{area.title}</span>
+                <span className="block w-8 h-px bg-[#38BDF8]" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-[#002866] leading-tight">
+                Research Projects
+              </h2>
+              {safeProjects.length > 0 && (
+                <p className="text-[#1f2937]/60 text-lg mt-4 max-w-2xl">
+                  Browse active, upcoming, and completed projects within this research area.
+                </p>
+              )}
+            </div>
+          </AnimateOnScroll>
+
+          <AnimateOnScroll animation="fade-up" delay={100} threshold={0.1}>
+            {safeProjects.length > 0 ? (
+              <ResearchProjectsGrid
+                projects={safeProjects}
+                areaSlug={area.slug.current}
+                fallbackImage={heroImage}
+              />
+            ) : (
+              <div className="text-center py-20">
+                <p className="text-[#1f2937]/40 text-lg">
+                  Research projects in this area are coming soon.
+                </p>
+                <Link
+                  href="/programs/research"
+                  className="inline-flex items-center gap-2 mt-6 text-[#38BDF8] text-sm font-semibold hover:underline"
+                >
+                  <ArrowLeft size={14} /> Browse all research areas
+                </Link>
+              </div>
+            )}
+          </AnimateOnScroll>
         </Container>
       </section>
 
       {/* Keywords */}
-      {research.keywords && research.keywords.length > 0 && (
-        <section className="py-8 bg-gray-50 border-t border-gray-100">
+      {area.keywords && area.keywords.length > 0 && (
+        <section className="py-8 bg-white border-t border-gray-100">
           <Container>
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-semibold text-gray-500 mr-2">Keywords:</span>
-              {research.keywords.map((kw: string) => (
-                <span key={kw} className="px-3 py-1 bg-white border border-gray-200 text-gray-600 text-xs rounded-full">
+              {area.keywords.map((kw: string) => (
+                <span key={kw} className="px-3 py-1 bg-[#f8f9fb] border border-gray-200 text-gray-600 text-xs rounded-full">
                   {kw}
                 </span>
               ))}
@@ -798,7 +635,7 @@ export default async function CategoryItemPage({ params }: PageProps) {
   const { category, slug } = await params;
 
   if (category === 'research') {
-    return <ResearchProjectPage category={category} slug={slug} />;
+    return <ResearchAreaDetailPage slug={slug} />;
   }
 
   return <IndividualProgramPage category={category} slug={slug} />;

@@ -1053,6 +1053,106 @@ export async function getAllResearchSlugs() {
   return await client.fetch(allResearchSlugsQuery);
 }
 
+// ── Research Area + Research Project Queries ─────────────────────────────────
+
+export const singleResearchAreaQuery = groq`
+  *[_type == "research" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    description,
+    summary,
+    featuredImage,
+    keywords
+  }
+`;
+
+export const researchProjectsByAreaQuery = groq`
+  *[_type == "researchProject" && researchArea._ref == $areaId] | order(startDate desc) {
+    _id,
+    title,
+    slug,
+    summary,
+    status,
+    startDate,
+    endDate,
+    featuredImage,
+    principalInvestigator->{
+      name,
+      role
+    }
+  }
+`;
+
+export const singleResearchProjectQuery = groq`
+  *[_type == "researchProject" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    researchArea->{
+      _id,
+      title,
+      slug
+    },
+    description,
+    summary,
+    objectives,
+    principalInvestigator->{
+      name,
+      role,
+      image,
+      email
+    },
+    coInvestigators[]->{
+      name,
+      role,
+      image
+    },
+    partners[]->{
+      _id,
+      name,
+      logo,
+      website
+    },
+    fundingSource,
+    startDate,
+    endDate,
+    status,
+    targetEnrollment,
+    currentEnrollment,
+    featuredImage,
+    publications,
+    keywords
+  }
+`;
+
+export const allResearchProjectSlugsQuery = groq`
+  *[_type == "researchProject" && defined(slug.current)] {
+    "projectSlug": slug.current,
+    "areaSlug": researchArea->slug.current
+  }
+`;
+
+export async function getResearchArea(slug: string) {
+  return await client.fetch(singleResearchAreaQuery, { slug });
+}
+
+export async function getResearchProjectsByArea(areaId: string) {
+  return await client.fetch(researchProjectsByAreaQuery, { areaId });
+}
+
+export async function getResearchProject(slug: string) {
+  return await client.fetch(singleResearchProjectQuery, { slug });
+}
+
+export async function getAllResearchProjectSlugs() {
+  try {
+    return await client.fetch(allResearchProjectSlugsQuery);
+  } catch {
+    return [];
+  }
+}
+
 export async function getPartners() {
   return await client.fetch(partnersQuery);
 }
