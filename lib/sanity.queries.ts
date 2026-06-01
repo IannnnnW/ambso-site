@@ -1042,6 +1042,17 @@ export async function getResearch(slug: string) {
   return await client.fetch(singleResearchQuery, { slug });
 }
 
+export const allResearchSlugsQuery = groq`
+  *[_type == "research"] {
+    "area": researchType,
+    "slug": slug.current
+  }
+`;
+
+export async function getAllResearchSlugs() {
+  return await client.fetch(allResearchSlugsQuery);
+}
+
 export async function getPartners() {
   return await client.fetch(partnersQuery);
 }

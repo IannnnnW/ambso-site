@@ -192,7 +192,7 @@ export interface Research {
   _type: 'research';
   title: string;
   slug: { current: string };
-  researchType: 'clinical-trials' | 'epidemiological' | 'behavioral' | 'implementation' | 'other';
+  researchType: 'clinical-trials' | 'epidemiological' | 'social-behavioral' | 'behavioral' | 'implementation' | 'other';
   studyPhase?: 'phase-1' | 'phase-2' | 'phase-3' | 'phase-4' | 'na';
   description?: PortableTextBlock[];
   summary?: string;
@@ -204,7 +204,7 @@ export interface Research {
   fundingSource?: string;
   startDate?: string;
   endDate?: string;
-  status: 'planning' | 'recruiting' | 'active' | 'completed' | 'suspended';
+  status: 'ongoing' | 'upcoming' | 'recruiting' | 'completed' | 'suspended' | 'active' | 'planning';
   targetEnrollment?: number;
   currentEnrollment?: number;
   featuredImage?: SanityImage;

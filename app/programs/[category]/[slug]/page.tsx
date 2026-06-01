@@ -136,10 +136,12 @@ async function ResearchProjectPage({ category, slug }: { category: string; slug:
 
           {/* badges */}
           <div className="flex flex-wrap gap-3 mb-5">
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusStyle} backdrop-blur-sm`}>
-              <span className="w-1.5 h-1.5 rounded-full bg-current" />
-              {research.status.charAt(0).toUpperCase() + research.status.slice(1)}
-            </span>
+            {research.status && (
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusStyle} backdrop-blur-sm`}>
+                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                {research.status.charAt(0).toUpperCase() + research.status.slice(1)}
+              </span>
+            )}
             <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
               {RESEARCH_TYPE_LABEL[research.researchType] ?? 'Research'}
             </span>
@@ -195,7 +197,7 @@ async function ResearchProjectPage({ category, slug }: { category: string; slug:
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                     <FlaskConical className="text-primary" size={24} />
-                    About This Study
+                    About This Research Area
                   </h2>
                   <div className="prose prose-lg max-w-none text-gray-700">
                     <PortableText value={research.description} />
