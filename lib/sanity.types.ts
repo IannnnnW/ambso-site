@@ -221,6 +221,22 @@ export interface Research {
   keywords?: string[];
 }
 
+export interface Collaborator {
+  _id: string;
+  _type: 'collaborator';
+  name: string;
+  position: string;
+  title?: string;
+  bio?: string;
+  profileUrl?: string;
+  picture?: SanityImage & { asset?: { url?: string } };
+  partner?: {
+    _id: string;
+    name: string;
+    logo?: SanityImage & { asset?: { url?: string } };
+  };
+}
+
 export interface ResearchProject {
   _id: string;
   _type: 'researchProject';
@@ -237,6 +253,7 @@ export interface ResearchProject {
   principalInvestigator?: TeamMember;
   coInvestigators?: TeamMember[];
   partners?: Partner[];
+  collaborators?: Collaborator[];
   fundingSource?: string;
   startDate?: string;
   endDate?: string;

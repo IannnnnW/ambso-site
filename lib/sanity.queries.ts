@@ -462,7 +462,8 @@ export const partnersWithCollaboratorsQuery = groq`
     _id,
     name,
     logo,
-    leadCollaborators[] {
+    leadCollaborators[]->{
+      _id,
       name,
       picture,
       position,
@@ -482,7 +483,8 @@ export const singlePartnerQuery = groq`
     description,
     logo,
     featuredImage,
-    leadCollaborators[] {
+    leadCollaborators[]->{
+      _id,
       name,
       picture,
       position,
@@ -1122,7 +1124,27 @@ export const singleResearchProjectQuery = groq`
     currentEnrollment,
     featuredImage,
     publications,
-    keywords
+    keywords,
+    collaborators[]->{
+      _id,
+      name,
+      position,
+      title,
+      bio,
+      profileUrl,
+      picture {
+        asset->{url},
+        alt
+      },
+      partner->{
+        _id,
+        name,
+        logo {
+          asset->{url},
+          alt
+        }
+      }
+    }
   }
 `;
 

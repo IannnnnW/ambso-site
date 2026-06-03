@@ -6,6 +6,7 @@ import programs from './documents/programs'
 import research from './documents/researchAreas'
 import researchProjects from './documents/researchProjects'
 import partner from './documents/partner'
+import collaborator from './documents/collaborator'
 import career from './documents/career'
 import tender from './documents/tender'
 import location from './documents/location'
@@ -53,6 +54,7 @@ export const schemaTypes = [
   programs,
   research,
   partner,
+  collaborator,
   location,
 
   // Opportunities

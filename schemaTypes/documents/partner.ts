@@ -78,66 +78,7 @@ export default defineType({
       name: 'leadCollaborators',
       title: 'Lead Collaborators',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {
-              name: 'name',
-              title: 'Name',
-              type: 'string',
-              validation: (Rule) => Rule.required(),
-            },
-            {
-              name: 'picture',
-              title: 'Picture',
-              type: 'image',
-              options: {
-                hotspot: true,
-              },
-              fields: [
-                {
-                  name: 'alt',
-                  type: 'string',
-                  title: 'Alternative text',
-                },
-              ],
-            },
-            {
-              name: 'position',
-              title: 'Position',
-              type: 'string',
-              validation: (Rule) => Rule.required(),
-            },
-            {
-              name: 'title',
-              title: 'Title',
-              type: 'string',
-              description: 'Professional title or designation',
-            },
-            {
-              name: 'bio',
-              title: 'Bio',
-              type: 'text',
-              description: 'Short biography paragraph',
-              rows: 4,
-            },
-            {
-              name: 'profileUrl',
-              title: 'Profile URL',
-              type: 'url',
-              description: 'Link to their institutional profile page',
-            },
-          ],
-          preview: {
-            select: {
-              title: 'name',
-              subtitle: 'position',
-              media: 'picture',
-            },
-          },
-        },
-      ],
+      of: [{type: 'reference', to: [{type: 'collaborator'}]}],
     },
     {
       name: 'researchGroups',

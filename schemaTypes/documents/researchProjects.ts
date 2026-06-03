@@ -30,6 +30,20 @@ export default defineType({
       description: 'Select the Research Area this program belongs to',
     },
     {
+      name: 'studyPhase',
+      title: 'Study Phase',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Phase I', value: 'phase-1'},
+          {title: 'Phase II', value: 'phase-2'},
+          {title: 'Phase III', value: 'phase-3'},
+          {title: 'Phase IV', value: 'phase-4'},
+          {title: 'Not Applicable', value: 'na'},
+        ],
+      },
+    },
+    {
       name: 'description',
       title: 'Project Description',
       type: 'blockContent',
@@ -65,6 +79,13 @@ export default defineType({
       title: 'Research Partners',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'partner'}]}],
+    },
+    {
+      name: 'collaborators',
+      title: 'Collaborators',
+      description: 'Named individuals from partner institutions involved in this project',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'collaborator'}]}],
     },
     {
       name: 'fundingSource',

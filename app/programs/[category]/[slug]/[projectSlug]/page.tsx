@@ -10,16 +10,17 @@ import {
   getAllResearchProjectSlugs,
 } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
+import { Collaborator } from '@/lib/sanity.types';
 import {
   ArrowLeft,
   Calendar,
   Users,
   Target,
-  CheckCircle,
   Building2,
   FileText,
   TrendingUp,
   User,
+  ExternalLink,
 } from 'lucide-react';
 
 interface PageProps {
@@ -86,8 +87,20 @@ export default async function ResearchProjectPage({ params }: PageProps) {
   const statusStyle = STATUS_BADGE[project.status] ?? STATUS_BADGE.ongoing;
 
   const hasEnrollment = project.targetEnrollment != null || project.currentEnrollment != null;
-  const hasPartners   = project.partners   && project.partners.length   > 0;
+  const hasPartners   = project.partners        && project.partners.length        > 0;
   const hasCoIs       = project.coInvestigators && project.coInvestigators.length > 0;
+
+  type CollabGroup = { partner: Collaborator['partner']; people: Collaborator[] };
+  const collaboratorGroups: CollabGroup[] = [];
+  if (project.collaborators && project.collaborators.length > 0) {
+    const map = new Map<string, CollabGroup>();
+    for (const c of project.collaborators) {
+      const key = c.partner?._id ?? 'unknown';
+      if (!map.has(key)) map.set(key, { partner: c.partner, people: [] });
+      map.get(key)!.people.push(c);
+    }
+    collaboratorGroups.push(...map.values());
+  }
 
   return (
     <div className="pt-20 lg:pt-28">
@@ -252,6 +265,93 @@ export default async function ResearchProjectPage({ params }: PageProps) {
                               <> · <a href={`https://doi.org/${pub.doi}`} target="_blank" rel="noopener noreferrer" className="text-[#38BDF8] hover:underline">DOI: {pub.doi}</a></>
                             )}
                           </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </AnimateOnScroll>
+              )}
+
+              {/* Collaborators */}
+              {collaboratorGroups.length > 0 && (
+                <AnimateOnScroll animation="fade-up" threshold={0.05}>
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="block w-6 h-px bg-[#38BDF8]" />
+                      <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-[0.15em]">Team</span>
+                    </div>
+                    <h2 className="text-2xl font-extrabold text-[#002866] mb-8 flex items-center gap-3">
+                      <Users className="text-[#38BDF8] flex-shrink-0" size={26} />
+                      Collaborators
+                    </h2>
+
+                    <div className="space-y-10">
+                      {collaboratorGroups.map((group) => (
+                        <div key={group.partner?._id ?? 'unknown'}>
+                          {/* Institution subheading */}
+                          <div className="flex items-center gap-3 mb-5">
+                            {group.partner?.logo?.asset?.url && (
+                              <img
+                                src={group.partner.logo.asset.url}
+                                alt={group.partner.name ?? ''}
+                                className="h-8 w-auto object-contain"
+                              />
+                            )}
+                            <h3 className="text-base font-bold text-[#002866]">
+                              {group.partner?.name ?? 'Partner Institution'}
+                            </h3>
+                          </div>
+
+                          {/* People grid — matches collaborations/[slug] card style */}
+                          <div className={`grid gap-6 ${group.people.length === 1 ? 'md:grid-cols-1 max-w-sm' : 'sm:grid-cols-2'}`}>
+                            {group.people.map((collab) => (
+                              <div key={collab._id} className="bg-gray-50 rounded-xl p-6 flex flex-col">
+                                <div className="flex items-start gap-4 mb-4">
+                                  <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
+                                    {collab.picture?.asset?.url ? (
+                                      <img
+                                        src={collab.picture.asset.url}
+                                        alt={collab.picture.alt ?? collab.name}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    ) : collab.picture?.asset ? (
+                                      <img
+                                        src={urlFor(collab.picture).width(160).height(160).url()}
+                                        alt={collab.picture.alt ?? collab.name}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    ) : (
+                                      <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-bold">
+                                        {collab.name.charAt(0)}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <h4 className="font-semibold text-gray-900 text-lg leading-tight">{collab.name}</h4>
+                                    {collab.title && (
+                                      <p className="text-primary text-sm font-medium mt-0.5">{collab.title}</p>
+                                    )}
+                                    <p className="text-gray-500 text-sm mt-0.5">{collab.position}</p>
+                                  </div>
+                                </div>
+
+                                {collab.bio && (
+                                  <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1">{collab.bio}</p>
+                                )}
+
+                                {collab.profileUrl && (
+                                  <a
+                                    href={collab.profileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1 mt-auto"
+                                  >
+                                    View profile <ExternalLink size={13} />
+                                  </a>
+                                )}
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
