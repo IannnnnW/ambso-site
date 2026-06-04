@@ -72,7 +72,7 @@ export default defineType({
       name: 'coInvestigators',
       title: 'Co-Investigators',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'teamMember'}]}],
+      of: [{type: 'reference', to: [{type: 'teamMember'}, {type: 'collaborator'}]}],
     },
     {
       name: 'partners',
