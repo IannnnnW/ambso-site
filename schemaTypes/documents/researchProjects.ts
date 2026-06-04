@@ -66,7 +66,7 @@ export default defineType({
       name: 'principalInvestigator',
       title: 'Principal Investigator',
       type: 'reference',
-      to: [{type: 'teamMember'}],
+      to: [{type: 'teamMember'}, {type: 'collaborator'}],
     },
     {
       name: 'coInvestigators',
