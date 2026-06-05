@@ -114,11 +114,6 @@ function ProgramCard({
 
       {/* content — bottom-right */}
       <div className="absolute inset-0 flex flex-col justify-end items-end px-6 py-6 lg:px-8 lg:py-7 text-right">
-        {category.shortDescription && (
-          <p className="text-white/80 text-sm lg:text-base leading-relaxed mb-3 max-w-xs opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400">
-            {category.shortDescription}
-          </p>
-        )}
         <div className="flex items-center gap-3">
           <h3 className="text-white font-bold text-xl lg:text-2xl group-hover:text-2xl lg:group-hover:text-3xl leading-tight transition-all duration-300">
             {category.title}
@@ -127,6 +122,11 @@ function ProgramCard({
             <ArrowRight size={15} className="text-accent program-arrow-bounce" />
           </span>
         </div>
+        {category.shortDescription && (
+          <p className="text-white/80 text-sm lg:text-base leading-relaxed mb-3 max-w-xs opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400">
+            {category.shortDescription}
+          </p>
+        )}
       </div>
     </Link>
   );
@@ -180,7 +180,7 @@ export default async function ProgramsPage() {
                         'md:grid-cols-4';
 
   return (
-    <div>
+    <div className="pt-20 lg:pt-28">
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
       <section className="relative flex flex-col justify-end overflow-hidden" style={{ minHeight: '72vh' }}>

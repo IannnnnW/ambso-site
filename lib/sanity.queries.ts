@@ -1106,9 +1106,13 @@ export const singleResearchProjectQuery = groq`
       email
     },
     coInvestigators[]->{
+      _id,
+      _type,
       name,
-      role,
-      image
+      "role": role,
+      "position": position,
+      "image": image { asset->{ url }, alt },
+      "picture": picture { asset->{ url }, alt }
     },
     partners[]->{
       _id,

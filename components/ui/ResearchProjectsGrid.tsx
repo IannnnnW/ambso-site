@@ -49,11 +49,6 @@ function ProjectCard({
       </div>
 
       <div className="absolute inset-0 flex flex-col justify-end items-end px-6 py-6 text-right">
-        {project.summary && (
-          <p className="text-white/80 text-sm leading-relaxed mb-3 max-w-sm opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 line-clamp-3">
-            {project.summary}
-          </p>
-        )}
         <div className="flex items-center gap-3">
           <h3 className="text-white font-bold text-xl group-hover:text-2xl leading-tight transition-all duration-300">
             {project.title}
@@ -62,6 +57,11 @@ function ProjectCard({
             <ArrowRight size={15} className="text-accent program-arrow-bounce" />
           </span>
         </div>
+        {project.summary && (
+          <p className="text-white/80 text-sm leading-relaxed mb-3 max-w-sm opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 line-clamp-3">
+            {project.summary}
+          </p>
+        )}
       </div>
     </Link>
   );

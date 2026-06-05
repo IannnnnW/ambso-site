@@ -442,25 +442,36 @@ export default async function ResearchProjectPage({ params }: PageProps) {
                       Co-Investigators
                     </h3>
                     <div className="space-y-3">
-                      {project.coInvestigators!.map((ci: { _id?: string; name: string; role?: string; image?: { asset?: { _ref: string } } }, i: number) => (
-                        <div key={ci._id ?? i} className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full overflow-hidden bg-[#002866]/10 flex-shrink-0 flex items-center justify-center">
-                            {ci.image?.asset ? (
-                              <img
-                                src={urlFor(ci.image).width(36).height(36).url()}
-                                alt={ci.name}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <User size={16} className="text-[#002866]" />
-                            )}
+                      {project.coInvestigators!.map((ci: {
+                        _id?: string; _type?: string; name: string;
+                        role?: string; position?: string;
+                        image?: { asset?: { url?: string }; alt?: string };
+                        picture?: { asset?: { url?: string }; alt?: string };
+                      }, i: number) => {
+                        const photo = ci._type === 'collaborator' ? ci.picture : ci.image;
+                        const photoUrl = photo?.asset?.url;
+                        return (
+                          <div key={ci._id ?? i} className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full overflow-hidden bg-[#002866]/10 flex-shrink-0 flex items-center justify-center">
+                              {photoUrl ? (
+                                <img
+                                  src={photoUrl}
+                                  alt={photo?.alt ?? ci.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <User size={16} className="text-[#002866]" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[#1f2937]">{ci.name}</p>
+                              {(ci.role ?? ci.position) && (
+                                <p className="text-xs text-[#1f2937]/55">{ci.role ?? ci.position}</p>
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-sm font-semibold text-[#1f2937]">{ci.name}</p>
-                            {ci.role && <p className="text-xs text-[#1f2937]/55">{ci.role}</p>}
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}
