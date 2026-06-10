@@ -21,6 +21,8 @@ import {
   TrendingUp,
   User,
   ExternalLink,
+  MapPin,
+  ClipboardList,
 } from 'lucide-react';
 
 interface PageProps {
@@ -171,6 +173,12 @@ export default async function ResearchProjectPage({ params }: PageProps) {
                 <div className="flex items-center gap-2">
                   <User size={16} />
                   <span>PI: {project.principalInvestigator.name}</span>
+                </div>
+              )}
+              {project.site && (
+                <div className="flex items-center gap-2">
+                  <MapPin size={16} />
+                  <span>{project.site}</span>
                 </div>
               )}
               {project.fundingSource && (
@@ -363,6 +371,33 @@ export default async function ResearchProjectPage({ params }: PageProps) {
             {/* ── Sidebar ──────────────────────────────────────────────── */}
             <AnimateOnScroll animation="fade-left" delay={150} threshold={0.05}>
               <div className="space-y-6">
+
+                {/* Study Details */}
+                {(project.protocol || project.site) && (
+                  <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
+                    <h3 className="text-base font-extrabold text-[#002866] mb-4 flex items-center gap-2">
+                      <ClipboardList className="text-[#38BDF8]" size={18} />
+                      Study Details
+                    </h3>
+                    <div className="space-y-3">
+                      {project.protocol && (
+                        <div>
+                          <p className="text-xs font-semibold text-[#1f2937]/45 uppercase tracking-wide mb-0.5">Protocol Title</p>
+                          <p className="text-sm text-[#1f2937]/80 leading-snug">{project.protocol}</p>
+                        </div>
+                      )}
+                      {project.site && (
+                        <div>
+                          <p className="text-xs font-semibold text-[#1f2937]/45 uppercase tracking-wide mb-0.5">Study Site</p>
+                          <p className="text-sm text-[#1f2937]/80 leading-snug flex items-center gap-1.5">
+                            <MapPin size={13} className="text-[#38BDF8] flex-shrink-0" />
+                            {project.site}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Enrollment */}
                 {hasEnrollment && (

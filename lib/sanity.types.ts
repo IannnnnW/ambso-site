@@ -254,6 +254,8 @@ export interface ResearchProject {
   coInvestigators?: TeamMember[];
   partners?: Partner[];
   collaborators?: Collaborator[];
+  protocol?: string;
+  site?: string;
   fundingSource?: string;
   startDate?: string;
   endDate?: string;

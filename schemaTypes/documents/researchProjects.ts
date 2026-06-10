@@ -30,6 +30,18 @@ export default defineType({
       description: 'Select the Research Area this program belongs to',
     },
     {
+      name: 'protocol',
+      title: 'Protocol Title',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'site',
+      title: 'Study Site',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: 'studyPhase',
       title: 'Study Phase',
       type: 'string',

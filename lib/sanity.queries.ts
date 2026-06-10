@@ -1120,6 +1120,8 @@ export const singleResearchProjectQuery = groq`
       logo,
       website
     },
+    protocol,
+    site,
     fundingSource,
     startDate,
     endDate,
