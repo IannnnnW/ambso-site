@@ -57,17 +57,12 @@ function ProjectCard({
             <ArrowRight size={15} className="text-accent program-arrow-bounce" />
           </span>
         </div>
-        {project.summary && (
-          <p className="text-white/80 text-sm leading-relaxed mb-3 max-w-sm opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 line-clamp-3">
-            {project.summary}
-          </p>
-        )}
       </div>
     </Link>
   );
 }
 
-type Tab = 'all' | 'ongoing' | 'upcoming' | 'completed';
+type Tab = 'ongoing' | 'upcoming' | 'completed';
 
 export default function ResearchProjectsGrid({
   projects,
@@ -78,21 +73,17 @@ export default function ResearchProjectsGrid({
   areaSlug: string;
   fallbackImage: string;
 }) {
-  const [activeTab, setActiveTab] = useState<Tab>('all');
+  const [activeTab, setActiveTab] = useState<Tab>('ongoing');
 
   const counts: Record<Tab, number> = {
-    all:       projects.length,
     ongoing:   projects.filter(p => p.status === 'ongoing').length,
     upcoming:  projects.filter(p => p.status === 'upcoming').length,
     completed: projects.filter(p => p.status === 'completed').length,
   };
 
-  const filtered = activeTab === 'all'
-    ? projects
-    : projects.filter(p => p.status === activeTab);
+  const filtered = projects.filter(p => p.status === activeTab);
 
   const tabs: { key: Tab; label: string }[] = [
-    { key: 'all',       label: 'All' },
     { key: 'ongoing',   label: 'Ongoing' },
     { key: 'upcoming',  label: 'Upcoming' },
     { key: 'completed', label: 'Completed' },
@@ -104,7 +95,7 @@ export default function ResearchProjectsGrid({
       <div className="flex flex-wrap gap-3 mb-10">
         {tabs.map(({ key, label }) => {
           const count = counts[key];
-          if (count === 0 && key !== 'all') return null;
+          if (count === 0) return null;
           const isActive = activeTab === key;
           return (
             <button

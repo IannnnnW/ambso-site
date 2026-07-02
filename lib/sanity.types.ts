@@ -248,7 +248,6 @@ export interface ResearchProject {
     slug: { current: string };
   };
   description?: PortableTextBlock[];
-  summary?: string;
   objectives?: string[];
   principalInvestigator?: TeamMember;
   coInvestigators?: TeamMember[];

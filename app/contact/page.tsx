@@ -1,18 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
-import { fallbackContactPageContent } from '@/lib/fallback-data';
-
-const content = fallbackContactPageContent;
+import { fallbackContactPageContent, deepMergeWithFallback } from '@/lib/fallback-data';
+import { contactPageContentQuery } from '@/lib/sanity.queries';
+import { client } from '@/lib/sanity.client';
+import type { ContactPageContent } from '@/lib/sanity.types';
 
 type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export default function ContactPage() {
+  const [content, setContent] = useState<ContactPageContent>(fallbackContactPageContent);
   const [status, setStatus] = useState<SubmitStatus>('idle');
   const [resultMessage, setResultMessage] = useState('');
+
+  useEffect(() => {
+    client.fetch<ContactPageContent>(contactPageContentQuery).then((data) => {
+      if (data) setContent(deepMergeWithFallback(data, fallbackContactPageContent));
+    }).catch(() => {/* keep fallback */});
+  }, []);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,8 +28,7 @@ export default function ContactPage() {
 
     const formData = new FormData(e.currentTarget);
     formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? '');
-    console.log(process.env.NEXT_PUBLIC_WEB3FORMS_KEY) 
-    
+
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -42,8 +49,6 @@ export default function ContactPage() {
       setResultMessage('Network error. Please check your connection and try again.');
     }
   };
-
-  const subjects = content.formSection?.subjects ?? [];
 
   return (
     <div className="pt-20 lg:pt-28">
@@ -77,7 +82,6 @@ export default function ContactPage() {
               </h2>
 
               <form onSubmit={onSubmit} className="space-y-6">
-                {/* Honeypot spam protection */}
                 <input type="checkbox" name="botcheck" className="hidden" />
 
                 <div>
@@ -106,37 +110,6 @@ export default function ContactPage() {
                   />
                 </div>
 
-                {/* <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div> */}
-
-                {/* <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject *
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  >
-                    <option value="">Select a subject</option>
-                    {subjects.map((subject) => (
-                      <option key={subject.value} value={subject.value}>
-                        {subject.label}
-                      </option>
-                    ))}
-                  </select>
-                </div> */}
-
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
                     Message *
@@ -150,7 +123,6 @@ export default function ContactPage() {
                   />
                 </div>
 
-                {/* Status feedback */}
                 {status === 'success' && (
                   <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
                     {resultMessage}
@@ -240,7 +212,6 @@ export default function ContactPage() {
 
           </div>
         </Container>
-
       </section>
     </div>
   );

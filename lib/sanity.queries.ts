@@ -1074,7 +1074,6 @@ export const researchProjectsByAreaQuery = groq`
     _id,
     title,
     slug,
-    summary,
     status,
     startDate,
     endDate,
@@ -1097,7 +1096,6 @@ export const singleResearchProjectQuery = groq`
       slug
     },
     description,
-    summary,
     objectives,
     principalInvestigator->{
       name,
@@ -1342,6 +1340,45 @@ export async function getFooterContent() {
     return data ?? null;
   } catch (error) {
     console.error('Error fetching footer content:', error);
+    return null;
+  }
+}
+
+export const annualReportsQuery = groq`
+  *[_type == "annualReport"] | order(year desc) {
+    _id,
+    year,
+    title,
+    summary,
+    "fileUrl": file.asset->url,
+    coverImage {
+      asset->{ url },
+      alt
+    }
+  }
+`;
+
+export async function getAnnualReports() {
+  try {
+    return await client.fetch(annualReportsQuery);
+  } catch {
+    return [];
+  }
+}
+
+export const programsPageContentQuery = groq`
+  *[_type == "programsPageContent"][0] {
+    hero,
+    statsBar,
+    approachSection,
+    impactSection
+  }
+`;
+
+export async function getProgramsPageContent() {
+  try {
+    return await client.fetch(programsPageContentQuery);
+  } catch {
     return null;
   }
 }

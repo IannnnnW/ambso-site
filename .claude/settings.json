@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const icons = require\\('@radix-ui/react-icons'\\); console.log\\(Object.keys\\(icons\\).filter\\(k => k.endsWith\\('Icon'\\)\\).join\\('\\\\n'\\)\\);\")",
+      "Bash(node /private/tmp/claude-501/-Users-wasukira-Projects-ambso-site/9c0bf5ff-7aec-4e5c-98a9-23bdb6efa353/scratchpad/replace-icons.mjs)",
+      "Bash(perl -i -pe 's/<Link1Icon\\(\\\\s\\)/<Link$1/g; s/<\\\\/Link1Icon>/<\\\\/Link>/g' /Users/wasukira/Projects/ambso-site/app/programs/capacity-building/page.tsx /Users/wasukira/Projects/ambso-site/components/sections/Programs.tsx /Users/wasukira/Projects/ambso-site/app/who-we-are/about/page.tsx)"
+    ]
+  }
+}

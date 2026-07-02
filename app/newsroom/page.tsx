@@ -127,7 +127,7 @@ export default async function NewsroomPage() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#1DA1F2] text-[#1DA1F2] rounded-full text-sm font-semibold hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 self-start sm:self-auto shrink-0"
               >
                 <Twitter size={15} />
-                Follow @AMBSO
+                Follow @AMBSO3
               </a>
             </div>
 

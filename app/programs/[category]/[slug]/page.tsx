@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll';
-import ResearchProjectsGrid from '@/components/ui/ResearchProjectsGrid';
 import { PortableText } from '@portabletext/react';
 import {
   getAllResearch,
@@ -25,6 +24,9 @@ import {
   FlaskConical,
   User,
 } from 'lucide-react';
+import BiotechOutlinedIcon from '@mui/icons-material/BiotechOutlined';
+import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
+import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 
 interface PageProps {
   params: Promise<{ category: string; slug: string }>;
@@ -192,9 +194,8 @@ async function ResearchAreaDetailPage({ slug }: { slug: string }) {
         </section>
       )}
 
-      {/* ── Projects ──────────────────────────────────────────────────────── */}
+      {/* ── Project Status Cards ──────────────────────────────────────────── */}
       <section className="py-20 bg-[#f8f9fb] relative overflow-hidden">
-        {/* Dot-grid background */}
         <svg className="absolute inset-0 w-full h-full opacity-[0.035] pointer-events-none" aria-hidden="true">
           <defs>
             <pattern id="rad-body-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -215,34 +216,85 @@ async function ResearchAreaDetailPage({ slug }: { slug: string }) {
               <h2 className="text-4xl md:text-5xl font-extrabold text-[#002866] leading-tight">
                 Research Projects
               </h2>
-              {safeProjects.length > 0 && (
-                <p className="text-[#1f2937]/60 text-lg mt-4 max-w-2xl">
-                  Browse active, upcoming, and completed projects within this research area.
-                </p>
-              )}
+              <p className="text-[#1f2937]/60 text-lg mt-4 max-w-2xl">
+                Select a category below to browse projects within this research area.
+              </p>
             </div>
           </AnimateOnScroll>
 
           <AnimateOnScroll animation="fade-up" delay={100} threshold={0.1}>
-            {safeProjects.length > 0 ? (
-              <ResearchProjectsGrid
-                projects={safeProjects}
-                areaSlug={area.slug.current}
-                fallbackImage={heroImage}
-              />
-            ) : (
-              <div className="text-center py-20">
-                <p className="text-[#1f2937]/40 text-lg">
-                  Research projects in this area are coming soon.
-                </p>
-                <Link
-                  href="/programs/research"
-                  className="inline-flex items-center gap-2 mt-6 text-[#38BDF8] text-sm font-semibold hover:underline"
-                >
-                  <ArrowLeft size={14} /> Browse all research areas
-                </Link>
-              </div>
-            )}
+            {(() => {
+              const statuses = [
+                {
+                  key: 'ongoing',
+                  label: 'Ongoing Projects',
+                  description: 'Currently active research and clinical trials in progress.',
+                  count: safeProjects.filter(p => p.status === 'ongoing').length,
+                  icon: <BiotechOutlinedIcon style={{ fontSize: 44, color: '#38BDF8' }} />,
+                  iconBg: '#E0F7FF',
+                  accentColor: '#38BDF8',
+                },
+                {
+                  key: 'upcoming',
+                  label: 'Upcoming Projects',
+                  description: 'Research studies and trials that are scheduled to begin.',
+                  count: safeProjects.filter(p => p.status === 'upcoming').length,
+                  icon: <EventNoteOutlinedIcon style={{ fontSize: 44, color: '#F59E0B' }} />,
+                  iconBg: '#FEF3C7',
+                  accentColor: '#F59E0B',
+                },
+                {
+                  key: 'completed',
+                  label: 'Completed Projects',
+                  description: 'Research that has been concluded with published outcomes.',
+                  count: safeProjects.filter(p => p.status === 'completed').length,
+                  icon: <TaskAltOutlinedIcon style={{ fontSize: 44, color: '#10B981' }} />,
+                  iconBg: '#D1FAE5',
+                  accentColor: '#10B981',
+                },
+              ];
+
+              return (
+                <div className="grid sm:grid-cols-3 gap-6">
+                  {statuses.map(({ key, label, description, count, icon, iconBg, accentColor }) => (
+                    <Link
+                      key={key}
+                      href={`/programs/research/${area.slug.current}/${key}`}
+                      className="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-[#002866]/10 transition-all duration-300 p-8 flex flex-col items-center text-center hover:-translate-y-1"
+                    >
+                      {/* Icon circle */}
+                      <div
+                        className="w-20 h-20 rounded-full flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-105"
+                        style={{ backgroundColor: iconBg }}
+                      >
+                        {icon}
+                      </div>
+
+                      {/* Count */}
+                      <div className="text-5xl font-extrabold text-[#002866] mb-1 tabular-nums">{count}</div>
+                      <div className="text-xs text-[#1f2937]/40 font-medium uppercase tracking-widest mb-6">
+                        Project{count !== 1 ? 's' : ''}
+                      </div>
+
+                      {/* Label */}
+                      <h3 className="text-xl font-bold text-[#1f2937] mb-3">{label}</h3>
+
+                      {/* Description */}
+                      <p className="text-[#1f2937]/55 text-sm leading-relaxed mb-6 flex-grow">{description}</p>
+
+                      {/* CTA pill */}
+                      <div
+                        className="inline-flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-full transition-all duration-300 group-hover:gap-3"
+                        style={{ color: accentColor, backgroundColor: iconBg }}
+                      >
+                        View Projects
+                        <ArrowLeft size={14} className="rotate-180" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              );
+            })()}
           </AnimateOnScroll>
         </Container>
       </section>

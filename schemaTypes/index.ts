@@ -1,4 +1,6 @@
 // Document types
+import annualReport from './documents/annualReport'
+import programsPageContent from './documents/programsPageContent'
 import news from './documents/news'
 import program from './documents/program'
 import teamMember from './documents/teamMember'
@@ -35,9 +37,11 @@ export const schemaTypes = [
   homepageContent,
   aboutPageContent,
   contactPageContent,
+  programsPageContent,
   teamPageContent,
   resourcesPageContent,
   researchProjects,
+  annualReport,
   // Pages and Sections
 //   page,
 //   heroSection,

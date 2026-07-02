@@ -7,6 +7,7 @@ import { PortableText } from '@portabletext/react';
 import {
   getResearchArea,
   getResearchProject,
+  getResearchProjectsByArea,
   getAllResearchProjectSlugs,
 } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
@@ -24,6 +25,7 @@ import {
   MapPin,
   ClipboardList,
 } from 'lucide-react';
+import BiotechOutlinedIcon from '@mui/icons-material/BiotechOutlined';
 
 interface PageProps {
   params: Promise<{ category: string; slug: string; projectSlug: string }>;
@@ -56,15 +58,140 @@ export async function generateStaticParams() {
     }));
 }
 
+// ── status listing page ───────────────────────────────────────────────────────
+
+const STATUS_KEYS = ['ongoing', 'upcoming', 'completed'] as const;
+type StatusKey = typeof STATUS_KEYS[number];
+
+const STATUS_META: Record<StatusKey, { label: string; badge: string; dot: string }> = {
+  ongoing:   { label: 'Ongoing',   badge: 'bg-accent/20 text-accent border-accent/30',         dot: 'bg-accent' },
+  upcoming:  { label: 'Upcoming',  badge: 'bg-amber-100 text-amber-700 border-amber-200',       dot: 'bg-amber-400' },
+  completed: { label: 'Completed', badge: 'bg-gray-100 text-gray-600 border-gray-200',          dot: 'bg-gray-400' },
+};
+
+async function ResearchProjectsListPage({ slug, status }: { slug: string; status: StatusKey }) {
+  const area = await getResearchArea(slug);
+  if (!area) notFound();
+
+  const allProjects = await getResearchProjectsByArea(area._id) ?? [];
+  const projects = allProjects.filter((p: { status: string }) => p.status === status);
+
+  const heroImage = area.featuredImage?.asset
+    ? urlFor(area.featuredImage).width(1920).height(600).url()
+    : '/images/labwork.jpg';
+
+  const meta = STATUS_META[status];
+
+  return (
+    <div className="pt-20 lg:pt-28">
+      {/* Hero */}
+      <section className="relative text-white py-20 min-h-[340px] flex items-center overflow-hidden">
+        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/92 via-primary/78 to-primary/55" />
+        <svg className="absolute right-0 inset-y-0 h-full opacity-[0.07] pointer-events-none" viewBox="0 0 360 360" fill="none" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+          {[300, 240, 180, 120, 60].map((r, i) => (
+            <circle key={i} cx="360" cy="180" r={r} stroke="white" strokeWidth="1.5" />
+          ))}
+        </svg>
+        <Container className="relative z-10">
+          <Link
+            href={`/programs/research/${slug}`}
+            className="inline-flex items-center text-white/70 hover:text-white mb-6 transition-colors text-sm"
+          >
+            <ArrowLeft size={16} className="mr-2" />
+            {area.title}
+          </Link>
+          <div className="mb-4">
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-sm ${meta.badge}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${meta.dot}`} />
+              {meta.label}
+            </span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+            {meta.label} Projects
+          </h1>
+          <p className="text-white/70 text-lg max-w-2xl">
+            {area.title} · {projects.length} project{projects.length !== 1 ? 's' : ''}
+          </p>
+        </Container>
+      </section>
+
+      {/* Projects grid */}
+      <section className="py-20 bg-[#f8f9fb] relative overflow-hidden">
+        <svg className="absolute inset-0 w-full h-full opacity-[0.035] pointer-events-none" aria-hidden="true">
+          <defs>
+            <pattern id="list-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.5" fill="#002866" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#list-dots)" />
+        </svg>
+        <Container className="relative z-10">
+          {projects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projects.map((project: { _id: string; title: string; slug: { current: string }; status: string }) => {
+                const meta = STATUS_META[project.status as StatusKey] ?? STATUS_META.ongoing;
+                return (
+                  <Link
+                    key={project._id}
+                    href={`/programs/research/${slug}/${project.slug.current}`}
+                    className="group bg-white rounded-2xl border border-gray-100 hover:border-primary/20 shadow-sm hover:shadow-lg transition-all duration-300 p-6 flex flex-col hover:-translate-y-0.5"
+                  >
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-primary/5">
+                        <BiotechOutlinedIcon style={{ fontSize: 24, color: '#002866' }} />
+                      </div>
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${meta.badge}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${meta.dot}`} />
+                        {project.status}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-[#002866] leading-snug flex-grow mb-6">
+                      {project.title}
+                    </h3>
+
+                    <div className="flex items-center gap-2 text-sm font-semibold text-[#1f2937]/40 group-hover:text-primary transition-colors">
+                      View Project
+                      <ArrowLeft size={14} className="rotate-180 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-[#1f2937]/40 text-lg">No {status} projects in this area yet.</p>
+              <Link
+                href={`/programs/research/${slug}`}
+                className="inline-flex items-center gap-2 mt-6 text-[#38BDF8] text-sm font-semibold hover:underline"
+              >
+                <ArrowLeft size={14} /> Back to {area.title}
+              </Link>
+            </div>
+          )}
+        </Container>
+      </section>
+    </div>
+  );
+}
+
 // ── metadata ──────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: PageProps) {
-  const { projectSlug } = await params;
+  const { slug, projectSlug } = await params;
+  if (STATUS_KEYS.includes(projectSlug as StatusKey)) {
+    const area = await getResearchArea(slug);
+    const label = STATUS_META[projectSlug as StatusKey]?.label ?? projectSlug;
+    return {
+      title: `${label} Projects${area ? ` | ${area.title}` : ''} | AMBSO Research`,
+    };
+  }
   const project = await getResearchProject(projectSlug);
   if (!project) return { title: 'Research Project Not Found | AMBSO' };
   return {
     title: `${project.title} | AMBSO Research`,
-    description: project.summary ?? `Learn about the ${project.title} research project at AMBSO`,
+    description: `Learn about the ${project.title} research project at AMBSO`,
   };
 }
 
@@ -72,6 +199,10 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ResearchProjectPage({ params }: PageProps) {
   const { slug, projectSlug } = await params;
+
+  if (STATUS_KEYS.includes(projectSlug as StatusKey)) {
+    return <ResearchProjectsListPage slug={slug} status={projectSlug as StatusKey} />;
+  }
 
   const [project, area] = await Promise.all([
     getResearchProject(projectSlug),
@@ -153,10 +284,6 @@ export default async function ResearchProjectPage({ params }: PageProps) {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight max-w-4xl">
               {project.title}
             </h1>
-
-            {project.summary && (
-              <p className="text-xl text-white/80 leading-relaxed max-w-3xl">{project.summary}</p>
-            )}
 
             {/* Meta row */}
             <div className="flex flex-wrap items-center gap-6 mt-8 text-white/65 text-sm">

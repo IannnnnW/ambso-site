@@ -5,7 +5,7 @@ import Button from '@/components/ui/Button';
 import PartnersCarousel from '@/components/layout/partnersCoursel';
 import { ArrowRight } from 'lucide-react';
 import { ProgramCategory, Partner } from '@/lib/sanity.types';
-import { getProgramCategories, getFeaturedPartners } from '@/lib/sanity.queries';
+import { getProgramCategories, getFeaturedPartners, getProgramsPageContent } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
 
 // ── image / slug helpers ─────────────────────────────────────────────────────
@@ -132,43 +132,57 @@ function ProgramCard({
   );
 }
 
-// ── stats ────────────────────────────────────────────────────────────────────
+// ── fallback content ─────────────────────────────────────────────────────────
 
-const STATS = [
+const FALLBACK_STATS = [
   { value: '57,000+', label: 'Male Circumcisions' },
   { value: '35+',     label: 'Peer Reviewed Publications' },
   { value: '15+',     label: 'Partner Organizations' },
-  { value: '15 Yrs',  label: 'Of Sustained Impact' },
+  { value: '10 Yrs',  label: 'Of Sustained Impact' },
 ];
 
-// ── approach pillars ─────────────────────────────────────────────────────────
-
-const APPROACH = [
+const FALLBACK_APPROACH = [
   {
     title: 'Community-Centred Design',
-    desc: 'Every program is developed in close dialogue with the communities we serve, ensuring relevance and uptake.',
+    description: 'Every program is developed in close dialogue with the communities we serve, ensuring relevance and uptake.',
   },
   {
     title: 'Multi-Disciplinary Teams',
-    desc: 'Clinicians, epidemiologists, and community health workers collaborate under one roof.',
+    description: 'Clinicians, epidemiologists, and community health workers collaborate under one roof.',
   },
   {
     title: 'Continuous Quality Improvement',
-    desc: 'Regular evaluation cycles feed findings back into program design for measurable, sustained improvement.',
+    description: 'Regular evaluation cycles feed findings back into program design for measurable, sustained improvement.',
   },
   {
     title: 'Sustainable Partnerships',
-    desc: 'Long-term alliances with government, academia, and international funders ensure lasting programmatic impact.',
+    description: 'Long-term alliances with government, academia, and international funders ensure lasting programmatic impact.',
   },
+];
+
+const FALLBACK_IMPACT_STATS = [
+  { value: '57,000+', label: 'Male Circumcisions', sub: 'Voluntary Medical procedures performed' },
+  { value: '35+',     label: 'Publications',       sub: 'Peer-reviewed research papers' },
+  { value: '15+',     label: 'Partners',           sub: 'Local & international collaborators' },
+  { value: '4',       label: 'Program Areas',      sub: 'Spanning research to community care' },
 ];
 
 // ── page ─────────────────────────────────────────────────────────────────────
 
 export default async function ProgramsPage() {
-  const [categories, partners]: [ProgramCategory[], Partner[]] = await Promise.all([
+  const [categories, partners, cmsContent]: [ProgramCategory[], Partner[], Record<string, unknown> | null] = await Promise.all([
     getProgramCategories(),
     getFeaturedPartners(),
+    getProgramsPageContent(),
   ]);
+
+  const stats = (cmsContent?.statsBar as typeof FALLBACK_STATS | undefined) ?? FALLBACK_STATS;
+  const approachItems = (cmsContent?.approachSection as { items?: typeof FALLBACK_APPROACH } | undefined)?.items ?? FALLBACK_APPROACH;
+  const approachTitle = (cmsContent?.approachSection as { title?: string } | undefined)?.title ?? 'Grounded in Research,\nDriven by Community';
+  const approachDesc = (cmsContent?.approachSection as { description?: string } | undefined)?.description ?? 'AMBSO integrates scientific rigour with compassionate service delivery. Every initiative we design is shaped by peer-reviewed evidence, community insight, and measurable health outcomes.';
+  const impactTitle = (cmsContent?.impactSection as { title?: string } | undefined)?.title ?? 'Ten Years of\nTransforming Health';
+  const impactDesc = (cmsContent?.impactSection as { description?: string } | undefined)?.description ?? 'From voluntary medical male circumcision to multi-site clinical research, AMBSO has consistently translated scientific evidence into measurable community benefit across Uganda.';
+  const impactStats = (cmsContent?.impactSection as { stats?: typeof FALLBACK_IMPACT_STATS } | undefined)?.stats ?? FALLBACK_IMPACT_STATS;
 
   const cats = categories ?? [];
   const [c1, c2, ...rest] = cats;
@@ -243,7 +257,7 @@ export default async function ProgramsPage() {
         </svg>
         <Container className="relative z-10 py-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-white/[0.12]">
-            {STATS.map(({ value, label }) => (
+            {stats.map(({ value, label }) => (
               <div key={label} className="px-6 py-3 text-center">
                 <div className="text-3xl md:text-4xl font-extrabold text-accent leading-none mb-2">
                   {value}
@@ -331,17 +345,18 @@ export default async function ProgramsPage() {
               </div>
 
               <h2 className="text-4xl font-extrabold text-[#002866] mb-6 leading-tight">
-                Grounded in Research,<br />Driven by Community
+                {approachTitle.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
 
               <p className="text-[#1f2937]/65 leading-relaxed mb-10">
-                AMBSO integrates scientific rigour with compassionate service delivery. Every initiative we design is shaped by peer-reviewed evidence, community insight, and measurable health outcomes.
+                {approachDesc}
               </p>
 
               <div className="space-y-6">
-                {APPROACH.map(({ title, desc }, i) => (
+                {approachItems.map(({ title, description }, i) => (
                   <div key={title} className="group flex items-start gap-4">
-                    {/* number box */}
                     <div
                       className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-[#38BDF8] text-xs font-black transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_4px_16px_rgba(56,189,248,0.3)]"
                       style={{ background: 'linear-gradient(135deg, #002866 0%, #003d99 100%)' }}
@@ -350,7 +365,7 @@ export default async function ProgramsPage() {
                     </div>
                     <div>
                       <h4 className="font-bold text-[#002866] mb-1">{title}</h4>
-                      <p className="text-[#1f2937]/60 text-sm leading-relaxed">{desc}</p>
+                      <p className="text-[#1f2937]/60 text-sm leading-relaxed">{description}</p>
                     </div>
                   </div>
                 ))}
@@ -389,10 +404,12 @@ export default async function ProgramsPage() {
                 </span>
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
-                Fifteen Years of<br />Transforming Health
+                {impactTitle.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
               <p className="text-white/70 text-lg leading-relaxed mb-8">
-                From voluntary medical male circumcision to multi-site clinical research, AMBSO has consistently translated scientific evidence into measurable community benefit across Uganda.
+                {impactDesc}
               </p>
               <Button href="/who-we-are/about" variant="secondary" size="lg">
                 Learn Our Story
@@ -400,12 +417,7 @@ export default async function ProgramsPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-6">
-              {[
-                { value: '57,000+', label: 'Male Circumcisions', sub: 'Voluntary Medical procedures performed' },
-                { value: '35+',     label: 'Publications',       sub: 'Peer-reviewed research papers' },
-                { value: '15+',     label: 'Partners',           sub: 'Local & international collaborators' },
-                { value: '4',       label: 'Program Areas',      sub: 'Spanning research to community care' },
-              ].map(({ value, label, sub }) => (
+              {impactStats.map(({ value, label, sub }) => (
                 <div
                   key={label}
                   className="bg-white/[0.07] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.12] transition-colors duration-300"

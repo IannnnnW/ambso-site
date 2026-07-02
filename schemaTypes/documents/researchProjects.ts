@@ -61,14 +61,6 @@ export default defineType({
       type: 'blockContent',
     },
     {
-      name: 'summary',
-      title: 'Executive Summary',
-      type: 'text',
-      rows: 4,
-      description: 'Brief summary for preview (200-300 characters)',
-      validation: (Rule) => Rule.max(300),
-    },
-    {
       name: 'objectives',
       title: 'Research Objectives',
       type: 'array',
