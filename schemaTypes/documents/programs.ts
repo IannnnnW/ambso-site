@@ -109,6 +109,25 @@ export default defineType({
       of: [{type: 'reference', to: [{type: 'partner'}]}],
     },
     {
+      name: 'principalInvestigator',
+      title: 'Principal Investigator',
+      type: 'reference',
+      to: [{type: 'teamMember'}, {type: 'collaborator'}],
+      description: 'Lead investigator or program lead',
+    },
+    {
+      name: 'coInvestigators',
+      title: 'Co-Investigators',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'teamMember'}, {type: 'collaborator'}]}],
+      description: 'Additional investigators — select from team members or collaborators',
+    },
+    {
+      name: 'fundingSource',
+      title: 'Funding Source',
+      type: 'string',
+    },
+    {
       name: 'teamMembers',
       title: 'Team Members',
       type: 'array',
@@ -118,7 +137,9 @@ export default defineType({
       name: 'locations',
       title: 'Program Locations',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'location'}]}],
+      of: [{type: 'string'}],
+      options: { layout: 'tags' },
+      description: 'Type each location name and press Enter',
     },
     {
       name: 'startDate',

@@ -334,12 +334,15 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
     ? urlFor(primaryImage).width(1920).height(700).url()
     : null;
 
-  const hasTeam      = program.teamMembers && program.teamMembers.length > 0;
-  const hasPartners  = program.partners    && program.partners.length > 0;
-  const hasLocations = program.locations   && program.locations.length > 0;
-  const hasOutcomes  = program.outcomes    && program.outcomes.length > 0;
-  const hasGallery   = program.gallery     && program.gallery.length > 0;
-  const hasSidebar   = hasTeam || hasPartners || hasLocations;
+  const hasTeam      = program.teamMembers        && program.teamMembers.length > 0;
+  const hasPartners  = program.partners            && program.partners.length > 0;
+  const hasLocations = program.locations           && program.locations.length > 0;
+  const hasOutcomes  = program.outcomes            && program.outcomes.length > 0;
+  const hasGallery   = program.gallery             && program.gallery.length > 0;
+  const hasPI        = !!program.principalInvestigator;
+  const hasCoIs      = program.coInvestigators     && program.coInvestigators.length > 0;
+  const hasFunding   = !!program.fundingSource;
+  const hasSidebar   = hasTeam || hasPartners || hasLocations || hasPI || hasCoIs || hasFunding;
 
   const statusStyle  = STATUS_BADGE[program.status] ?? '';
 
@@ -415,7 +418,7 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
                 <MapPin size={16} />
                 <span>
                   {program.locations
-                    .map((l: { name: string; city?: string }) => l.city ?? l.name)
+                    .map((l: string) => l)
                     .join(', ')}
                 </span>
               </div>
@@ -560,6 +563,78 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
             {hasSidebar && (
               <div className="space-y-6">
 
+                {/* Principal Investigator */}
+                {hasPI && (
+                  <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
+                    <h3 className="text-base font-extrabold text-[#002866] mb-4 flex items-center gap-2">
+                      <User className="text-[#38BDF8]" size={18} />
+                      Principal Investigator
+                    </h3>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-[#002866]/10 flex-shrink-0 flex items-center justify-center">
+                        {(() => {
+                          const pi = program.principalInvestigator!;
+                          const photo = pi._type === 'collaborator' ? pi.picture : pi.image;
+                          return photo?.asset?.url ? (
+                            <img src={photo.asset.url} alt={photo.alt ?? pi.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <User size={20} className="text-[#002866]" />
+                          );
+                        })()}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#1f2937]">{program.principalInvestigator!.name}</p>
+                        <p className="text-xs text-[#1f2937]/55">
+                          {program.principalInvestigator!.role ?? program.principalInvestigator!.position}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Co-Investigators */}
+                {hasCoIs && (
+                  <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
+                    <h3 className="text-base font-extrabold text-[#002866] mb-4 flex items-center gap-2">
+                      <Users className="text-[#38BDF8]" size={18} />
+                      Co-Investigators
+                    </h3>
+                    <div className="space-y-3">
+                      {program.coInvestigators!.map((ci, i) => {
+                        const photo = ci._type === 'collaborator' ? ci.picture : ci.image;
+                        return (
+                          <div key={ci._id ?? i} className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full overflow-hidden bg-[#002866]/10 flex-shrink-0 flex items-center justify-center">
+                              {photo?.asset?.url ? (
+                                <img src={photo.asset.url} alt={photo.alt ?? ci.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <User size={16} className="text-[#002866]" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[#1f2937]">{ci.name}</p>
+                              {(ci.role ?? ci.position) && (
+                                <p className="text-xs text-[#1f2937]/55">{ci.role ?? ci.position}</p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Funding */}
+                {hasFunding && (
+                  <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
+                    <h3 className="text-base font-extrabold text-[#002866] mb-3 flex items-center gap-2">
+                      <Building2 className="text-[#38BDF8]" size={18} />
+                      Funding
+                    </h3>
+                    <p className="text-[#1f2937]/75 text-sm">{program.fundingSource}</p>
+                  </div>
+                )}
+
                 {/* Team */}
                 {hasTeam && (
                   <div className="bg-[#f8f9fb] p-6 rounded-2xl border border-[#002866]/[0.08]">
@@ -644,15 +719,10 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
                       Locations
                     </h3>
                     <div className="space-y-2">
-                      {program.locations.map((loc: { name: string; city?: string; district?: string }, i: number) => (
+                      {program.locations.map((loc: string, i: number) => (
                         <div key={i} className="flex items-start gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-[#38BDF8] mt-1.5 flex-shrink-0" />
-                          <div>
-                            <p className="text-sm font-medium text-[#1f2937]">{loc.name ?? loc.city}</p>
-                            {loc.district && (
-                              <p className="text-xs text-[#1f2937]/55">{loc.district} District</p>
-                            )}
-                          </div>
+                          <p className="text-sm font-medium text-[#1f2937]">{loc}</p>
                         </div>
                       ))}
                     </div>

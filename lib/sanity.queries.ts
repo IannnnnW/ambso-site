@@ -298,6 +298,25 @@ export const singleProgramQuery = groq`
       logo,
       website
     },
+    principalInvestigator->{
+      _id,
+      _type,
+      name,
+      "role": role,
+      "position": position,
+      "image": image { asset->{ url }, alt },
+      "picture": picture { asset->{ url }, alt }
+    },
+    coInvestigators[]->{
+      _id,
+      _type,
+      name,
+      "role": role,
+      "position": position,
+      "image": image { asset->{ url }, alt },
+      "picture": picture { asset->{ url }, alt }
+    },
+    fundingSource,
     teamMembers[]->{
       _id,
       name,
@@ -305,11 +324,7 @@ export const singleProgramQuery = groq`
       image,
       slug
     },
-    locations[]->{
-      name,
-      city,
-      district
-    }
+    locations
   }
 `;
 

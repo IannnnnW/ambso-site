@@ -178,6 +178,25 @@ export interface Program {
     description: string;
   }>;
   partners?: Partner[];
+  principalInvestigator?: {
+    _id: string;
+    _type: string;
+    name: string;
+    role?: string;
+    position?: string;
+    image?: { asset?: { url: string }; alt?: string };
+    picture?: { asset?: { url: string }; alt?: string };
+  };
+  coInvestigators?: Array<{
+    _id: string;
+    _type: string;
+    name: string;
+    role?: string;
+    position?: string;
+    image?: { asset?: { url: string }; alt?: string };
+    picture?: { asset?: { url: string }; alt?: string };
+  }>;
+  fundingSource?: string;
   teamMembers?: TeamMember[];
   locations?: Location[];
   startDate?: string;
