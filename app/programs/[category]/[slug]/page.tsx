@@ -600,7 +600,12 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
                       Co-Investigators
                     </h3>
                     <div className="space-y-3">
-                      {program.coInvestigators!.map((ci, i) => {
+                      {program.coInvestigators!.map((ci: {
+                        _id?: string; _type: string; name: string;
+                        role?: string; position?: string;
+                        image?: { asset?: { url: string }; alt?: string };
+                        picture?: { asset?: { url: string }; alt?: string };
+                      }, i: number) => {
                         const photo = ci._type === 'collaborator' ? ci.picture : ci.image;
                         return (
                           <div key={ci._id ?? i} className="flex items-center gap-3">
