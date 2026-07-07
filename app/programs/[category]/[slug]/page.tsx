@@ -336,7 +336,8 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
 
   const hasTeam      = program.teamMembers        && program.teamMembers.length > 0;
   const hasPartners  = program.partners            && program.partners.length > 0;
-  const hasLocations = program.locations           && program.locations.length > 0;
+  const stringLocations: string[] = (program.locations ?? []).filter((l: unknown) => typeof l === 'string');
+  const hasLocations = stringLocations.length > 0;
   const hasOutcomes  = program.outcomes            && program.outcomes.length > 0;
   const hasGallery   = program.gallery             && program.gallery.length > 0;
   const hasPI        = !!program.principalInvestigator;
@@ -417,9 +418,7 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
               <div className="flex items-center gap-2">
                 <MapPin size={16} />
                 <span>
-                  {program.locations
-                    .map((l: string) => l)
-                    .join(', ')}
+                  {stringLocations.join(', ')}
                 </span>
               </div>
             )}
@@ -724,7 +723,7 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
                       Locations
                     </h3>
                     <div className="space-y-2">
-                      {program.locations.map((loc: string, i: number) => (
+                      {stringLocations.map((loc, i) => (
                         <div key={i} className="flex items-start gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-[#38BDF8] mt-1.5 flex-shrink-0" />
                           <p className="text-sm font-medium text-[#1f2937]">{loc}</p>
