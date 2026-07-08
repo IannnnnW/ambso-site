@@ -499,13 +499,20 @@ async function IndividualProgramPage({ category, slug }: { category: string; slu
                     Expected Outcomes
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-4">
-                    {program.outcomes.map((outcome: string, i: number) => (
+                    {program.outcomes.map((outcome: { metric?: string; value?: string; description?: string }, i: number) => (
                       <div
                         key={i}
-                        className="flex items-start gap-3 p-4 bg-[#002866]/[0.03] rounded-xl border border-[#002866]/[0.08]"
+                        className="p-4 bg-[#002866]/[0.03] rounded-xl border border-[#002866]/[0.08] flex flex-col gap-1"
                       >
-                        <CheckCircle className="text-[#38BDF8] flex-shrink-0 mt-0.5" size={18} />
-                        <p className="text-[#1f2937]/75 text-sm leading-relaxed">{outcome}</p>
+                        {outcome.value && (
+                          <div className="text-2xl font-extrabold text-[#002866]">{outcome.value}</div>
+                        )}
+                        {outcome.metric && (
+                          <div className="text-sm font-semibold text-[#1f2937]">{outcome.metric}</div>
+                        )}
+                        {outcome.description && (
+                          <p className="text-[#1f2937]/60 text-xs leading-relaxed">{outcome.description}</p>
+                        )}
                       </div>
                     ))}
                   </div>
