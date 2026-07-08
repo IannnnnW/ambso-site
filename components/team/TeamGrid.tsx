@@ -29,6 +29,7 @@ const departmentLabels: Record<string, string> = {
   boardMember: 'Board of Directors',
   seniorManagementTeam: 'Senior Management Team',
   headofDepartment: 'Heads of Department',
+  researchAssociate: 'Research Associates',
   teamMember: 'Team Members',
 };
 
@@ -41,6 +42,7 @@ export default function TeamGrid({ members }: TeamGridProps) {
     boardMember: members.filter((m) => m.department === 'boardMember').length,
     seniorManagementTeam: members.filter((m) => m.department === 'seniorManagementTeam').length,
     headofDepartment: members.filter((m) => m.department === 'headofDepartment').length,
+    researchAssociate: members.filter((m) => m.department === 'researchAssociate').length,
   };
 
   // Filter members based on selected category
@@ -56,6 +58,7 @@ export default function TeamGrid({ members }: TeamGridProps) {
           boardMember: members.filter((m) => m.department === 'boardMember'),
           seniorManagementTeam: members.filter((m) => m.department === 'seniorManagementTeam'),
           headofDepartment: members.filter((m) => m.department === 'headofDepartment'),
+          researchAssociate: members.filter((m) => m.department === 'researchAssociate'),
           teamMember: members.filter((m) => m.department === 'teamMember'),
         }
       : null;

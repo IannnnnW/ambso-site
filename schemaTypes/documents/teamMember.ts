@@ -35,6 +35,7 @@ export default defineType({
         list: [
           {title: 'Senior Management Team', value: 'seniorManagementTeam'},
           {title: 'Head of Department', value: 'headofDepartment'},
+          {title: 'Research Associate', value: 'researchAssociate'},
           {title: "Team Member", value: 'teamMember'},
           {title: 'Board Member', value: 'boardMember'}
         ],
