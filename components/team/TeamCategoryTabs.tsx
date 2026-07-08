@@ -6,8 +6,8 @@ const categories = [
   { id: 'all', label: 'Our Team', icon: Users },
   { id: 'boardMember', label: 'Board', icon: Award },
   { id: 'seniorManagementTeam', label: 'SMT', icon: Briefcase },
-  { id: 'headofDepartment', label: 'HoD', icon: UserCog },
   { id: 'researchAssociate', label: 'Research Associates', icon: FlaskConical },
+  { id: 'headofDepartment', label: 'Heads of Sections', icon: UserCog },
 ];
 
 interface TeamCategoryTabsProps {

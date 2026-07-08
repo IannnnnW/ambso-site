@@ -28,8 +28,8 @@ interface TeamGridProps {
 const departmentLabels: Record<string, string> = {
   boardMember: 'Board of Directors',
   seniorManagementTeam: 'Senior Management Team',
-  headofDepartment: 'Heads of Department',
   researchAssociate: 'Research Associates',
+  headofDepartment: 'Heads of Sections',
   teamMember: 'Team Members',
 };
 
@@ -57,8 +57,8 @@ export default function TeamGrid({ members }: TeamGridProps) {
       ? {
           boardMember: members.filter((m) => m.department === 'boardMember'),
           seniorManagementTeam: members.filter((m) => m.department === 'seniorManagementTeam'),
-          headofDepartment: members.filter((m) => m.department === 'headofDepartment'),
           researchAssociate: members.filter((m) => m.department === 'researchAssociate'),
+          headofDepartment: members.filter((m) => m.department === 'headofDepartment'),
           teamMember: members.filter((m) => m.department === 'teamMember'),
         }
       : null;
