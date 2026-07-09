@@ -275,8 +275,8 @@ export default async function ProgramsPage() {
         <Container className="relative z-10">
           <SectionHeader
             label="Program Areas"
-            title="Where We Work"
-            subtitle="Our interdisciplinary approach spans clinical research, community health, and capacity development — creating measurable impact at every level."
+            title="AMBSO Activities"
+            subtitle="Our interdisciplinary approach spans clinical research, community health, and capacity development creating measurable impact at every level."
           />
 
           {cats.length > 0 ? (

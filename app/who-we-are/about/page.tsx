@@ -5,18 +5,11 @@ import VideoEmbed from '@/components/ui/VideoEmbed';
 import HistoryRoadmap from '@/components/about/HistoryRoadmap';
 import MissionVisionBand from '@/components/about/MissionVisionBand';
 import CoreValuesBand from '@/components/about/CoreValuesBand';
-import { ArrowRight, Briefcase, Microscope, Handshake, Calendar, LucideIcon } from 'lucide-react';
 import { getAboutPageContent, getPartnersWithCollaborators, getFeaturedPartners } from '@/lib/sanity.queries';
 import { deepMergeWithFallback, fallbackAboutPageContent, fallbackHistoryMilestones } from '@/lib/fallback-data';
 import { urlFor } from '@/lib/sanity.client';
 import type { Partner } from '@/lib/sanity.types';
 
-const iconMap: Record<string, LucideIcon> = {
-  Briefcase,
-  Microscope,
-  Handshake,
-  Calendar,
-};
 
 export const metadata = {
   title: 'About Us | AMBSO',
@@ -43,8 +36,8 @@ export default async function AboutPage() {
       <section className="relative text-white py-24 min-h-[480px] flex items-center overflow-hidden">
         {/* Background: staff photo */}
         <Image
-          src="/images/staff.jpg"
-          alt="AMBSO Staff"
+          src="/images/about_us_bg_image.png"
+          alt="AMBSO About Us"
           fill
           className="object-cover object-center"
           priority
@@ -59,7 +52,7 @@ export default async function AboutPage() {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 {content.hero?.title}
               </h1>
-              <p className="text-xl text-gray-100 leading-relaxed">
+              <p className="text-xl text-gray-100 leading-relaxed whitespace-pre-wrap">
                 {content.hero?.description}
               </p>
             </div>
@@ -160,44 +153,6 @@ export default async function AboutPage() {
           </Container>
         </section>
       )}
-
-      {/* What We Do */}
-      <section className="py-16 bg-white">
-        <Container>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
-            {content.whatWeDo?.sectionTitle || 'What We Do'}
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {(content.whatWeDo?.items || [
-              { title: 'Our Programs', description: 'We implement clinical, community, and capacity building programs across Uganda', link: '/programs', icon: 'Briefcase' },
-              { title: 'Our Research', description: 'We conduct clinical trials and behavioral research to address health challenges', link: '/research', icon: 'Microscope' },
-              { title: 'Our Partners', description: 'We collaborate with leading academic and research institutions globally', link: '/collaborations', icon: 'Handshake' },
-              { title: 'Upcoming Events', description: 'Stay updated with our latest events and community activities', link: '/newsroom', icon: 'Calendar' },
-            ]).map((item, index) => {
-              const Icon = iconMap[item.icon || 'Briefcase'] || Briefcase;
-              return (
-                <Link
-                  key={index}
-                  href={item.link}
-                  className="group bg-gray-50 p-6 rounded-xl border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all"
-                >
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <Icon className="text-primary" size={24} />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-4">{item.description}</p>
-                  <span className="inline-flex items-center text-primary text-sm font-medium">
-                    Explore
-                    <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </Container>
-      </section>
 
       {/* CTA Section */}
       <section className="py-16 bg-primary text-white">

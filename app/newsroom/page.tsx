@@ -1,10 +1,11 @@
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import TweetCard from '@/components/ui/TweetCard';
-import { Calendar, Newspaper, Twitter } from 'lucide-react';
-import { getAllNews, getTweetEmbeds } from '@/lib/sanity.queries';
+import VideoEmbed from '@/components/ui/VideoEmbed';
+import { Calendar, Newspaper, Twitter, Youtube } from 'lucide-react';
+import { getAllNews, getTweetEmbeds, getYoutubeVideos } from '@/lib/sanity.queries';
 import { fetchTweetOEmbeds } from '@/lib/twitter';
-import { News as NewsType, TweetEmbed } from '@/lib/sanity.types';
+import { News as NewsType, TweetEmbed, YoutubeVideo } from '@/lib/sanity.types';
 import { urlFor } from '@/lib/sanity.client';
 
 export const metadata = {
@@ -25,17 +26,14 @@ function getCategoryColor(category: string): string {
 }
 
 export default async function NewsroomPage() {
-  // Fetch news articles and tweet embed IDs from Sanity in parallel
-  const [newsItems, tweetEmbeds] = await Promise.all([
+  const [newsItems, tweetEmbeds, youtubeVideos] = await Promise.all([
     getAllNews() as Promise<NewsType[]>,
     getTweetEmbeds() as Promise<TweetEmbed[]>,
+    getYoutubeVideos() as Promise<YoutubeVideo[]>,
   ]);
 
-  // Fetch oEmbed HTML for each active tweet server-side (build time, no CORS)
   const tweetIds = tweetEmbeds.map((t) => t.tweetId);
-  console.log(tweetIds)
   const tweets = tweetIds.length > 0 ? await fetchTweetOEmbeds(tweetIds) : [];
-  console.log(tweetIds.length)
   return (
     <div className="pt-20 lg:pt-28">
       {/* ── Page Header ─────────────────────────────────────────────── */}
@@ -101,6 +99,37 @@ export default async function NewsroomPage() {
           )}
         </Container>
       </section>
+
+      {/* ── YouTube Videos ───────────────────────────────────────────── */}
+      {youtubeVideos.length > 0 && (
+        <section className="py-16 bg-white border-t border-gray-100">
+          <Container>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/10 text-red-600 rounded-full text-xs font-semibold mb-3">
+                  <Youtube size={12} />
+                  <span>YouTube</span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                  Videos
+                </h2>
+                <p className="text-gray-500 text-sm mt-1.5">
+                  Watch the latest videos from AMBSO
+                </p>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {youtubeVideos.map((video) => (
+                <div key={video._id} className="flex flex-col gap-3">
+                  <VideoEmbed videoUrl={video.url} title={video.title} />
+                  <p className="text-sm font-medium text-gray-700 line-clamp-2">{video.title}</p>
+                </div>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* ── From Our X (Twitter) Feed ────────────────────────────────── */}
       {tweets.length > 0 && (

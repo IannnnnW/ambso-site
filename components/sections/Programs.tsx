@@ -32,6 +32,18 @@ const imageMap: Record<string, string> = {
   HandHeart:     '/images/resource-mobilization.jpeg',
 };
 
+const slugImageMap: Record<string, string> = {
+  'research':              '/images/labwork.jpg',
+  'clinical-programs':     '/images/labwork.jpg',
+  'clinical':              '/images/labwork.jpg',
+  'capacity-building':     '/images/capacity-building.png',
+  'community-programs':    '/images/community.jpg',
+  'community':             '/images/community.jpg',
+  'community-engagement':  '/images/community.jpg',
+  'resource-mobilization': '/images/resource-mobilization.jpeg',
+  'service-delivery':      '/images/staff.jpg',
+};
+
 const defaultPrograms: Array<{ title: string; description: string; icon: string; href: string; colorClass: string; image?: string }> = [
   {
     title: 'Clinical Programs',
@@ -131,10 +143,13 @@ export default function Programs({ content }: ProgramsProps) {
   const subtitle = content?.subtitle ?? defaultContent.subtitle;
   const programs = content?.programs ?? defaultContent.programs;
 
-  const programsWithImages = programs.map((p) => ({
-    ...p,
-    resolvedImage: p.image || imageMap[p.icon] || '/images/labwork.jpg',
-  }));
+  const programsWithImages = programs.map((p) => {
+    const slug = (p.href ?? '').split('/').pop() ?? '';
+    return {
+      ...p,
+      resolvedImage: p.image || imageMap[p.icon] || slugImageMap[slug] || '/images/labwork.jpg',
+    };
+  });
 
   // Row 1: first two cards at 60 / 40 split
   // Row 2: remaining cards in equal columns

@@ -86,6 +86,15 @@ export interface TweetEmbed {
   isActive: boolean;
 }
 
+export interface YoutubeVideo {
+  _id: string;
+  _type: 'youtubeVideo';
+  url: string;
+  title: string;
+  order?: number;
+  isActive: boolean;
+}
+
 export interface SanityImage {
   _type: 'image';
   asset: {

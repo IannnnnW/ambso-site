@@ -28,10 +28,12 @@ interface TeamGridProps {
 const departmentLabels: Record<string, string> = {
   boardMember: 'Board of Directors',
   seniorManagementTeam: 'Senior Management Team',
-  researchAssociate: 'Research Associates',
+  researchAssociate: 'Research and Program Associates',
   headofDepartment: 'Heads of Sections',
   teamMember: 'Team Members',
 };
+
+const TREE_DEPARTMENTS = ['boardMember', 'seniorManagementTeam'];
 
 export default function TeamGrid({ members }: TeamGridProps) {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -84,6 +86,7 @@ export default function TeamGrid({ members }: TeamGridProps) {
             <div className="space-y-20">
               {Object.entries(groupedMembers).map(([dept, deptMembers]) => {
                 if (deptMembers.length === 0) return null;
+                const isTree = TREE_DEPARTMENTS.includes(dept);
                 return (
                   <div key={dept}>
                     <div className="text-center mb-12">
@@ -92,11 +95,31 @@ export default function TeamGrid({ members }: TeamGridProps) {
                       </h2>
                       <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
                     </div>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                      {deptMembers.map((member) => (
-                        <TeamMemberCard key={member._id} member={member} />
-                      ))}
-                    </div>
+                    {isTree ? (
+                      <div>
+                        <div className="flex flex-col items-center mb-6">
+                          <div className="w-full max-w-xs">
+                            <TeamMemberCard member={deptMembers[0]} />
+                          </div>
+                          {deptMembers.length > 1 && (
+                            <div className="w-px h-8 bg-primary/30 mt-2" />
+                          )}
+                        </div>
+                        {deptMembers.length > 1 && (
+                          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                            {deptMembers.slice(1).map((member) => (
+                              <TeamMemberCard key={member._id} member={member} />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                        {deptMembers.map((member) => (
+                          <TeamMemberCard key={member._id} member={member} />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -105,11 +128,31 @@ export default function TeamGrid({ members }: TeamGridProps) {
             // Single category view
             <>
               {filteredMembers.length > 0 ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                  {filteredMembers.map((member) => (
-                    <TeamMemberCard key={member._id} member={member} />
-                  ))}
-                </div>
+                TREE_DEPARTMENTS.includes(activeCategory) ? (
+                  <div>
+                    <div className="flex flex-col items-center mb-6">
+                      <div className="w-full max-w-xs">
+                        <TeamMemberCard member={filteredMembers[0]} />
+                      </div>
+                      {filteredMembers.length > 1 && (
+                        <div className="w-px h-8 bg-primary/30 mt-2" />
+                      )}
+                    </div>
+                    {filteredMembers.length > 1 && (
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                        {filteredMembers.slice(1).map((member) => (
+                          <TeamMemberCard key={member._id} member={member} />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                    {filteredMembers.map((member) => (
+                      <TeamMemberCard key={member._id} member={member} />
+                    ))}
+                  </div>
+                )
               ) : (
                 <div className="text-center py-16">
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">

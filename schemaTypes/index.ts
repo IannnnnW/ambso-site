@@ -20,6 +20,7 @@ import contactPageContent from './documents/contactPageContent'
 import teamPageContent from './documents/teamPageContent'
 import resourcesPageContent from './documents/resourcePageContent'
 import tweetEmbed from './documents/tweetEmbed'
+import youtubeVideo from './documents/youtubeVideo'
 import headerContent from './documents/headerContent'
 import footerContent from './documents/footerContent'
 
@@ -72,5 +73,6 @@ export const schemaTypes = [
   ctaSection,
   testimonial,
   faq,
-  tweetEmbed
+  tweetEmbed,
+  youtubeVideo,
 ]

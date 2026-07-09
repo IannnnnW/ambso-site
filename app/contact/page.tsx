@@ -53,18 +53,13 @@ export default function ContactPage() {
   return (
     <div className="pt-20 lg:pt-28">
       <section className="relative text-white py-20 min-h-[420px] flex items-center overflow-hidden">
-        <img
-          src="/images/staff.jpg"
-          alt="AMBSO Team"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#002866]/75 via-[#002866]/55 to-[#002866]/30" />
+        <div className="absolute inset-0 bg-primary" />
         <Container className="relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               {content.hero?.title}
             </h1>
-            <p className="text-xl text-gray-100 leading-relaxed">
+            <p className="text-xl text-gray-100 leading-relaxed whitespace-pre-wrap">
               {content.hero?.description}
             </p>
           </div>
@@ -151,62 +146,93 @@ export default function ContactPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
                 {content.contactInfo?.title}
               </h2>
-              <div className="space-y-6">
-                <div className="bg-primary/5 p-6 rounded-xl">
-                  <div className="flex items-start">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MapPin className="text-primary" size={24} />
+              <div className="space-y-4">
+
+                {/* Head Office */}
+                <div className="bg-primary/5 p-5 rounded-xl">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <MapPin className="text-primary" size={18} />
                     </div>
-                    <div className="ml-4">
-                      <h3 className="font-semibold text-gray-900 mb-1">Headquarters</h3>
-                      <p className="text-gray-700">{content.contactInfo?.headquarters}</p>
-                      <p className="text-sm text-gray-600 mt-2">
-                        {content.contactInfo?.additionalOffices}
-                      </p>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Head Office</h3>
+                      <p className="text-gray-700 text-sm">Plot 7441 Nakuule Zone (Behind Seven Sisters&apos; Building), Nansana Hoima Road</p>
+                      <p className="text-gray-600 text-sm">P.O Box 37565, Wakiso, Uganda</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-primary/5 p-6 rounded-xl">
-                  <div className="flex items-start">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Phone className="text-primary" size={24} />
+                {/* Hoima Field Office */}
+                <div className="bg-primary/5 p-5 rounded-xl">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <MapPin className="text-primary" size={18} />
                     </div>
-                    <div className="ml-4">
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Hoima Field Office</h3>
+                      <p className="text-gray-700 text-sm">Ishaka Kijjungu, Along Hospital Way, Behind Hoima Regional Referral Hospital Mental Unit</p>
+                      <p className="text-gray-600 text-sm">P.O Box 306, Hoima, Uganda</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Masaka Field Office */}
+                <div className="bg-primary/5 p-5 rounded-xl">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <MapPin className="text-primary" size={18} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Masaka Field Office</h3>
+                      <p className="text-gray-700 text-sm">Kalisizo Town, Old Bukoba Road, Near Kalisizo Sub-County Headquarters</p>
+                      <p className="text-gray-600 text-sm">P.O Box 220155, Masaka, Uganda</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Phone */}
+                <div className="bg-primary/5 p-5 rounded-xl">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Phone className="text-primary" size={18} />
+                    </div>
+                    <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
-                      <a href={`tel:${content.contactInfo?.phone}`} className="text-primary hover:underline">
-                        {content.contactInfo?.phone}
-                      </a>
+                      <p className="text-gray-700 text-sm">(+256) 394500 421</p>
+                      <p className="text-gray-700 text-sm">(+256) 782241305</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-primary/5 p-6 rounded-xl">
-                  <div className="flex items-start">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Mail className="text-primary" size={24} />
+                {/* Email */}
+                <div className="bg-primary/5 p-5 rounded-xl">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Mail className="text-primary" size={18} />
                     </div>
-                    <div className="ml-4">
+                    <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-                      <a href={`mailto:${content.contactInfo?.email}`} className="text-primary hover:underline">
-                        {content.contactInfo?.email}
+                      <a href="mailto:info@ambso.org" className="text-primary hover:underline text-sm">
+                        info@ambso.org
                       </a>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-primary/5 p-6 rounded-xl">
-                  <div className="flex items-start">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Clock className="text-primary" size={24} />
+                {/* Working Hours */}
+                <div className="bg-primary/5 p-5 rounded-xl">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Clock className="text-primary" size={18} />
                     </div>
-                    <div className="ml-4">
+                    <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Working Hours</h3>
-                      <p className="text-gray-700">{content.contactInfo?.weekdayHours}</p>
-                      <p className="text-gray-700">{content.contactInfo?.weekendHours}</p>
+                      <p className="text-gray-700 text-sm">{content.contactInfo?.weekdayHours}</p>
+                      <p className="text-gray-700 text-sm">{content.contactInfo?.weekendHours}</p>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
 

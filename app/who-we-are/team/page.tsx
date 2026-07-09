@@ -29,7 +29,7 @@ export default async function TeamPage() {
               <span>Meet Our Team</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">{content.hero?.title}</h1>
-            <p className="text-xl text-gray-100 leading-relaxed">
+            <p className="text-xl text-gray-100 leading-relaxed whitespace-pre-wrap">
               {content.hero?.description}
             </p>
           </div>
@@ -40,7 +40,7 @@ export default async function TeamPage() {
       <section className="py-12 bg-white border-b">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">
               {content.leadershipIntro}
             </p>
           </div>

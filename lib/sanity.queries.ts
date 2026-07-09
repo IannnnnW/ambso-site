@@ -1286,6 +1286,25 @@ export async function getTweetEmbeds() {
   }
 }
 
+export const youtubeVideosQuery = groq`
+  *[_type == "youtubeVideo" && isActive == true] | order(order asc, _createdAt desc) {
+    _id,
+    url,
+    title,
+    order
+  }
+`;
+
+export async function getYoutubeVideos() {
+  try {
+    const data = await client.fetch(youtubeVideosQuery);
+    return data ?? [];
+  } catch (error) {
+    console.error('Error fetching YouTube videos:', error);
+    return [];
+  }
+}
+
 // ── Header & Footer Queries ───────────────────────────────────────────────────
 
 export const headerContentQuery = groq`
