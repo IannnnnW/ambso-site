@@ -320,7 +320,7 @@ export default async function ResourceMobilizationPage() {
               life-changing health programs and research initiatives.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button href="/donate" variant="secondary" size="lg">
+              <Button href="/contact" variant="secondary" size="lg">
                 Make a Donation
               </Button>
               <Button

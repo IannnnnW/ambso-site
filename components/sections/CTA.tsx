@@ -16,7 +16,7 @@ const defaultContent = {
     'Your support enables us to continue our mission of advancing health through innovative research, training, and service provision across Africa.',
   primaryButton: {
     text: 'Make a Donation',
-    link: '/donate',
+    link: '/contact',
   },
   secondaryButton: {
     text: 'Explore Opportunities',

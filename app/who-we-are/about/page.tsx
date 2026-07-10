@@ -166,7 +166,7 @@ export default async function AboutPage() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                href="/donate"
+                href="/contact"
                 className="px-8 py-3 bg-white text-primary font-semibold rounded-lg hover:bg-gray-100 transition-colors"
               >
                 Donate Now

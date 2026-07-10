@@ -305,7 +305,7 @@ export default async function CommunityProgramPage() {
                 <p className="text-sm text-gray-600 mb-4">
                   Support our community programs through donations
                 </p>
-                <Button href="/donate" variant="outline" size="sm">
+                <Button href="/contact" variant="outline" size="sm">
                   Donate
                 </Button>
               </div>
