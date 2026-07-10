@@ -153,50 +153,35 @@ export default async function CollaboratorPage({ params }: CollaboratorPageProps
       {/* Main content */}
       <section className="py-14 bg-white">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            {/* Partnership overview */}
-            {partner.description && (
-              <div className="prose prose-lg max-w-none mb-12">
-                <PortableText value={partner.description} components={portableTextComponents} />
-              </div>
-            )}
+          <div className="grid lg:grid-cols-3 gap-10 xl:gap-14 items-start">
 
-            {/* Meta pills */}
-            {(partner.partnershipStartDate || (partner.partnershipType && partner.partnershipType.length > 0)) && (
-              <div className="flex flex-wrap gap-2 mb-12">
-                {partner.partnershipStartDate && (
-                  <span className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full font-medium">
-                    Partnership since {new Date(partner.partnershipStartDate).getFullYear()}
-                  </span>
-                )}
-                {partner.partnershipType?.map((type: string) => (
-                  <span key={type} className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full capitalize">
-                    {type}
-                  </span>
-                ))}
-              </div>
-            )}
+            {/* ── Left: primary content (2/3) ─────────────────────────── */}
+            <div className="lg:col-span-2">
 
-            {/* Lead Collaborators */}
-            {partner.leadCollaborators && partner.leadCollaborators.length > 0 && (
-              <div className="mb-14">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Users size={20} className="text-primary" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    Our Lead Collaborator{partner.leadCollaborators.length > 1 ? 's' : ''}
-                  </h2>
+              {/* Partnership overview */}
+              {partner.description && (
+                <div className="prose prose-lg max-w-none mb-10">
+                  <PortableText value={partner.description} components={portableTextComponents} />
                 </div>
+              )}
 
-                <div className={`grid gap-6 ${partner.leadCollaborators.length === 1 ? 'md:grid-cols-1 max-w-sm' : 'sm:grid-cols-2'}`}>
-                  {partner.leadCollaborators.map((collab: LeadCollaborator, idx: number) => (
-                    <div
-                      key={idx}
-                      className="bg-gray-50 rounded-xl p-6 flex flex-col"
-                    >
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
+              {/* Lead Collaborators */}
+              {partner.leadCollaborators && partner.leadCollaborators.length > 0 && (
+                <div className="mb-12">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-9 h-9 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Users size={18} className="text-primary" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Our Lead Collaborator{partner.leadCollaborators.length > 1 ? 's' : ''}
+                    </h2>
+                  </div>
+
+                  <div className="space-y-4">
+                    {partner.leadCollaborators.map((collab: LeadCollaborator, idx: number) => (
+                      <div key={idx} className="bg-[#f8f9fb] rounded-xl p-6 flex gap-5 border border-gray-100">
+                        {/* Photo */}
+                        <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-gray-200 self-start">
                           {collab.picture?.asset ? (
                             <img
                               src={urlFor(collab.picture).width(160).height(160).url()}
@@ -209,77 +194,133 @@ export default async function CollaboratorPage({ params }: CollaboratorPageProps
                             </div>
                           )}
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900 text-lg leading-tight">{collab.name}</h3>
+
+                        {/* Details */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-gray-900 text-lg leading-tight">{collab.name}</h3>
                           {collab.title && (
-                            <p className="text-primary text-sm font-medium mt-0.5">{collab.title}</p>
+                            <p className="text-primary text-sm font-semibold mt-0.5">{collab.title}</p>
                           )}
-                          <p className="text-gray-500 text-sm mt-0.5">{collab.position}</p>
+                          <p className="text-gray-500 text-sm mt-0.5 mb-3">{collab.position}</p>
+
+                          {collab.bio && (
+                            <p className="text-gray-700 text-sm leading-relaxed">{collab.bio}</p>
+                          )}
+
+                          {collab.profileUrl && (
+                            <a
+                              href={collab.profileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1 mt-3"
+                            >
+                              View profile <ExternalLink size={13} />
+                            </a>
+                          )}
                         </div>
                       </div>
-
-                      {collab.bio && (
-                        <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1">{collab.bio}</p>
-                      )}
-
-                      {collab.profileUrl && (
-                        <a
-                          href={collab.profileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1 mt-auto"
-                        >
-                          View profile <ExternalLink size={13} />
-                        </a>
-                      )}
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Research Groups */}
-            {partner.researchGroups && partner.researchGroups.length > 0 && (
-              <div className="mb-14">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Research Groups</h2>
-                <div className="space-y-4">
-                  {partner.researchGroups.map((group: ResearchGroup, idx: number) => (
-                    <div key={idx} className="border border-gray-200 rounded-xl p-6">
-                      <h3 className="font-semibold text-gray-900 text-lg mb-2">{group.name}</h3>
-                      {group.description && (
-                        <p className="text-gray-600 leading-relaxed mb-3">{group.description}</p>
-                      )}
-                      {group.readMoreUrl && (
-                        <a
-                          href={group.readMoreUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1"
-                        >
-                          Read more <ExternalLink size={13} />
-                        </a>
-                      )}
-                    </div>
-                  ))}
+              {/* Research Groups */}
+              {partner.researchGroups && partner.researchGroups.length > 0 && (
+                <div className="mb-12">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-5">Research Groups</h2>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {partner.researchGroups.map((group: ResearchGroup, idx: number) => (
+                      <div key={idx} className="border border-gray-200 rounded-xl p-5 flex flex-col">
+                        <h3 className="font-semibold text-gray-900 mb-2">{group.name}</h3>
+                        {group.description && (
+                          <p className="text-gray-600 text-sm leading-relaxed mb-3 flex-1">{group.description}</p>
+                        )}
+                        {group.readMoreUrl && (
+                          <a
+                            href={group.readMoreUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1 mt-auto"
+                          >
+                            Read more <ExternalLink size={13} />
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Related Programs & Research */}
-            {((partner.relatedPrograms && partner.relatedPrograms.length > 0) ||
-              (partner.relatedResearch && partner.relatedResearch.length > 0)) && (
-              <div className="grid md:grid-cols-2 gap-8 mb-14">
+            </div>
+
+            {/* ── Right: sticky sidebar (1/3) ─────────────────────────── */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-24 space-y-5">
+
+                {/* Visit website */}
+                {partner.website && (
+                  <a
+                    href={partner.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+                  >
+                    Visit Website <ExternalLink size={15} />
+                  </a>
+                )}
+
+                {/* Partnership details card */}
+                {(partner.country || partner.partnershipStartDate || (partner.partnershipType?.length > 0)) && (
+                  <div className="bg-[#f8f9fb] rounded-xl p-5 border border-gray-100 space-y-4">
+                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Partnership Details</h3>
+
+                    {partner.country && (
+                      <div>
+                        <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Country</p>
+                        <div className="flex items-center gap-1.5 text-gray-900 font-medium">
+                          <Globe size={14} className="text-primary flex-shrink-0" />
+                          {partner.country}
+                        </div>
+                      </div>
+                    )}
+
+                    {partner.partnershipStartDate && (
+                      <div>
+                        <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">Partnership Since</p>
+                        <p className="text-gray-900 font-medium">
+                          {new Date(partner.partnershipStartDate).getFullYear()}
+                        </p>
+                      </div>
+                    )}
+
+                    {partner.partnershipType && partner.partnershipType.length > 0 && (
+                      <div>
+                        <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-2">Type</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {partner.partnershipType.map((type: string) => (
+                            <span key={type} className="px-2.5 py-1 bg-primary/10 text-primary text-xs rounded-full font-medium capitalize">
+                              {type}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Related Programs */}
                 {partner.relatedPrograms && partner.relatedPrograms.length > 0 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">Related Programs</h2>
+                  <div className="bg-[#f8f9fb] rounded-xl p-5 border border-gray-100">
+                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Related Programs</h3>
                     <ul className="space-y-2">
                       {partner.relatedPrograms.map((item: RelatedItem) => (
                         <li key={item.slug.current}>
                           <Link
                             href={`/programs/${item.slug.current}`}
-                            className="text-primary hover:underline flex items-center gap-1"
+                            className="text-primary text-sm hover:underline flex items-start gap-1.5"
                           >
-                            <span>•</span> {item.title}
+                            <span className="mt-1 w-1 h-1 rounded-full bg-primary flex-shrink-0" />
+                            {item.title}
                           </Link>
                         </li>
                       ))}
@@ -287,39 +328,29 @@ export default async function CollaboratorPage({ params }: CollaboratorPageProps
                   </div>
                 )}
 
+                {/* Related Research */}
                 {partner.relatedResearch && partner.relatedResearch.length > 0 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">Related Research</h2>
+                  <div className="bg-[#f8f9fb] rounded-xl p-5 border border-gray-100">
+                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Related Research</h3>
                     <ul className="space-y-2">
                       {partner.relatedResearch.map((item: RelatedItem) => (
                         <li key={item.slug.current}>
                           <Link
                             href={`/research/${item.slug.current}`}
-                            className="text-primary hover:underline flex items-center gap-1"
+                            className="text-primary text-sm hover:underline flex items-start gap-1.5"
                           >
-                            <span>•</span> {item.title}
+                            <span className="mt-1 w-1 h-1 rounded-full bg-primary flex-shrink-0" />
+                            {item.title}
                           </Link>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
-              </div>
-            )}
 
-            {/* Visit website CTA */}
-            {partner.website && (
-              <div className="border-t border-gray-100 pt-10 text-center">
-                <a
-                  href={partner.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                  Visit website <ExternalLink size={16} />
-                </a>
               </div>
-            )}
+            </div>
+
           </div>
         </Container>
       </section>
