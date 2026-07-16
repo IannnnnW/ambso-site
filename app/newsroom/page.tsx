@@ -150,7 +150,7 @@ export default async function NewsroomPage() {
                 </p>
               </div>
               <a
-                href="https://x.com/AMBSO_Uganda"
+                href="https://x.com/AMBSO3"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#1DA1F2] text-[#1DA1F2] rounded-full text-sm font-semibold hover:bg-[#1DA1F2] hover:text-white transition-all duration-200 self-start sm:self-auto shrink-0"

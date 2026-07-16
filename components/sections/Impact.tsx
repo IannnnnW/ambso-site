@@ -2,17 +2,21 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Container from '../ui/Container';
+
+interface ImpactStat {
+  value: number;
+  label: string;
+  suffix?: string;
+  link?: string;
+}
 
 interface ImpactProps {
   content?: {
     title?: string;
     subtitle?: string;
-    stats?: Array<{
-      value: number;
-      label: string;
-      suffix?: string;
-    }>;
+    stats?: ImpactStat[];
   };
 }
 
@@ -20,11 +24,11 @@ const defaultContent = {
   title: 'Our Impact',
   subtitle: 'Making a measurable difference in communities across Africa',
   stats: [
-    { value: 57000, label: 'Male Circumcisions', suffix: '+' },
-    { value: 35, label: 'Peer Reviewed Publications', suffix: '+' },
-    { value: 15, label: 'Partner Organizations', suffix: '+' },
-    { value: 15, label: 'Years of Impact', suffix: '' },
-  ],
+    { value: 57000, label: 'Male Circumcisions', suffix: '+', link: '/programs' },
+    { value: 35, label: 'Peer Reviewed Publications', suffix: '+', link: '/resources' },
+    { value: 15, label: 'Partner Organizations', suffix: '+', link: '/collaborations' },
+    { value: 15, label: 'Years of Impact', suffix: '', link: '/who-we-are/about' },
+  ] as ImpactStat[],
 };
 
 function Counter({ value, duration = 2000 }: { value: number; duration?: number }) {
@@ -88,15 +92,30 @@ export default function Impact({ content }: ImpactProps) {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold mb-2">
-                <Counter value={stat.value} />
-                {stat.suffix}
+          {stats.map((stat) => {
+            const inner = (
+              <>
+                <div className="text-4xl md:text-5xl font-bold mb-2">
+                  <Counter value={stat.value} />
+                  {stat.suffix}
+                </div>
+                <div className="text-lg text-gray-200 group-hover:text-white transition-colors">{stat.label}</div>
+              </>
+            );
+            return stat.link ? (
+              <Link
+                key={stat.label}
+                href={stat.link}
+                className="group text-center rounded-2xl px-2 py-4 -my-4 transition-all duration-300 hover:bg-white/[0.06] hover:-translate-y-1"
+              >
+                {inner}
+              </Link>
+            ) : (
+              <div key={stat.label} className="text-center">
+                {inner}
               </div>
-              <div className="text-lg text-gray-200">{stat.label}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Container>
     </section>

@@ -89,10 +89,10 @@ export const fallbackHomepageContent: HomepageContent = {
     title: 'Our Impact',
     subtitle: 'Making a measurable difference in communities across Africa',
     stats: [
-      { value: 50000, label: 'People Reached', suffix: '+' },
-      { value: 120, label: 'Research Studies', suffix: '+' },
-      { value: 25, label: 'Partner Organizations', suffix: '+' },
-      { value: 15, label: 'Years of Impact', suffix: '' },
+      { value: 50000, label: 'People Reached', suffix: '+', link: '/programs' },
+      { value: 120, label: 'Research Studies', suffix: '+', link: '/programs/research' },
+      { value: 25, label: 'Partner Organizations', suffix: '+', link: '/collaborations' },
+      { value: 15, label: 'Years of Impact', suffix: '', link: '/who-we-are/about' },
     ],
   },
   newsSection: {

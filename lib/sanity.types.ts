@@ -506,6 +506,7 @@ export interface HomepageContent {
       value: number;
       label: string;
       suffix?: string;
+      link?: string;
     }>;
   };
   newsSection?: {

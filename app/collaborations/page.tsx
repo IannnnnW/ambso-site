@@ -33,6 +33,14 @@ function getPartnerTypeLabel(type?: string): string {
 export default async function CollaborationsPage() {
   const partners: Partner[] = await getPartners().catch(() => []);
 
+  // slug → logo URL map for the map's label cards
+  const logoBySlug: Record<string, string> = {};
+  for (const p of partners) {
+    if (p.logo?.asset && p.slug?.current) {
+      try { logoBySlug[p.slug.current] = urlFor(p.logo).height(64).url(); } catch { /* skip */ }
+    }
+  }
+
   const international = partners.filter(
     (p) => p.partnerType === 'academic' || p.partnerType === 'international' || p.partnerType === 'research'
   );
@@ -72,7 +80,7 @@ export default async function CollaborationsPage() {
 
       {/* Interactive world collaborators map */}
       <section className="relative z-0">
-        <CollaboratorsMapSection />
+        <CollaboratorsMapSection logos={logoBySlug} />
       </section>
 
       <section className="py-16 bg-white">

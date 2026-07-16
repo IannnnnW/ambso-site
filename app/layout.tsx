@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
 import HeaderServer from '@/components/layout/HeaderServer';
 import FooterServer from '@/components/layout/FooterServer';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${montserrat.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning>
         <ConditionalLayout header={<HeaderServer />} footer={<FooterServer />}>
           {children}

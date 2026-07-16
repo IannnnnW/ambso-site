@@ -7,7 +7,7 @@ const CollaboratorsMap = dynamic(() => import('./CollaboratorsMap'), {
   loading: () => (
     <div
       className="w-full animate-pulse bg-gray-100"
-      style={{ height: '60vh', minHeight: '420px' }}
+      style={{ height: '65vh', minHeight: '480px' }}
     />
   ),
 });
@@ -18,7 +18,7 @@ const STATS = [
   { value: '3',  label: 'Continents' },
 ];
 
-export default function CollaboratorsMapSection() {
+export default function CollaboratorsMapSection({ logos }: { logos?: Record<string, string> }) {
   return (
     <div>
       {/* Stats bar */}
@@ -42,8 +42,15 @@ export default function CollaboratorsMapSection() {
         ))}
       </div>
 
+      {/* Title */}
+      <div className="bg-white py-6 text-center">
+        <h2 className="text-2xl md:text-3xl font-extrabold uppercase tracking-wide" style={{ color: '#002866' }}>
+          AMBSO Global Map of Partner Institutions
+        </h2>
+      </div>
+
       {/* Map */}
-      <CollaboratorsMap />
+      <CollaboratorsMap logos={logos} />
     </div>
   );
 }

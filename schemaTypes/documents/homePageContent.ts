@@ -85,6 +85,7 @@ export default defineType({
               { name: 'value', title: 'Value', type: 'number' },
               { name: 'label', title: 'Label', type: 'string' },
               { name: 'suffix', title: 'Suffix', type: 'string', description: 'e.g., +, %, etc.' },
+              { name: 'link', title: 'Link', type: 'string', description: 'Page this statistic links to, e.g. /resources, /programs, /collaborations' },
             ],
           }],
         },
