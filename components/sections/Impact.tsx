@@ -95,7 +95,7 @@ export default function Impact({ content }: ImpactProps) {
           {stats.map((stat) => {
             const inner = (
               <>
-                <div className="text-4xl md:text-5xl font-bold mb-2">
+                <div className="font-heading text-4xl md:text-5xl font-bold mb-2">
                   <Counter value={stat.value} />
                   {stat.suffix}
                 </div>

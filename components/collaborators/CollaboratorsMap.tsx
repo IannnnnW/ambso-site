@@ -94,7 +94,7 @@ function makeHQPin(reducedMotion: boolean): L.DivIcon {
       ${pulse}
       <svg viewBox="0 0 52 52" width="44" height="44" style="filter:drop-shadow(0 4px 10px rgba(0,40,102,0.5));position:relative;">
         <circle cx="26" cy="26" r="26" fill="#002866"/>
-        <text x="26" y="33" text-anchor="middle" font-size="20" font-weight="bold" fill="white" font-family="Montserrat,system-ui,sans-serif">A</text>
+        <text x="26" y="33" text-anchor="middle" font-size="20" font-weight="bold" fill="white" font-family="Poppins,system-ui,sans-serif">A</text>
       </svg>
     </div>`,
     className: '',

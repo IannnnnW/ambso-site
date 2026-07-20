@@ -1,13 +1,22 @@
 import type { Metadata } from "next";
-import { Montserrat, Geist_Mono } from "next/font/google";
+import { Poppins, Lato, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
 import HeaderServer from '@/components/layout/HeaderServer';
 import FooterServer from '@/components/layout/FooterServer';
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+// Headings — geometric, confident
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+// Body — humanist, readable in long-form text
+const lato = Lato({
+  variable: "--font-lato",
+  subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -36,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.variable} ${lato.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning>
         <ConditionalLayout header={<HeaderServer />} footer={<FooterServer />}>
           {children}
