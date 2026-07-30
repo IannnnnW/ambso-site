@@ -535,7 +535,7 @@ export const allPartnerSlugsQuery = groq`
 
 // Career Queries
 export const careersQuery = groq`
-  *[_type == "career" && status == "open" && applicationDeadline > now()] | order(publishedAt desc) {
+  *[_type == "career" && status == "open"] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -573,21 +573,32 @@ export const singleCareerQuery = groq`
     applicationEmail,
     applicationLink,
     salaryRange,
+    "supportingDocuments": supportingDocuments[]{
+      title,
+      description,
+      "url": asset->url,
+      "filename": asset->originalFilename
+    },
     publishedAt,
     status
   }
 `;
 
+export const allCareerSlugsQuery = groq`
+  *[_type == "career" && defined(slug.current)]{ "slug": slug.current }
+`;
+
 // Tender Queries
 export const tendersQuery = groq`
-  *[_type == "tender" && status == "open" && submissionDeadline > now()] | order(publishedAt desc) {
+  *[_type == "tender" && status == "open" ] | order(closingDate asc) {
     _id,
     title,
     slug,
-    tenderNumber,
+    referenceNumber,
     category,
-    submissionDeadline,
-    publishedAt,
+    summary,
+    publishDate,
+    closingDate,
     status
   }
 `;
@@ -597,18 +608,70 @@ export const singleTenderQuery = groq`
     _id,
     title,
     slug,
-    tenderNumber,
+    referenceNumber,
     category,
     description,
-    requirements,
+    summary,
+    publishDate,
+    closingDate,
+    "documents": documents[]{
+      title,
+      description,
+      "url": asset->url,
+      "filename": asset->originalFilename
+    },
     eligibilityCriteria,
-    submissionDeadline,
-    documents,
+    submissionInstructions,
     contactPerson,
-    contactEmail,
-    publishedAt,
+    estimatedValue,
     status
   }
+`;
+
+export const allTenderSlugsQuery = groq`
+  *[_type == "tender" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+// Grant Queries
+export const grantsQuery = groq`
+  *[_type == "grant" && status in ["open", "upcoming"] && (!defined(deadline) || deadline > now())] | order(order asc, deadline desc) {
+    _id,
+    name,
+    slug,
+    "shortDescription": pt::text(description),
+    status,
+    deadline,
+    order
+  }
+`;
+
+export const singleGrantQuery = groq`
+  *[_type == "grant" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    description,
+    fundingScope,
+    fundingAmount,
+    durationOfGrant,
+    applicationAndAwardDetails,
+    eligibility,
+    submissionInstructions,
+    "supportingDocuments": supportingDocuments[]{
+      title,
+      description,
+      "url": asset->url,
+      "filename": asset->originalFilename
+    },
+    applicationFormUrl,
+    status,
+    deadline,
+    seo
+  }
+`;
+
+export const allGrantSlugsQuery = groq`
+  *[_type == "grant" && defined(slug.current)]{ "slug": slug.current }
 `;
 
 // Location Queries
@@ -1227,19 +1290,84 @@ export async function getAllPartnerSlugs() {
 }
 
 export async function getCareers() {
-  return await client.fetch(careersQuery);
+  try {
+    return await client.fetch(careersQuery);
+  } catch (error) {
+    console.error('Error fetching careers:', error);
+    return [];
+  }
 }
 
 export async function getCareer(slug: string) {
-  return await client.fetch(singleCareerQuery, { slug });
+  try {
+    return await client.fetch(singleCareerQuery, { slug });
+  } catch (error) {
+    console.error('Error fetching career:', error);
+    return null;
+  }
+}
+
+export async function getAllCareerSlugs() {
+  try {
+    return await client.fetch(allCareerSlugsQuery);
+  } catch (error) {
+    console.error('Error fetching career slugs:', error);
+    return [];
+  }
 }
 
 export async function getTenders() {
-  return await client.fetch(tendersQuery);
+  try {
+    return await client.fetch(tendersQuery);
+  } catch (error) {
+    console.error('Error fetching tenders:', error);
+    return [];
+  }
 }
 
 export async function getTender(slug: string) {
-  return await client.fetch(singleTenderQuery, { slug });
+  try {
+    return await client.fetch(singleTenderQuery, { slug });
+  } catch (error) {
+    console.error('Error fetching tender:', error);
+    return null;
+  }
+}
+
+export async function getAllTenderSlugs() {
+  try {
+    return await client.fetch(allTenderSlugsQuery);
+  } catch (error) {
+    console.error('Error fetching tender slugs:', error);
+    return [];
+  }
+}
+
+export async function getAllGrants() {
+  try {
+    return await client.fetch(grantsQuery);
+  } catch (error) {
+    console.error('Error fetching grants:', error);
+    return [];
+  }
+}
+
+export async function getGrantBySlug(slug: string) {
+  try {
+    return await client.fetch(singleGrantQuery, { slug });
+  } catch (error) {
+    console.error('Error fetching grant:', error);
+    return null;
+  }
+}
+
+export async function getAllGrantSlugs() {
+  try {
+    return await client.fetch(allGrantSlugsQuery);
+  } catch (error) {
+    console.error('Error fetching grant slugs:', error);
+    return [];
+  }
 }
 
 export async function getLocations() {

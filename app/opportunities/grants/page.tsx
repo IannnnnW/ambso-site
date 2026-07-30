@@ -1,33 +1,25 @@
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
-import { FileText, Calendar, ArrowRight } from 'lucide-react';
-import { getTenders } from '@/lib/sanity.queries';
+import { HandCoins, Calendar, ArrowRight } from 'lucide-react';
+import { getAllGrants } from '@/lib/sanity.queries';
 
 export const revalidate = 3600;
 
 export const metadata = {
-  title: 'Tenders | AMBSO',
-  description: 'AMBSO periodically issues tenders for goods and services. View current opportunities.',
+  title: 'Grants | AMBSO',
+  description:
+    'AMBSO grant opportunities supporting impact research and health innovation. View current calls and how to apply.',
 };
 
-interface TenderListItem {
+interface GrantListItem {
   _id: string;
-  title: string;
+  name: string;
   slug: { current: string };
-  referenceNumber?: string;
-  category?: string;
-  summary?: string;
-  closingDate: string;
-  status: string;
+  shortDescription?: string;
+  status: 'open' | 'closed' | 'upcoming';
+  deadline?: string;
 }
-
-const categoryLabels: Record<string, string> = {
-  goods: 'Goods',
-  services: 'Services',
-  works: 'Works',
-  consultancy: 'Consultancy',
-};
 
 function formatDate(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
@@ -37,17 +29,24 @@ function formatDate(date: string): string {
   });
 }
 
-export default async function TendersPage() {
-  const tenders: TenderListItem[] = await getTenders();
+const statusStyles: Record<string, string> = {
+  open: 'bg-green-100 text-green-700',
+  upcoming: 'bg-amber-100 text-amber-700',
+  closed: 'bg-gray-200 text-gray-600',
+};
+
+export default async function GrantsPage() {
+  const grants: GrantListItem[] = await getAllGrants();
 
   return (
     <div className="pt-20 lg:pt-28">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Tenders</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Grants</h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              AMBSO periodically issues tenders for goods and services. View current opportunities below.
+              AMBSO grant opportunities supporting impact research, capacity building, and health
+              innovation across Africa.
             </p>
           </div>
         </Container>
@@ -56,47 +55,40 @@ export default async function TendersPage() {
       <section className="py-16 bg-white">
         <Container>
           <div className="mb-4 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Current Tenders</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Current Grant Opportunities</h2>
             <div className="w-20 h-1 bg-primary mx-auto rounded-full mb-10" />
           </div>
 
-          {tenders.length > 0 ? (
+          {grants.length > 0 ? (
             <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              {tenders.map((tender) => (
+              {grants.map((grant) => (
                 <Link
-                  key={tender._id}
-                  href={`/opportunities/tenders/${tender.slug.current}`}
+                  key={grant._id}
+                  href={`/opportunities/grants/${grant.slug.current}`}
                   className="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all flex flex-col"
                 >
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <h3 className="text-lg font-bold text-gray-900 group-hover:text-primary transition-colors leading-snug">
-                      {tender.title}
+                      {grant.name}
                     </h3>
-                    <span className="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full flex-shrink-0">
-                      Open
+                    <span
+                      className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full capitalize flex-shrink-0 ${
+                        statusStyles[grant.status] ?? statusStyles.closed
+                      }`}
+                    >
+                      {grant.status}
                     </span>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {tender.referenceNumber && (
-                      <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
-                        Ref: {tender.referenceNumber}
-                      </span>
-                    )}
-                    {tender.category && (
-                      <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
-                        {categoryLabels[tender.category] ?? tender.category}
-                      </span>
-                    )}
-                  </div>
-
-                  {tender.summary && (
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">{tender.summary}</p>
+                  {grant.shortDescription && (
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
+                      {grant.shortDescription}
+                    </p>
                   )}
 
                   <div className="mt-auto flex items-center gap-1.5 text-sm text-gray-500">
                     <Calendar size={14} className="text-primary/60" />
-                    Closes {formatDate(tender.closingDate)}
+                    {grant.deadline ? `Closes ${formatDate(grant.deadline)}` : 'Rolling applications'}
                   </div>
 
                   <span className="mt-4 inline-flex items-center gap-1 text-primary text-sm font-semibold group-hover:gap-2 transition-all">
@@ -108,10 +100,10 @@ export default async function TendersPage() {
           ) : (
             <div className="max-w-4xl mx-auto text-center">
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                <FileText className="text-primary" size={40} />
+                <HandCoins className="text-primary" size={40} />
               </div>
               <p className="text-lg text-gray-600 mb-8">
-                No active tenders at this time. Please check back later or contact us for more information.
+                No open grant calls at this time. Please check back later or contact us for more information.
               </p>
               <Button href="/contact">
                 Contact Us

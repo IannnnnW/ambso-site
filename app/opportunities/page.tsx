@@ -1,7 +1,7 @@
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { Briefcase, FileText } from 'lucide-react';
+import { Briefcase, FileText, HandCoins } from 'lucide-react';
 
 export default function OpportunitiesPage() {
   return (
@@ -17,7 +17,7 @@ export default function OpportunitiesPage() {
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Opportunities</h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Explore career opportunities and tenders at AMBSO.
+              Explore career opportunities, tenders, and grants at AMBSO.
             </p>
           </div>
         </Container>
@@ -25,7 +25,7 @@ export default function OpportunitiesPage() {
 
       <section className="py-20 bg-white">
         <Container>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <Card hover className="p-8">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
                 <Briefcase className="text-primary" size={32} />
@@ -51,6 +51,20 @@ export default function OpportunitiesPage() {
               </p>
               <Button href="/opportunities/tenders" variant="outline">
                 View Tenders
+              </Button>
+            </Card>
+
+            <Card hover className="p-8">
+              <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mb-6">
+                <HandCoins className="text-accent" size={32} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Grants</h3>
+              <p className="text-gray-700 leading-relaxed mb-6">
+                AMBSO offers grant opportunities supporting impact research and health innovation.
+                View current calls and application details.
+              </p>
+              <Button href="/opportunities/grants" variant="outline">
+                View Grants
               </Button>
             </Card>
           </div>

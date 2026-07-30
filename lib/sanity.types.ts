@@ -325,6 +325,13 @@ export interface Partner {
   order: number;
 }
 
+export interface DownloadableDocument {
+  title?: string;
+  description?: string;
+  url?: string;
+  filename?: string;
+}
+
 export interface Career {
   _id: string;
   _type: 'career';
@@ -342,6 +349,7 @@ export interface Career {
   applicationEmail?: string;
   applicationLink?: string;
   salaryRange?: string;
+  supportingDocuments?: DownloadableDocument[];
   publishedAt: string;
   status: 'open' | 'closed' | 'draft';
 }
@@ -351,25 +359,49 @@ export interface Tender {
   _type: 'tender';
   title: string;
   slug: { current: string };
-  tenderNumber?: string;
-  category: 'goods' | 'services' | 'works' | 'consultancy' | 'other';
+  referenceNumber?: string;
+  category: 'goods' | 'services' | 'works' | 'consultancy';
   description: PortableTextBlock[];
-  requirements?: string[];
+  summary?: string;
   eligibilityCriteria?: string[];
-  submissionDeadline: string;
-  documents?: Array<{
-    title: string;
-    file: {
-      asset: {
-        _ref: string;
-        url: string;
-      };
-    };
-  }>;
-  contactPerson?: string;
-  contactEmail?: string;
-  publishedAt: string;
+  submissionInstructions?: PortableTextBlock[];
+  publishDate: string;
+  closingDate: string;
+  documents?: DownloadableDocument[];
+  contactPerson?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+  };
+  estimatedValue?: string;
   status: 'open' | 'closed' | 'awarded' | 'cancelled';
+}
+
+export interface Grant {
+  _id: string;
+  _type: 'grant';
+  name: string;
+  slug: { current: string };
+  description?: PortableTextBlock[];
+  shortDescription?: string;
+  fundingScope?: PortableTextBlock[];
+  fundingAmount?: PortableTextBlock[];
+  durationOfGrant?: PortableTextBlock[];
+  applicationAndAwardDetails?: PortableTextBlock[];
+  eligibility?: {
+    applicants?: PortableTextBlock[];
+    ineligibleCosts?: PortableTextBlock[];
+  };
+  submissionInstructions?: PortableTextBlock[];
+  supportingDocuments?: DownloadableDocument[];
+  applicationFormUrl?: string;
+  status: 'open' | 'closed' | 'upcoming';
+  deadline?: string;
+  order?: number;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+  };
 }
 
 export interface Location {

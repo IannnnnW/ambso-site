@@ -111,6 +111,30 @@ export default defineType({
       description: 'Optional: e.g., "UGX 2M - 4M per month"',
     },
     {
+      name: 'supportingDocuments',
+      title: 'Supporting Documents',
+      type: 'array',
+      description: 'Documents applicants can download (e.g. full job advert, application form)',
+      of: [
+        {
+          type: 'file',
+          fields: [
+            {
+              name: 'title',
+              type: 'string',
+              title: 'Document Title',
+            },
+            {
+              name: 'description',
+              type: 'text',
+              title: 'Description',
+              rows: 2,
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'publishedAt',
       title: 'Published Date',
       type: 'datetime',

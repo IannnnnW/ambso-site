@@ -11,6 +11,7 @@ import partner from './documents/partner'
 import collaborator from './documents/collaborator'
 import career from './documents/career'
 import tender from './documents/tender'
+import grant from './documents/grant'
 import location from './documents/location'
 import resource from './documents/resource'
 import { heroSlide } from './documents/heroSlide'
@@ -65,6 +66,7 @@ export const schemaTypes = [
   // Opportunities
   career,
   tender,
+  grant,
 
   // Reusable Objects
   blockContent,
