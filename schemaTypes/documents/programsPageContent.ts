@@ -24,6 +24,7 @@ export default defineType({
         fields: [
           { name: 'value', title: 'Value', type: 'string' },
           { name: 'label', title: 'Label', type: 'string' },
+          { name: 'link', title: 'Link', type: 'string', description: 'Page this stat redirects to when clicked, e.g. /resources, /collaborations, /programs/clinical' },
         ],
         preview: {
           select: { title: 'value', subtitle: 'label' },

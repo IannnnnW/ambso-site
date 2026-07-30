@@ -134,11 +134,11 @@ function ProgramCard({
 
 // ── fallback content ─────────────────────────────────────────────────────────
 
-const FALLBACK_STATS = [
-  { value: '57,000+', label: 'Male Circumcisions' },
-  { value: '35+',     label: 'Peer Reviewed Publications' },
-  { value: '15+',     label: 'Partner Organizations' },
-  { value: '10 Yrs',  label: 'Of Sustained Impact' },
+const FALLBACK_STATS: Array<{ value: string; label: string; link?: string }> = [
+  { value: '57,000+', label: 'Male Circumcisions', link: '/programs/clinical-programs' },
+  { value: '35+',     label: 'Peer Reviewed Publications', link: '/resources' },
+  { value: '15+',     label: 'Partner Organizations', link: '/collaborations' },
+  { value: '10 Yrs',  label: 'Of Sustained Impact', link: '/who-we-are/about' },
 ];
 
 const FALLBACK_APPROACH = [
@@ -257,14 +257,29 @@ export default async function ProgramsPage() {
         </svg>
         <Container className="relative z-10 py-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-white/[0.12]">
-            {stats.map(({ value, label }) => (
-              <div key={label} className="px-6 py-3 text-center">
-                <div className="text-3xl md:text-4xl font-extrabold text-accent leading-none mb-2">
-                  {value}
+            {stats.map(({ value, label, link }) => {
+              const inner = (
+                <>
+                  <div className="text-3xl md:text-4xl font-extrabold text-accent leading-none mb-2">
+                    {value}
+                  </div>
+                  <div className="text-sm text-white/65 font-medium group-hover:text-white transition-colors">{label}</div>
+                </>
+              );
+              return link ? (
+                <Link
+                  key={label}
+                  href={link}
+                  className="group block px-6 py-3 text-center rounded-lg transition-colors duration-300 hover:bg-white/[0.06]"
+                >
+                  {inner}
+                </Link>
+              ) : (
+                <div key={label} className="px-6 py-3 text-center">
+                  {inner}
                 </div>
-                <div className="text-sm text-white/65 font-medium">{label}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Container>
       </section>
