@@ -75,12 +75,12 @@ const COLLABORATORS: Collaborator[] = [
   { id: 'sdsu', name: 'San Diego State University', shortName: 'San Diego State University', place: 'San Diego, California, USA', region: 'USA – California', lat: 32.7757, lng: -117.0719, labelLat: -2, labelLng: -155, slug: 'san-diego-state-university' },
 
   // Uganda — labels stacked mid-map with lines converging on Kampala
-  { id: 'makerere', name: 'Makerere University School of Public Health', shortName: 'Makerere University School of Public Health', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3347, lng: 32.5681, labelLat: 25, labelLng: -3, slug: 'makerere-university-school-of-public-health' },
+  { id: 'makerere', name: 'Makerere University School of Public Health', shortName: 'Makerere University School of Public Health', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3347, lng: 32.5681, labelLat: 25, labelLng: -4, slug: 'makerere-university-school-of-public-health' },
   { id: 'moh', name: 'Ministry of Health', shortName: 'Ministry of Health Uganda', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3323, lng: 32.5825, labelLat: 9, labelLng: -4, slug: 'ministry-of-health' },
-  { id: 'sicra', name: 'Strengthening Institutional Capacity for Research Administration', shortName: 'SICRA Uganda', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3600, lng: 32.5800, labelLat: -7, labelLng: -5, slug: 'strengthening-institutional-capacity-for-research-administration' },
+  { id: 'sicra', name: 'Strengthening Institutional Capacity for Research Administration', shortName: 'SICRA Uganda', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3600, lng: 32.5800, labelLat: -7, labelLng: -4, slug: 'strengthening-institutional-capacity-for-research-administration' },
   { id: 'idi', name: 'Infectious Diseases Institute', shortName: 'Infectious Diseases Institute (IDI)', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3390, lng: 32.5760, labelLat: -23, labelLng: -4, slug: 'infectious-diseases-institute' },
-  { id: 'urocare', name: 'Uro Care Hospital', shortName: 'URO Care Hospital Uganda', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3476, lng: 32.5825, labelLat: -38, labelLng: -2, slug: 'uro-care-hospital' },
-  { id: 'rakai', name: 'Rakai Health Sciences Program', shortName: 'Rakai Health Sciences Program', place: 'Kalisizo, Uganda', region: 'Uganda', lat: 0.3476, lng: 31.5085, labelLat: -50, labelLng: 2, slug: 'rakai-health-sciences-program' },
+  { id: 'urocare', name: 'Uro Care Hospital', shortName: 'URO Care Hospital Uganda', place: 'Kampala, Uganda', region: 'Uganda', lat: 0.3476, lng: 32.5825, labelLat: -38, labelLng: -4, slug: 'uro-care-hospital' },
+  { id: 'rakai', name: 'Rakai Health Sciences Program', shortName: 'Rakai Health Sciences Program', place: 'Kalisizo, Uganda', region: 'Uganda', lat: 0.3476, lng: 31.5085, labelLat: -50, labelLng: -4, slug: 'rakai-health-sciences-program' },
 ];
 
 // ─── Pin / label generators ──────────────────────────────────────────────────

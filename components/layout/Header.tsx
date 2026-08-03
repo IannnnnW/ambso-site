@@ -84,23 +84,23 @@ export default function Header({ data }: { data: HeaderContent }) {
       {/* ── Top Utility Strip ─────────────────────────────────────── */}
       <div className="hidden lg:block bg-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-9">
-            <span className="text-white/55 text-xs font-light tracking-wide">
+          <div className="flex justify-between items-center h-10">
+            <span className="text-white/70 text-sm font-bold tracking-wide">
               {orgName}
             </span>
             <div className="flex items-center gap-6">
               <a
                 href={`tel:${phoneTel}`}
-                className="flex items-center gap-1.5 text-white/65 hover:text-accent-light text-xs transition-colors duration-200"
+                className="flex items-center gap-1.5 text-white/75 hover:text-accent-light text-sm font-bold transition-colors duration-200"
               >
-                <Phone size={11} strokeWidth={2} />
+                <Phone size={13} strokeWidth={2.5} />
                 <span>{phone}</span>
               </a>
               <a
                 href={`mailto:${email}`}
-                className="flex items-center gap-1.5 text-white/65 hover:text-accent-light text-xs transition-colors duration-200"
+                className="flex items-center gap-1.5 text-white/75 hover:text-accent-light text-sm font-bold transition-colors duration-200"
               >
-                <Mail size={11} strokeWidth={2} />
+                <Mail size={13} strokeWidth={2.5} />
                 <span>{email}</span>
               </a>
             </div>
