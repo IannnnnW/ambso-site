@@ -1,4 +1,5 @@
 import {defineType} from 'sanity'
+import {CoordinatesInput} from '../components/CoordinatesInput'
 
 export default defineType({
   name: 'location',
@@ -80,6 +81,9 @@ export default defineType({
       name: 'coordinates',
       title: 'Coordinates',
       type: 'object',
+      description:
+        'Paste a Google Maps link, DMS coordinates (0°32\'24.2"S 31°37\'19.9"E), or a decimal pair — the fields below fill in automatically.',
+      components: {input: CoordinatesInput},
       fields: [
         {
           name: 'lat',

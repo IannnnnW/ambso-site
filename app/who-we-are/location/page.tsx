@@ -32,7 +32,7 @@ export default async function LocationPage() {
         }) => ({
           id: l._id,
           name: l.name,
-          type: l.locationType === 'office' ? 'office' : 'headquarters' as 'headquarters' | 'office',
+          type: (l.locationType === 'headquarters' ? 'headquarters' : 'office') as 'headquarters' | 'office',
           address: l.address,
           city: l.city,
           district: l.district,
