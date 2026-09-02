@@ -64,7 +64,7 @@ interface Collaborator {
 const COLLABORATORS: Collaborator[] = [
   // Europe
   { id: 'karolinska', name: 'Karolinska Institutet', shortName: 'Karolinska Institutet', place: 'Stockholm, Sweden', region: 'Sweden', lat: 59.3498, lng: 18.0239, labelLat: 70, labelLng: 30, slug: 'karolinska-institutet' },
-  { id: 'sacro', name: 'Sacro Cuore', shortName: 'Sacro Cuore', place: 'Rome, Italy', region: 'Italy', lat: 45.4654, lng: 11.5654, labelLat: 40, labelLng: -33, slug: 'sacro-coure' },
+  { id: 'sacro', name: 'IRCCS Sacro Cuore Don Calabria Hospital', shortName: 'Sacro Cuore Don Calabria Hospital', place: 'Negrar, Verona, Italy', region: 'Italy', lat: 45.55, lng: 10.90, labelLat: 46, labelLng: -6, slug: 'irccs-sacro-cuore-don-calabria-hospital' },
 
   // USA — labels stacked over the Pacific, ordered north → south to match pin latitudes
   { id: 'boston', name: 'Boston College', shortName: 'Boston College', place: 'Chestnut Hill, Massachusetts, USA', region: 'USA – Massachusetts', lat: 42.3355, lng: -71.1685, labelLat: 63, labelLng: -155, slug: 'boston-college' },
