@@ -86,8 +86,8 @@ export default async function CollaborationsPage() {
       <section className="py-16 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Our Partnership Approach
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 uppercase">
+              Our Approach
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed">
               AMBSO maintains strategic partnerships with leading international institutions and regional organizations,
