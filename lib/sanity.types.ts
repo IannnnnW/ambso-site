@@ -665,6 +665,35 @@ export interface ContactPageContent {
   };
 }
 
+export interface CollaborationsPageContent {
+  _id: string;
+  _type: 'collaborationsPageContent';
+  hero?: {
+    title: string;
+    description?: string;
+  };
+  statsBar?: Array<{ value: string; label: string }>;
+  mapSection?: {
+    title?: string;
+  };
+  approachSection?: {
+    title: string;
+    description?: string;
+  };
+  emptyState?: {
+    internationalTitle?: string;
+    internationalPartners?: string[];
+    regionalTitle?: string;
+    regionalPartners?: string[];
+  };
+  ctaSection?: {
+    title: string;
+    description?: string;
+    buttonText?: string;
+    buttonLink?: string;
+  };
+}
+
 export interface TeamPageContent {
   _id: string;
   _type: 'teamPageContent';

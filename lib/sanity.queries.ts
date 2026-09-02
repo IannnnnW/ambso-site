@@ -1545,3 +1545,22 @@ export async function getProgramsPageContent() {
   }
 }
 
+export const collaborationsPageContentQuery = groq`
+  *[_type == "collaborationsPageContent"][0] {
+    hero,
+    statsBar,
+    mapSection,
+    approachSection,
+    emptyState,
+    ctaSection
+  }
+`;
+
+export async function getCollaborationsPageContent() {
+  try {
+    return await client.fetch(collaborationsPageContentQuery);
+  } catch {
+    return null;
+  }
+}
+

@@ -4,8 +4,16 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import CollaboratorsMapSection from '@/components/collaborators/CollaboratorsMapSection';
 import { Handshake, Globe, ExternalLink } from 'lucide-react';
-import { getPartners } from '@/lib/sanity.queries';
+import { getPartners, getCollaborationsPageContent } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.client';
+import { deepMergeWithFallback, fallbackCollaborationsPageContent } from '@/lib/fallback-data';
+
+export const revalidate = 3600;
+
+export const metadata = {
+  title: 'Collaborations | AMBSO',
+  description: 'Building strategic partnerships to advance health research and service delivery across Africa.',
+};
 
 interface Partner {
   _id: string;
@@ -31,7 +39,12 @@ function getPartnerTypeLabel(type?: string): string {
 }
 
 export default async function CollaborationsPage() {
-  const partners: Partner[] = await getPartners().catch(() => []);
+  const [partners, sanityContent]: [Partner[], Record<string, unknown> | null] = await Promise.all([
+    getPartners().catch(() => []),
+    getCollaborationsPageContent(),
+  ]);
+
+  const content = deepMergeWithFallback(sanityContent, fallbackCollaborationsPageContent);
 
   // slug → logo URL map for the map's label cards
   const logoBySlug: Record<string, string> = {};
@@ -51,28 +64,17 @@ export default async function CollaborationsPage() {
     (p) => !international.includes(p) && !regional.includes(p)
   );
 
-  // Fallback lists when Sanity has no data yet
-  const fallbackInternational = [
-    'Karolinska Institutet',
-    'University of Southern California (USC)',
-    'Boston College',
-    'University of California, Los Angeles (UCLA)',
-  ];
-  const fallbackRegional = [
-    'Infectious Diseases Institute (IDI)',
-    'Uro Care Hospital',
-    'Ministry of Health Uganda',
-    'Various East African Research Centers',
-  ];
+  const fallbackInternational = content.emptyState?.internationalPartners ?? [];
+  const fallbackRegional = content.emptyState?.regionalPartners ?? [];
 
   return (
     <div className="pt-20 lg:pt-28">
       <section className="bg-gradient-to-r from-primary to-primary-light text-white py-20">
         <Container>
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Collaborations</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{content.hero?.title}</h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Building strategic partnerships to advance health research and service delivery across Africa.
+              {content.hero?.description}
             </p>
           </div>
         </Container>
@@ -80,18 +82,21 @@ export default async function CollaborationsPage() {
 
       {/* Interactive world collaborators map */}
       <section className="relative z-0">
-        <CollaboratorsMapSection logos={logoBySlug} />
+        <CollaboratorsMapSection
+          logos={logoBySlug}
+          stats={content.statsBar}
+          title={content.mapSection?.title}
+        />
       </section>
 
       <section className="py-16 bg-white">
         <Container>
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 uppercase">
-              Our Approach
+              {content.approachSection?.title}
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed">
-              AMBSO maintains strategic partnerships with leading international institutions and regional organizations,
-              enabling us to deliver world-class research and services that transform lives across the continent.
+              {content.approachSection?.description}
             </p>
           </div>
 
@@ -141,7 +146,7 @@ export default async function CollaborationsPage() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
                   <Globe className="text-primary" size={32} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">International Partners</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">{content.emptyState?.internationalTitle}</h3>
                 <ul className="space-y-3">
                   {fallbackInternational.map((name) => (
                     <li key={name} className="flex items-start text-gray-700">
@@ -156,7 +161,7 @@ export default async function CollaborationsPage() {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
                   <Globe className="text-green-600" size={32} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Regional Partners</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">{content.emptyState?.regionalTitle}</h3>
                 <ul className="space-y-3">
                   {fallbackRegional.map((name) => (
                     <li key={name} className="flex items-start text-gray-700">
@@ -178,14 +183,13 @@ export default async function CollaborationsPage() {
               <Handshake className="text-primary" size={40} />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Partner With Us
+              {content.ctaSection?.title}
             </h2>
             <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-              We welcome partnerships with organizations that share our commitment to transforming
-              Africa through innovative research, training, and service provision.
+              {content.ctaSection?.description}
             </p>
-            <Button href="/contact" size="lg">
-              Get in Touch
+            <Button href={content.ctaSection?.buttonLink ?? '/contact'} size="lg">
+              {content.ctaSection?.buttonText}
             </Button>
           </div>
         </Container>

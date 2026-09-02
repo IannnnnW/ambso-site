@@ -12,13 +12,24 @@ const CollaboratorsMap = dynamic(() => import('./CollaboratorsMap'), {
   ),
 });
 
-const STATS = [
+const DEFAULT_STATS = [
   { value: '14', label: 'Partners' },
   { value: '5',  label: 'Countries' },
   { value: '3',  label: 'Continents' },
 ];
 
-export default function CollaboratorsMapSection({ logos }: { logos?: Record<string, string> }) {
+const DEFAULT_TITLE = "AMBSO'S Global Network of Collaborators";
+
+interface CollaboratorsMapSectionProps {
+  logos?: Record<string, string>;
+  stats?: Array<{ value: string; label: string }>;
+  title?: string;
+}
+
+export default function CollaboratorsMapSection({ logos, stats, title }: CollaboratorsMapSectionProps) {
+  const displayStats = stats && stats.length > 0 ? stats : DEFAULT_STATS;
+  const displayTitle = title || DEFAULT_TITLE;
+
   return (
     <div>
       {/* Stats bar */}
@@ -26,7 +37,7 @@ export default function CollaboratorsMapSection({ logos }: { logos?: Record<stri
         className="flex items-center justify-center gap-0 py-3"
         style={{ backgroundColor: '#002866' }}
       >
-        {STATS.map((stat, i) => (
+        {displayStats.map((stat, i) => (
           <div key={stat.label} className="flex items-center">
             {i > 0 && (
               <div
@@ -45,7 +56,7 @@ export default function CollaboratorsMapSection({ logos }: { logos?: Record<stri
       {/* Title */}
       <div className="bg-white py-6 text-center">
         <h2 className="text-2xl md:text-3xl font-extrabold uppercase tracking-wide" style={{ color: '#002866' }}>
-          AMBSO'S Global Network of Collaborators
+          {displayTitle}
         </h2>
       </div>
 

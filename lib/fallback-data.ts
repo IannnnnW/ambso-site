@@ -8,6 +8,7 @@ import type {
   HomepageContent,
   AboutPageContent,
   ContactPageContent,
+  CollaborationsPageContent,
   TeamPageContent,
   ResourcesPageContent,
   HeaderContent,
@@ -300,6 +301,49 @@ export const fallbackContactPageContent: ContactPageContent = {
     email: 'info@ambso.org',
     weekdayHours: 'Monday - Friday: 8:00 AM - 5:00 PM',
     weekendHours: 'Saturday - Sunday: Closed',
+  },
+};
+
+export const fallbackCollaborationsPageContent: CollaborationsPageContent = {
+  _id: 'fallback-collaborations',
+  _type: 'collaborationsPageContent',
+  hero: {
+    title: 'Collaborations',
+    description: 'Building strategic partnerships to advance health research and service delivery across Africa.',
+  },
+  statsBar: [
+    { value: '14', label: 'Partners' },
+    { value: '5', label: 'Countries' },
+    { value: '3', label: 'Continents' },
+  ],
+  mapSection: {
+    title: "AMBSO'S Global Network of Collaborators",
+  },
+  approachSection: {
+    title: 'Our Approach',
+    description: 'AMBSO maintains strategic partnerships with leading international institutions and regional organizations, enabling us to deliver world-class research and services that transform lives across the continent.',
+  },
+  emptyState: {
+    internationalTitle: 'International Partners',
+    internationalPartners: [
+      'Karolinska Institutet',
+      'University of Southern California (USC)',
+      'Boston College',
+      'University of California, Los Angeles (UCLA)',
+    ],
+    regionalTitle: 'Regional Partners',
+    regionalPartners: [
+      'Infectious Diseases Institute (IDI)',
+      'Uro Care Hospital',
+      'Ministry of Health Uganda',
+      'Various East African Research Centers',
+    ],
+  },
+  ctaSection: {
+    title: 'Partner With Us',
+    description: 'We welcome partnerships with organizations that share our commitment to transforming Africa through innovative research, training, and service provision.',
+    buttonText: 'Get in Touch',
+    buttonLink: '/contact',
   },
 };
 

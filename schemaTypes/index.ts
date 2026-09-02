@@ -18,6 +18,7 @@ import { heroSlide } from './documents/heroSlide'
 import homepageContent from './documents/homePageContent'
 import aboutPageContent from './documents/aboutPageContent'
 import contactPageContent from './documents/contactPageContent'
+import collaborationsPageContent from './documents/collaborationsPageContent'
 import teamPageContent from './documents/teamPageContent'
 import resourcesPageContent from './documents/resourcePageContent'
 import tweetEmbed from './documents/tweetEmbed'
@@ -39,6 +40,7 @@ export const schemaTypes = [
   homepageContent,
   aboutPageContent,
   contactPageContent,
+  collaborationsPageContent,
   programsPageContent,
   teamPageContent,
   resourcesPageContent,
