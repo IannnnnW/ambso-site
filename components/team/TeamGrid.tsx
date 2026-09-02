@@ -106,7 +106,7 @@ export default function TeamGrid({ members }: TeamGridProps) {
                           )}
                         </div>
                         {deptMembers.length > 1 && (
-                          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                          <div className="grid justify-center gap-6 md:gap-8 grid-cols-[repeat(auto-fit,minmax(240px,280px))]">
                             {deptMembers.slice(1).map((member) => (
                               <TeamMemberCard key={member._id} member={member} />
                             ))}
@@ -139,7 +139,7 @@ export default function TeamGrid({ members }: TeamGridProps) {
                       )}
                     </div>
                     {filteredMembers.length > 1 && (
-                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                      <div className="grid justify-center gap-6 md:gap-8 grid-cols-[repeat(auto-fit,minmax(240px,280px))]">
                         {filteredMembers.slice(1).map((member) => (
                           <TeamMemberCard key={member._id} member={member} />
                         ))}
