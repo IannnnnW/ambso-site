@@ -45,7 +45,7 @@ export default function CollaboratorsMapSection({ logos }: { logos?: Record<stri
       {/* Title */}
       <div className="bg-white py-6 text-center">
         <h2 className="text-2xl md:text-3xl font-extrabold uppercase tracking-wide" style={{ color: '#002866' }}>
-          AMBSO Global Map of Partner Institutions
+          AMBSO'S Global Network of Collaborators
         </h2>
       </div>
 
