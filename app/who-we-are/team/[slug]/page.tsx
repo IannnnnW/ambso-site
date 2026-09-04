@@ -63,6 +63,7 @@ interface TeamMember {
 const departmentLabels: Record<string, string> = {
   boardMember: 'Board of Directors',
   seniorManagementTeam: 'Senior Management Team',
+  researchAssociate: 'Research Associate',
   headofDepartment: 'Head of Department',
   teamMember: 'Team Member',
 };
@@ -109,6 +110,10 @@ export default async function TeamMemberPage({ params }: PageProps) {
     member.socialMedia?.twitter ||
     member.socialMedia?.researchGate ||
     member.socialMedia?.orcid;
+
+  const hasSidebar =
+    (member.qualifications && member.qualifications.length > 0) ||
+    (member.expertise && member.expertise.length > 0);
 
   return (
     <div className="pt-20 lg:pt-28 bg-gray-50 min-h-screen">
@@ -246,54 +251,56 @@ export default async function TeamMemberPage({ params }: PageProps) {
       {/* Biography and Details */}
       <section className="py-12 md:py-16">
         <Container>
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className={hasSidebar ? 'grid lg:grid-cols-3 gap-8' : 'flex justify-center'}>
             {/* Sidebar - Qualifications & Expertise */}
-            <div className="lg:order-2 space-y-6">
-              {/* Qualifications */}
-              {member.qualifications && member.qualifications.length > 0 && (
-                <div className="bg-white rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <GraduationCap className="w-5 h-5 text-primary" />
+            {hasSidebar && (
+              <div className="lg:order-2 space-y-6">
+                {/* Qualifications */}
+                {member.qualifications && member.qualifications.length > 0 && (
+                  <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <GraduationCap className="w-5 h-5 text-primary" />
+                      </div>
+                      <h3 className="text-lg font-bold text-gray-900">Qualifications</h3>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">Qualifications</h3>
+                    <ul className="space-y-2">
+                      {member.qualifications.map((qual, index) => (
+                        <li key={index} className="flex items-start gap-2 text-gray-700">
+                          <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                          <span>{qual}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul className="space-y-2">
-                    {member.qualifications.map((qual, index) => (
-                      <li key={index} className="flex items-start gap-2 text-gray-700">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                        <span>{qual}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                )}
 
-              {/* Areas of Expertise */}
-              {member.expertise && member.expertise.length > 0 && (
-                <div className="bg-white rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-accent/10 rounded-lg">
-                      <Award className="w-5 h-5 text-accent-dark" />
+                {/* Areas of Expertise */}
+                {member.expertise && member.expertise.length > 0 && (
+                  <div className="bg-white rounded-2xl p-6 shadow-sm">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Award className="w-5 h-5 text-accent-dark" />
+                      </div>
+                      <h3 className="text-lg font-bold text-gray-900">Areas of Expertise</h3>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">Areas of Expertise</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {member.expertise.map((exp, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-full"
+                        >
+                          {exp}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {member.expertise.map((exp, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-full"
-                      >
-                        {exp}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {/* Main Content - Biography */}
-            <div className="lg:col-span-2 lg:order-1">
+            <div className={hasSidebar ? 'lg:col-span-2 lg:order-1' : 'w-full max-w-3xl'}>
               {member.bio && member.bio.length > 0 && (
                 <div className="bg-white rounded-2xl p-8 shadow-sm h-full">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Biography</h2>
