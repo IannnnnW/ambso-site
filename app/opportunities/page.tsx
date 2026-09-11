@@ -8,7 +8,7 @@ export default function OpportunitiesPage() {
     <div className="pt-20 lg:pt-28">
       <section className="relative text-white py-20 min-h-[420px] flex items-center overflow-hidden">
         <img
-          src="/images/staff-extended.jpg"
+          src="/images/opportunities.jpeg"
           alt="AMBSO Staff"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
