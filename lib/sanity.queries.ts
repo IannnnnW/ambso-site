@@ -657,6 +657,7 @@ export const singleGrantQuery = groq`
     applicationAndAwardDetails,
     eligibility,
     submissionInstructions,
+    faqs,
     "supportingDocuments": supportingDocuments[]{
       title,
       description,

@@ -393,6 +393,7 @@ export interface Grant {
     ineligibleCosts?: PortableTextBlock[];
   };
   submissionInstructions?: PortableTextBlock[];
+  faqs?: Array<{ question: string; answer: PortableTextBlock[] }>;
   supportingDocuments?: DownloadableDocument[];
   applicationFormUrl?: string;
   status: 'open' | 'closed' | 'upcoming';

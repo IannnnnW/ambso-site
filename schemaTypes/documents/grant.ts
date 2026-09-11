@@ -75,6 +75,36 @@ export default defineType({
       description: 'How/where to apply, required attachments',
     },
     {
+      name: 'faqs',
+      title: 'Frequently Asked Questions',
+      type: 'array',
+      description: 'Common questions applicants have about this grant',
+      of: [
+        {
+          type: 'object',
+          name: 'faqItem',
+          title: 'FAQ',
+          fields: [
+            {
+              name: 'question',
+              title: 'Question',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'answer',
+              title: 'Answer',
+              type: 'blockContent',
+              validation: (Rule) => Rule.required(),
+            },
+          ],
+          preview: {
+            select: { title: 'question' },
+          },
+        },
+      ],
+    },
+    {
       name: 'supportingDocuments',
       title: 'Supporting Documents',
       type: 'array',

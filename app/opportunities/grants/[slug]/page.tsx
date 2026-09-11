@@ -144,6 +144,20 @@ export default async function GrantDetailPage({ params }: GrantPageProps) {
               value={grant.submissionInstructions}
             />
 
+            {grant.faqs && grant.faqs.length > 0 && (
+              <div className="mb-10">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <div className="space-y-4">
+                  {grant.faqs.map((faq, i) => (
+                    <div key={i} className="border border-gray-200 rounded-xl p-5">
+                      <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+                      <PortableTextRenderer value={faq.answer} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <DocumentDownloadList documents={grant.supportingDocuments} />
 
             {/* Apply */}

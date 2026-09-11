@@ -331,7 +331,7 @@ export default async function ProgramsPage() {
             {/* Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] order-2 lg:order-1">
               <Image
-                src="/images/staff-extended.jpg"
+                src="/images/staff-extended.jpeg"
                 alt="AMBSO staff and community members"
                 fill
                 className="object-cover"
