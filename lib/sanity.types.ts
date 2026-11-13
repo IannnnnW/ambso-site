@@ -416,12 +416,14 @@ export interface Location {
   district: string;
   region?: string;
   country: string;
+  postalCode?: string;
   coordinates?: {
     lat: number;
     lng: number;
   };
   contactPhone?: string;
   contactEmail?: string;
+  officeHours?: string;
   isPrimary: boolean;
   order: number;
 }

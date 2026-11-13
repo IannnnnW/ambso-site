@@ -687,9 +687,11 @@ export const locationsQuery = groq`
     "district": address.district,
     "region": address.region,
     "country": address.country,
+    "postalCode": address.postalCode,
     coordinates,
     "contactPhone": contact.phone,
     "contactEmail": contact.email,
+    officeHours,
     isPrimary,
     order
   }
